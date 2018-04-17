@@ -91,11 +91,12 @@
     <Compile Include="EF\StageSSPortalDbConfiguration.cs" />
     <Compile Include="EF\StageSSPortalDbContext.cs" />
     <Compile Include="EF\StageSSPortalDbInitializer.cs" />
+    <Compile Include="Interfaces\IGebruikerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="Interfaces\packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="docs\MySqlCommand.xml" />
