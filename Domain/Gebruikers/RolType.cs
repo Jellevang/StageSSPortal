@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Gebruikers
 {
-    class RolType
+    public enum RolType
     {
+        Admin = 1,
+        Klant
     }
 }
