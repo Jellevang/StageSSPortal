@@ -6,25 +6,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Domain.Gebruikers;
+using DAL.EF;
+using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
     public class GebruikerRepository : UserStore<Gebruiker>, IGebruikerRepository // Bij ophalen etc checken op actief !!
     {
-        private readonly VerkiezingstestContext ctx;
+        private readonly StageSSPortalDbContext ctx;
         private Gebruiker user;
         private UserManager<Gebruiker> userManager;
 
-        public GebruikerRepository() : base(new VerkiezingstestContext())
+        public GebruikerRepository() : base(new StageSSPortalDbContext())
         {
-            ctx = (VerkiezingstestContext)this.Context;
+            ctx = (StageSSPortalDbContext)this.Context;
             userManager = new UserManager<Gebruiker>(new GebruikerRepository(ctx));
         }
         /*public GebruikerRepository(UnitOfWork uow) : base(uow.Context)
         {
             ctx = uow.Context;
         }*/
-        public GebruikerRepository(VerkiezingstestContext context) : base(context)
+        public GebruikerRepository(StageSSPortalDbContext context) : base(context)
         {
             ctx = context;
         }
@@ -86,7 +88,7 @@ namespace DAL.Repositories
                     userRole = ctx.Roles.FirstOrDefault(r => r.Name == "Admin");
                 }
             }
-            if (rol.Equals(3))
+            /*if (rol.Equals(3))
             {
                 if (!ctx.Roles.Any(r => r.Name == "SuperAdmin"))
                 {
@@ -97,19 +99,19 @@ namespace DAL.Repositories
                 {
                     userRole = ctx.Roles.FirstOrDefault(r => r.Name == "SuperAdmin");
                 }
-            }
+            }*/
             else
             {
 
 
-                if (!ctx.Roles.Any(r => r.Name == "Partij"))
+                if (!ctx.Roles.Any(r => r.Name == "Klant"))
                 {
-                    userRole = new IdentityRole("Partij");
+                    userRole = new IdentityRole("Klant");
                     ctx.Roles.Add(userRole);
                 }
                 else
                 {
-                    userRole = ctx.Roles.FirstOrDefault(r => r.Name == "Partij");
+                    userRole = ctx.Roles.FirstOrDefault(r => r.Name == "Klant");
                 }
             }
 
@@ -133,7 +135,7 @@ namespace DAL.Repositories
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;
-                    case RolType.SuperAdmin:
+                    /*case RolType.SuperAdmin:
                         user = new Gebruiker()
                         {
                             Email = email,
@@ -145,7 +147,7 @@ namespace DAL.Repositories
                             Toegestaan = true,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
-                        break;
+                        break;*/
                     default:
                         user = new Gebruiker()
                         {

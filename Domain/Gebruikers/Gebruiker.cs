@@ -15,7 +15,7 @@ namespace Domain.Gebruikers
 
         public int GebruikerId { get; set; }
         public String Naam { get; set; }
-        //public RolType Rol { get; set; }
+        public RolType Rol { get; set; }
         public Boolean Toegestaan { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<Gebruiker> manager)

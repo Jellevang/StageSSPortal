@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Gebruikers\Gebruiker.cs" />
     <Compile Include="Gebruikers\RolType.cs" />
