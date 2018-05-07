@@ -7,7 +7,7 @@ using System.Net.Http.Headers;
 
 namespace StageSSPortal.Helpers
 {
-    public class StreamProvider : MultipartFormDataStreamProvider
+    /*public class StreamProvider : MultipartFormDataStreamProvider
     {
         public StreamProvider(string uploadPath)
             : base(uploadPath)
@@ -24,5 +24,5 @@ namespace StageSSPortal.Helpers
             }
             return fileName.Replace("\"", string.Empty);
         }
-    }
+    }*/
 }

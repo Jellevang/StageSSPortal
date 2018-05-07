@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewBag.Title = "Profiel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#">Klant beheren</a></li>
+    </ul>
+    <div class="navbar-text pull-right">
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <p>
+                <a href="@Url.Action("Index", "Manage")">Account beheren</a>
+            </p>
+            <p>
+                <a href="javascript:document.getElementById('logoutForm').submit()">Uitloggen</a>
+            </p>
+        }
+    </div>
+    <h1>Profiel bewerken</h1>
+    <hr>
+
+    <div class="container">
+        <div id="Klantcontainer">
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        @*<div class="col-md-3">
+            <div class="text-center">
+                <img src="" id="imgLogo" class="avatar img-rounded" alt="avatar" width="100" height="100">
+                <h6>Logo uploaden</h6>
+                <input type="file" class="form-control" name="file" id="fiLogo">
+            </div>
+        </div>*@
+
+        <!-- edit form column -->
+        <div class="col-md-9 personal-info">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Naam:</label>
+                    <div class="col-lg-8">
+                        <input id="tfNaam" class="form-control" type="text" placeholder="Naam">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-8">
+                        <input id="update" type="button" class="btn btn-primary" value="Save Changes" onclick="GetKlant()">
+                        <span></span>
+                        <input type="reset" class="btn btn-default" value="Cancel">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@*@section scripts{
+    <script type="text/javascript">
+        var KlantId = '@ViewBag.Id';
+        var Klant;
+        var KlantBegin;
+
+        $(function() {
+
+            LaadEigenschappen(KlantId);
+        });
+
+        function LaadEigenschappen(id) {
+            $.ajax('/api/Klant/Profiel/' + id,
+                    {
+                        type: 'GET',
+                        dataType: 'json'
+                    })
+                .done(function(data) {
+                    KlantBegin = data;
+                    $('#tfNaam').val(data.Naam);
+                    $('#imgLogo').prop("src", data.Logo);
+                    if (data.IsNationaal) {
+                        $('#cbIsNationaal').attr("checked", true);
+                        $('#onderKlant').fadeToggle();
+                    } else {
+                        $('#tfGemeente').val(data.Locatie.Postcode);
+                    }
+                    VulHoofdKlanten();
+                })
+                .fail(function(data) {
+                });
+        }
+
+
+
+        function GetKlant() {
+            var naam = $("#tfNaam").val();
+            Klant = { Naam: naam };
+            if ($('#cbIsNationaal').is(":checked")) {
+                Klant.IsNationaal = true;
+                UpdateKlantProfiel();
+            } else {
+                Klant.IsNationaal = false;
+                GetLocatie();
+            }
+
+        }
+
+
+        function GetLocatie() {
+            var postcode = $('#tfGemeente').val();
+            $.ajax('/api/Klant/Gemeente/' + postcode,
+                {
+                    type: 'GET',
+                    dataType: 'json'
+            }).done(function (data) {
+                Klant.Locatie = data;
+                GetHoofdKlant();
+            }).fail(function() {
+
+            });
+        }
+
+        function GetHoofdKlant() {
+            var hoofdKlantNaam = $('#ddHoofdKlant').val();
+            $.ajax('/api/Klant/HoofdKlant/' + hoofdKlantNaam,
+                {
+                    type: 'GET',
+                    dataType: 'json'
+                }).done(function(data) {
+                Klant.HoofdKlant = data;
+                UpdateKlantProfiel();
+            }).fail(function() {
+            });
+        }
+
+        function UpdateKlantProfiel() {
+            var files = $("#fiLogo").get(0).files;
+
+            if (files.length > 0) {
+                var formdata = new FormData();
+                for (i = 0; i < files.length; i++) {
+                    formdata.append("file" + i, files[i]);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Klant/Image",
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
+                    success: function(name) {
+                        var path = "/Resources/Images/Klant/" + name;
+                        $("#imgLogo").prop("src", path);
+                        Klant.Logo = path;
+                        alert("image success, path = " + Klant.Logo);
+                    }
+                });
+            }
+            $.ajax('/api/Klant/Profiel/' + KlantId,
+                {
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(Klant)
+                }).done(function() {
+                alert("profiel updated, string = " + JSON.stringify(Klant));
+                toonProfiel(KlantId);
+            }).fail(function() {
+                alert("update fout!");
+            });
+        }
+
+        function toonProfiel(id) {
+            $.ajax('/api/Klant/Profiel/' + id + '',
+                    {
+                        type: 'GET',
+                        dataType: 'json'
+                    })
+                .done(function(data) {
+                })
+                .fail(function(data) {
+                });
+        }
+    </script>*@
+}
+

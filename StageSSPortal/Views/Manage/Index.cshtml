@@ -15,13 +15,14 @@
             [
             @if (Model.HasPassword)
             {
-            @Html.ActionLink("Change your password", "ChangePassword")
+                @Html.ActionLink("Change your password", "ChangePassword")
             }
             else
             {
-            @Html.ActionLink("Create", "SetPassword")
+                @Html.ActionLink("Create", "SetPassword")
             }
             ]
         </dd>
     </dl>
 </div>
+@section scripts{} 

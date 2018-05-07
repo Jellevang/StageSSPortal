@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -22,7 +18,6 @@ namespace BL
         {
             return user.GenerateUserIdentityAsync((GebruikerManager)UserManager);
         }
-
         public static SignInManager Create(GebruikerManager manager, IOwinContext context)
         {
             return new SignInManager(manager, context.Authentication);

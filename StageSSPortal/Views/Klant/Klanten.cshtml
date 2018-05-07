@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Klanten";
+}
+<div class="container">
+    <h2>Klanten</h2>
+
+    <hr />
+
+    <div class="container">
+        <div id="KlantLijst"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+       $(document).ready(function (e) {
+           inladenKlanten();
+       });
+
+       function inladenKlanten() {
+           $.ajax('/api/Klant/Klanten', {
+               type: 'GET',
+               dataType: 'json'
+           })
+           .done(function (data) {
+               showKlanten(data)
+           });
+       }
+
+       function showKlanten(data) {
+           $.each(data, function (index, value) {
+               $('#KlantLijst').append('<div class="col-xs-12"><form><div class="col-xs-10"><div class="form-group">' +
+                   '<input id="tfNaam' + value.KlantId + '" class="form-control" value="' + value.Naam + '"></div></div>' +
+                   '<div class="col-xs-2"><button id="delete' + value.KlantId + '" type="button" class="btn btn-warning block">Block</button>'
+                   + '<button id="update' + value.KlantId + '" type="button" class="btn btn-success saveKenmerk">Save</button></form></div></div>')
+           });
+       }
+    </script>
+
+}

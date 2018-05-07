@@ -9,6 +9,7 @@ namespace Domain.Gebruikers
     public enum RolType
     {
         Admin = 1,
-        Klant
+        Klant,
+        KlantAccount
     }
 }

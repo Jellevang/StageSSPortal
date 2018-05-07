@@ -11,6 +11,7 @@ using StageSSPortal.Models;
 using StageSSPortal.Helpers;
 using BL;
 using Domain.Gebruikers;
+using Microsoft.AspNet.Identity;
 
 namespace StageSSPortal.Controllers
 {
@@ -55,6 +56,14 @@ namespace StageSSPortal.Controllers
         [AllowAnonymous]
         public virtual ActionResult Login(string returnUrl)
         {
+            if (SignInManager.AuthenticationManager.User != null && SignInManager.AuthenticationManager.User.Identity != null && SignInManager.AuthenticationManager.User.Identity.IsAuthenticated == true)
+            {
+                //ViewBag.ReturnUrl = "/Account/Logoff";
+                // LogOff();
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                return RedirectToAction("Login", "Account");
+
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -70,43 +79,48 @@ namespace StageSSPortal.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user != null)
-            {
-                if (user.Toegestaan == false)
+            
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user != null)
                 {
-                    ViewBag.errorMessage = "Uw account is geblokkeerd.";
-                    return View("Error");
-                }
-                var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-                switch (result)
-                {
-                    case SignInStatus.Success:
-                        if (user.Rol == RolType.SuperAdmin)
-                        {
-                            returnUrl = "~/Superadmin/Index";
+                    if (user.Toegestaan == false)
+                    {
+                        ViewBag.errorMessage = "Uw account is geblokkeerd.";
+                        return View("Error");
+                    }
+                    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            if (user.Rol == RolType.KlantAccount)
+                             {
+                                 returnUrl = "~/Home/Index";
+                                 return RedirectToLocal(returnUrl);
+                             }
+                            if (user.Rol == RolType.Admin)
+                            {
+                                returnUrl = "~/Admin/Index";
+                                //returnUrl = "~/Home/Index";
+                                return RedirectToLocal(returnUrl);
+                            }
+                            //returnUrl = "~/Klant/Profiel";
+                            returnUrl = "~/Klant/Home";
                             return RedirectToLocal(returnUrl);
-                        }
-                        if (user.Rol == RolType.Admin)
-                        {
-                            returnUrl = "~/Admin/Index";
-                            return RedirectToLocal(returnUrl);
-                        }
-                        returnUrl = "~/Partij/Profiel";
-                        return RedirectToLocal(returnUrl);
-                    case SignInStatus.LockedOut:
-                        return View("Lockout");
-                    case SignInStatus.RequiresVerification:
-                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                    case SignInStatus.Failure:
+                        case SignInStatus.LockedOut:
+                            return View("Lockout");
+                        case SignInStatus.RequiresVerification:
+                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                        case SignInStatus.Failure:
 
-                    default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                    }
                 }
-            }
-            ModelState.AddModelError("", "Invalid login attempt.");
-            return View(model);
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            
+            
         }
 
         //
@@ -116,7 +130,7 @@ namespace StageSSPortal.Controllers
         public virtual ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         protected override void Dispose(bool disposing)

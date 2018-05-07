@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Domain.Klant>
+
+@{
+    ViewBag.Title = "Klanten";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Lijst van Klanten</h2>
+
+    <p>
+        @Html.ActionLink("Nieuwe Klant", "Create") @*| @Html.ActionLink("Inviteer", "Invite")*@
+    </p>
+    @*<button class="btn-success" onclick="VerzendMails()">Stuur uitnodigingsmail</button>*@
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Naam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsGeblokkeerd)
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsGeblokkeerd)
+                </td>
+                <td>
+                    @Html.ActionLink("Aanpassen", "Edit", new { id = item.KlantId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.KlantId }) |
+                    @if (item.IsGeblokkeerd == true)
+                    {
+                        @Html.ActionLink("Deblokkeer", "Unblock", new { id = item.KlantId })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Blokkeer", "Block", new { id = item.KlantId })
+                    }
+                    @Html.ActionLink("Verwijder", "Delete", new { id = item.KlantId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+@*@section scripts
+{
+    <script type="text/javascript">
+
+        function VerzendMails() {
+            $.ajax('/api/Klant/Mail/Verzend',
+                            {
+                                type: 'POST',
+                                dataType: 'json'
+                            })
+                        .done(function (data) {
+
+                        })
+                        .fail(function (data) {
+
+                        });
+        }
+
+    </script>
+
+}*@

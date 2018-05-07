@@ -1,0 +1,42 @@
+﻿@model Domain.Klant
+
+@{
+    ViewBag.Title = "Deblokkeren";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Deblokkeren</h2>
+
+<h3>Bent u zeker dat u deze Klant wilt deblokkeren?</h3>
+<div>
+    <h4>Deblokkeren Klant</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Deblokkeer" class="btn btn-default" /> |
+            @Html.ActionLink("Terug naar lijst", "Index")
+        </div>
+    }
+</div>
