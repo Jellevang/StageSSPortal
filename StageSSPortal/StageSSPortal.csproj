@@ -249,6 +249,7 @@
     <Compile Include="Controllers\KlantAccountController.cs" />
     <Compile Include="Controllers\KlantController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\api\SSHController.cs" />
     <Compile Include="Controllers\SSHController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

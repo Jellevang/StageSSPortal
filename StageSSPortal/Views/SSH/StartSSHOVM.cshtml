@@ -37,7 +37,7 @@
             $("#VmInfo").css("display", "none");
 
         }
-        $.ajax("api/ssh/vms", {
+        $.ajax("/api/SSH/vms", {
             type: "GET",
             dataType: "json"
         })
@@ -69,7 +69,7 @@
                 alert(t);
             }
         })
-        $.ajax("api/ssh/info/" + t, { //+ $(this).val(), {
+        $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
             type: "GET",
             dataType: "json"
         })
@@ -91,7 +91,7 @@
                 t = $(this).attr('id');
                 //alert(t);
             }
-            $.ajax("api/ssh/StopVM/" + t, {
+            $.ajax("/api/SSH/StopVM/" + t, {
                 type: "GET",
                 dataType: "json"
             })
@@ -112,7 +112,7 @@
                 //t.replace(".", "-");
                 // alert(t);
             }
-            $.ajax("api/ssh/StartVM/" + t, { //+ $(this).val(), {
+            $.ajax("/api/SSH/StartVM/" + t, { //+ $(this).val(), {
                 type: "GET",
                 dataType: "json"
             })

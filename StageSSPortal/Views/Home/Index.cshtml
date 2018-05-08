@@ -1,151 +1,26 @@
-﻿<style>
-    #LijstServerVMs {
-        width: 30%;
-        float: left;
-    }
+﻿@{
+    ViewBag.Title = "Home Page";
+}
 
-    .VmRow:hover {
-        color: blue;
-    }
 
-    div#VmInfo {
-        float: left;
-        position: relative;
-    }
 
-    div#btns {
-        float: right;
-    }
-</style>
+<div class="row">
+    <div class="col-md-4">
+        <h1>MONIN</h1>
+        <p>
+            Database Managed Services
+        </p>
+    </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        //$("button#test").click(function () {
-        // alert("test");
-        $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
-            $(".VmRow").css("color", "rgb(0, 0, 0)");
-            $(this).css("color", "rgb(244, 78, 66)");
-            showInfo();
-        });
-        showVmNames();
-    });
-
-    function showVmNames() {
-        if ($("#ShowVms").css("display") != "none") {
-            $("table#LijstServerVMs").find("tr").remove();
-            $("#VmInfo").css("display", "none");
-
-        }
-        $.ajax("api/ssh/vms", {
-            type: "GET",
-            dataType: "json"
-        })
-            .done(function (data) {
-                ShowVms(data);
-            })
-    };
-    function ShowVms(LijstServerVMs) {
-        $.each(LijstServerVMs, function (index, value) {
-            addVM(value);
-        })
-        $("#ShowVms").css("display", "block");
-    }
-    function changeColor() {
-        $(this).css('background-color', 'rgb(58, 187, 252)');
-    }
-    function addVM(vm) {
-        $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" + "<td>" + vm.Status + "</td>" + "</tr>");
-    }
-    function showInfo() {
-        $("#ListVmInfo").find("tr").remove();
-        $("#VmInfo").css("display", "none");
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //t = $(this).children("td:first").attr("id");
-                t = $(this).attr('id');
-                //t.replace(".", "-");
-                alert(t);
-            }
-        })
-        $.ajax("api/ssh/info/" + t, { //+ $(this).val(), {
-            type: "GET",
-            dataType: "json"
-        })
-            .done(function (data) {
-                var text = data;
-                //alert(text);
-                //alert("test");
-                $.each(data, function (index, value) {
-                    $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
-                })
-                $("#VmInfo").css("display", "block");
-                $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
-            })
-    };
-    function StopVM() {
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                t = $(this).attr('id');
-                //alert(t);
-            }
-            $.ajax("api/ssh/StopVM/" + t, {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
-                })
-        });
-        showVmNames();
-
-    };
-
-    function StartVM() {
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //t = $(this).children("td:first").attr("id");
-                t = $(this).attr('id');
-                //t.replace(".", "-");
-                // alert(t);
-            }
-            $.ajax("api/ssh/StartVM/" + t, { //+ $(this).val(), {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
-                })
-        });
-        showVmNames();
-
-    };
-</script>
-
-<div class="jumbotron">
-    <h1>Beheer Virtuele Machines</h1>
 </div>
 
+<div class="row">
+    <div class="col-md-4">
 
-<div id="ShowVms" style="display:none">
-    <table id="LijstServerVMs" class="table">
-        <tr>
-            <th>Name</th>
-            <th>Status</th>
+        <p>
+            Om dit platform te gebruiken moet u klant zijn bij monin. Op de Contact pagina vindt u de gegevens van Monin
+            Voor meer info kunt u de <a href="https://www.monin-it.be">website</a> van monin checken
+        </p>
+    </div>
 
-        </tr>
-    </table>
 </div>
-
-<div id="VmInfo" style="display:none">
-    <table id="ListVmInfo" class="table"></table>
-</div>
-<div id="btns">
-    <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-    <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
-</div>
-
-@*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
