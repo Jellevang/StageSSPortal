@@ -184,6 +184,7 @@ namespace StageSSPortal.Controllers.api
                 ssh.Disconnect();
             }
             return Ok();
+            
         }
 
         [HttpGet]
@@ -206,14 +207,14 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult KlantOVMs(List<VmModel> model)
         {
             model = new List<VmModel>();
-            List<string> vmState = new List<string>();
+            //List<string> vmState = new List<string>();
             string[] vmInfo = new string[7];
             string[] getVmInfo = new string[7];
-            List<string> LijstServerVMs = new List<string>();
+            //List<string> LijstServerVMs = new List<string>();
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
             ovms = mgr.GetKlantOVMs(k.KlantId).ToList();
-            List<string> klantovms = new List<string>();
+            //List<string> klantovms = new List<string>();
             using (ssh)
             {
                 foreach (OracleVirtualMachine vm in ovms)
@@ -221,7 +222,7 @@ namespace StageSSPortal.Controllers.api
                     VmModel vmModel = new VmModel();
                     vmModel.Name = vm.Naam;
                     vmModel.id = vm.OvmId;
-                    LijstServerVMs.Add(vm.Naam);
+                    //LijstServerVMs.Add(vm.Naam);
                     vmInfo = GetInfo(vm.Naam, ssh, getVmInfo);
                     var regex = @"Status = [A-Z]+";
                     for (int j = 0; j < vmInfo.Length; j++)
