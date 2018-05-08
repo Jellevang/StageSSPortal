@@ -58,7 +58,7 @@ namespace StageSSPortal.Controllers.api
         }
         [HttpGet]
         [Route("api/SSH/Vms")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult GetVms(List<VmModel> model)
         {
             model = new List<VmModel>();
@@ -133,7 +133,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/SSH/Info/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult GetInfo(string id)
         {
             string[] Info = new string[7];
@@ -146,7 +146,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/SSH/StopVm/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult StopVm(string id)
         {
             using (ssh)
@@ -160,7 +160,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/SSH/StartVm/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult StartVm(string id)
         {
             using (ssh)
@@ -196,7 +196,7 @@ namespace StageSSPortal.Controllers.api
                 }
                 vmState = GetVmState(klantovms, ssh);
             }
-            return Ok();
+            return Ok(klantovms);
         }
 
     }
