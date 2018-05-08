@@ -37,7 +37,7 @@
             $("#VmInfo").css("display", "none");
 
         }
-        $.ajax("api/Klant/SSH/KlantOVMs", {
+        $.ajax("/api/Klant/SSH/KlantOVMs", {
             type: "GET",
             dataType: "json"
         })
