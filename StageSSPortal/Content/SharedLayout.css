@@ -15,3 +15,6 @@ div#LayBar {
  ul li a{
      color:white !important;
  }
+ div.logo img{
+     height:50px;
+ }
