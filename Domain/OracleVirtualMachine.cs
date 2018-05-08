@@ -10,6 +10,7 @@ namespace Domain
     {
         public int OracleVirtualMachineId { get; set; }
         public string Naam { get; set; }
+        public string OvmId { get; set; }
         public int KlantId { get; set; }
     }
 }

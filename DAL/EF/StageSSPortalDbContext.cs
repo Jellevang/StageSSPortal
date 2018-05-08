@@ -42,6 +42,7 @@ namespace DAL.EF
             //modelBuilder.Entity<KlantAccount>().Property(ka => ka.KlantId).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.Naam).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.KlantId).IsRequired();
+            modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.OvmId).IsRequired();
             modelBuilder.Entity<OVMLijst>().Property(ovm => ovm.AccountId).IsRequired();
             modelBuilder.Entity<OVMLijst>().Property(ovm => ovm.OVMId).IsRequired();
             // Identity

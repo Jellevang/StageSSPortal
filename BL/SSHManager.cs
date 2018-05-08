@@ -18,11 +18,12 @@ namespace BL
             repo = new SSHRepository();
         }
 
-        public OracleVirtualMachine AddOVM(string naam, int klantId)
+        public OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId)
         {
             OracleVirtualMachine ovm = new OracleVirtualMachine()
             {
                 Naam = naam,
+                OvmId = ovmId,
                 KlantId = klantId
             };
             OracleVirtualMachine created = repo.AddMachine(ovm);

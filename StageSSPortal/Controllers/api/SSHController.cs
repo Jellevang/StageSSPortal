@@ -58,7 +58,7 @@ namespace StageSSPortal.Controllers.api
         }
         [HttpGet]
         [Route("api/SSH/Vms")]
-        [Authorize(Roles = "Admin , Klant")]
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult GetVms(List<VmModel> model)
         {
             model = new List<VmModel>();
@@ -81,6 +81,9 @@ namespace StageSSPortal.Controllers.api
                 ssh.Disconnect();
                 string patternVM = @"Vm [0-9]+";
                 string idPattern = @"id: [0-9]+";
+                List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+                ovms = mgr.GetOVMs().ToList();
+                bool isEmpty = !ovms.Any();
                 for (int i = 0; i < serverVMs.Length; i++)
                 {
                     var res = Regex.Match(serverVMs[i], patternVM);
@@ -92,7 +95,32 @@ namespace StageSSPortal.Controllers.api
                         string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
                         vmModel.Name = name;
                         vmModel.id = id;
-                      
+
+                        if (isEmpty)
+                        {
+                            OracleVirtualMachine cutted = mgr.AddOVM(name, id, 1);
+                        }
+                        else
+                        {
+                            bool bezit = false;
+                            foreach (OracleVirtualMachine ovm in ovms)
+                            {
+                                if (ovm.Naam.Equals(name))
+                                {
+                                    bezit = true;
+                                }
+
+                            }
+                            if (bezit == true)
+                            {
+
+                            }
+                            else
+                            {
+                                OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
+                            }
+                        }
+
                         vmInfo = GetInfo(name, ssh, getVmInfo);
                         var regex = @"Status = [A-Z]+";
                         for (int j = 0; j < vmInfo.Length; j++)
@@ -173,30 +201,62 @@ namespace StageSSPortal.Controllers.api
         }
 
         [HttpGet]
-        [Route("Klant/SSH/KlantOVMs")]
+        [Route("api/Klant/SSH/KlantOVMs")]
         [Authorize(Roles = "Klant")]
-        public IHttpActionResult KlantOVMs()
+        public IHttpActionResult KlantOVMs(List<VmModel> model)
         {
+            model = new List<VmModel>();
             List<string> vmState = new List<string>();
             string[] vmInfo = new string[7];
             string[] getVmInfo = new string[7];
+            List<string> LijstServerVMs = new List<string>();
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
             ovms = mgr.GetKlantOVMs(k.KlantId).ToList();
             List<string> klantovms = new List<string>();
-            foreach(OracleVirtualMachine vm in ovms)
-            {
-                klantovms.Add(vm.Naam);
-            }
             using (ssh)
             {
-                foreach (var vm in klantovms)
+                foreach (OracleVirtualMachine vm in ovms)
                 {
-                    vmInfo = GetInfo(vm, ssh, getVmInfo);
+                    VmModel vmModel = new VmModel();
+                    vmModel.Name = vm.Naam;
+                    vmModel.id = vm.OvmId;
+                    LijstServerVMs.Add(vm.Naam);
+                    vmInfo = GetInfo(vm.Naam, ssh, getVmInfo);
+                    var regex = @"Status = [A-Z]+";
+                    for (int j = 0; j < vmInfo.Length; j++)
+                    {
+                        var match = Regex.Match(vmInfo[j], regex);
+                        if (match.Length != 0)
+                        {
+                            vmModel.Status = vmInfo[j].Substring(vmInfo[j].IndexOf("=") + 2, vmInfo[j].Length - vmInfo[j].IndexOf("=") - 2);
+                        }
+                    }
+                    model.Add(vmModel);
                 }
-                vmState = GetVmState(klantovms, ssh);
             }
-            return Ok(klantovms);
+            
+            return Ok(model);
+            //List<string> vmState = new List<string>();
+            //string[] vmInfo = new string[7];
+            //string[] getVmInfo = new string[7];
+            //List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+            //Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
+            //ovms = mgr.GetKlantOVMs(k.KlantId).ToList();
+            //List<string> klantovms = new List<string>();
+            //foreach(OracleVirtualMachine vm in ovms)
+            //{
+            //    klantovms.Add(vm.Naam);
+            //}
+            //using (ssh)
+            //{
+            //    foreach (var vm in klantovms)
+            //    {
+            //        vmInfo = GetInfo(vm, ssh, getVmInfo);
+            //    }
+            //    vmState = GetVmState(klantovms, ssh);
+            //}
+            //return Ok(klantovms);
         }
 
     }
