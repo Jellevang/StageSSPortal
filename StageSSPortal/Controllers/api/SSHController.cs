@@ -56,6 +56,10 @@ namespace StageSSPortal.Controllers.api
             }
             return vmInfo2;
         }
+
+       
+
+
         [HttpGet]
         [Route("api/SSH/Vms")]
         [Authorize(Roles = "Admin")]
