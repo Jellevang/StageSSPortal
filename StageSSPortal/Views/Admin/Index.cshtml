@@ -9,26 +9,11 @@
         <div class="col-md-9">
             <h2>Welkom</h2>
         </div>
-        <div class="col-md-3">
-            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-        <p>
-            <a href="@Url.Action("Index", "Manage")">Account beheren</a>
-        </p>
-        <p>
-            <a href="@Url.Action("Create", "Klant")">Klant aanmaken</a>
-        </p>
-        <p>
-            <a href="@Url.Action("Index", "Klant")">Lijst van klanten</a>
-        </p>
-        <p>
-            <a href="@Url.Action("StartSSHOVM", "SSH")">Lijst van machines</a>
-        </p>
-        <p>
-            <a href="javascript:document.getElementById('logoutForm').submit()">Uitloggen</a>
-        </p>
-}
+        <div >
+                <a href="@Url.Action("Index", "Manage")">Account beheren</a>
+                <a href="@Url.Action("Create", "Klant")">Klant aanmaken</a>
+                <a href="@Url.Action("Index", "Klant")">Lijst van klanten</a>
+                <a href="@Url.Action("StartSSHOVM", "SSH")">Lijst van machines</a>
         </div>
     </div>
 

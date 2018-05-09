@@ -7,26 +7,54 @@ h1,h2,h3,h4,h5,h6{
 
 div#LayBar {
     background-color: #B83535;
- 
+ max-height:50px;
 }
- ul li a:hover{
+.container{
+    max-width:inherit;
+    max-height:inherit;
+}
+.navbar-inverse .navbar-nav > li > a{
+    color:white;
+}
+.navbar-inverse .navbar-brand{
+    color:white;
+}
+a:hover {
+    font-weight: bold;
+}
+/* ul li a:hover{
      color:grey !important;
  }
  ul li a{
      color:white !important;
- }
- li.logo img {
-     height:50px !important;
+ }*/
+ div img {
+     float:left;
+     height:49px !important;
      margin-right:2% !important;
  }
+ .navbar-header{
+     float:none;
+     width: inherit;
+ }
+ .navbar-brand{
+     float:left !important;
+ }
+ div.opties{
+     float:right;
+ }
+div.test {
+    max-height:inherit;
+}/*
  ul#Menu li {
      margin-left:2% !important;
      float:left;
  }
-    ul#Menu li:hover {
-        background-color: #B83535 !important;
-        color:grey !important;
-    }
+ul#Menu li a {
+    text-decoration:inherit !important;
+    margin:inherit;
+     
+}
 ul.navbar-nav{
     float:none !important;
-}
+}*/

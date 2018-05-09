@@ -11,47 +11,44 @@
 </head>
 <body>
     <div id="LayBar" class="navbar navbar-inverse navbar-fixed-top logo">
-        
 
-        @*<div class="logo">
-        </div>*@
         <div class="container">
-
-            @*<div class="navbar-header">
-
+            <div class="navbar-header test">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <img src="~/Content/img/monin.jpg" />
                 @Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>*@
+            @*</div>*@
 
-            <div class="navbar-collapse collapse">
-
-                <ul id="Menu" class="nav navbar-fixed-top ">
-                    @*navbar-nav*@
-                                <li class="logo"><img src="~/Content/img/monin.jpg" /></li>
-                                <li>@Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" })</li>
-                                @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
-
-                                <li>@Html.ActionLink("About", "About", "Home")</li>
-                                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                                <li>@Html.Partial("_LoginPartial")</li>
-                                @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+            @*<div class="logo">
+        </div>*@
+            @*<div class="navbar opties">*@
+                @*-collapse collapse*@
+                        <ul id="Menu" class="nav navbar-nav ">
+                            @*<li class="logo"><img src="~/Content/img/monin.jpg" /></li>*@
+                            @*<li>@Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" })</li>*@
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                            @if (ViewContext.HttpContext.User.IsInRole("Admin"))
                 {
                     <li>@Html.ActionLink("Home", "Index", "Admin")</li>
-}
-                                @if (ViewContext.HttpContext.User.IsInRole("Klant"))
+    }
+                            @if (ViewContext.HttpContext.User.IsInRole("Klant"))
                 {
                     <li>@Html.ActionLink("Home", "Home", "Klant")</li>
-}
-                                @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+    }
+                            @if (ViewContext.HttpContext.User.IsInRole("Admin"))
                 {
                     <li>@Html.ActionLink("Klanten", "Index", "Klant")</li>
-}
-                            </ul>
-            </div>
+    }
+
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+
+                    </div>
         </div>
     </div>
     <div class="container body-content">

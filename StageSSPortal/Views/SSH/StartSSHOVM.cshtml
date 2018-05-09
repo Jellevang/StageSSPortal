@@ -46,7 +46,7 @@
     }
     function showVmNames() {
         if ($("#ShowVms").css("display") != "none") {
-            $("table#LijstServerVMs").find("tr").remove();
+            $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
 
         }
