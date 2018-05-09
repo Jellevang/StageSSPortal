@@ -24,18 +24,6 @@ namespace StageSSPortal.Controllers.api
             ssh = new SshClient("10.0.12.240", 10000, "admin", "tst0VMman");
 
         }
-
-
-
-        //// GET: SSH
-        //[Route("Admin/SSH/Index")]
-        //[Authorize(Roles = "Admin")]
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
-
         public string[] GetInfo(string vmId, SshClient ssh, string[] vmInfo2)
         {
             vmInfo2 = new string[7];
@@ -206,6 +194,16 @@ namespace StageSSPortal.Controllers.api
         }
 
         [HttpGet]
+        [Route("api/SSH/KlantOVM/{k}")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult SetKlantOVM(Klant k, OracleVirtualMachine ovm)
+        {
+            ovm.KlantId = k.KlantId;
+            mgr.ChangeOVM(ovm);
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("api/SSH/StopVm/{id}")]
         [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult StopVm(string id)
@@ -271,26 +269,6 @@ namespace StageSSPortal.Controllers.api
             // }
 
             return Ok(model);
-            //List<string> vmState = new List<string>();
-            //string[] vmInfo = new string[7];
-            //string[] getVmInfo = new string[7];
-            //List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
-            //Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
-            //ovms = mgr.GetKlantOVMs(k.KlantId).ToList();
-            //List<string> klantovms = new List<string>();
-            //foreach(OracleVirtualMachine vm in ovms)
-            //{
-            //    klantovms.Add(vm.Naam);
-            //}
-            //using (ssh)
-            //{
-            //    foreach (var vm in klantovms)
-            //    {
-            //        vmInfo = GetInfo(vm, ssh, getVmInfo);
-            //    }
-            //    vmState = GetVmState(klantovms, ssh);
-            //}
-            //return Ok(klantovms);
         }
 
     }
