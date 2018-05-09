@@ -23,15 +23,17 @@
     $(document).ready(function () {
         //$("button#test").click(function () {
         // alert("test");
+        $("select").hide();
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
             showInfo();
         });
         showVmNames();
-        loadKlanten();
+
     });
     function loadKlanten() {
+        $("select").show();
         $.ajax("/api/SSH/Klanten", {
             type: "GET",
             dataType: "json"
@@ -69,6 +71,7 @@
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
+        loadKlanten();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
@@ -96,9 +99,7 @@
             })
     };
 
-    function KlantenLijst() {
-
-    }
+    
     function StopVM() {
         var t;
         $("tr.VmRow").each(function () {
