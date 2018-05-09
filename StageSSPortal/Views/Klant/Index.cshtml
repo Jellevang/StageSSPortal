@@ -57,24 +57,3 @@
     </table>
 </div>
 
-@*@section scripts
-{
-    <script type="text/javascript">
-
-        function VerzendMails() {
-            $.ajax('/api/Klant/Mail/Verzend',
-                            {
-                                type: 'POST',
-                                dataType: 'json'
-                            })
-                        .done(function (data) {
-
-                        })
-                        .fail(function (data) {
-
-                        });
-        }
-
-    </script>
-
-}*@
