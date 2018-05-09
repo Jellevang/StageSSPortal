@@ -15,6 +15,10 @@ div#LayBar {
  ul li a{
      color:white !important;
  }
- div.logo img{
-     height:50px;
+ li.logo img {
+     height:50px !important;
+     margin-right:2% !important;
+ }
+ ul#Menu li {
+     margin-left:2% !important;
  }
