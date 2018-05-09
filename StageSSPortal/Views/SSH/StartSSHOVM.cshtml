@@ -29,15 +29,26 @@
             showInfo();
         });
         showVmNames();
+        loadKlanten();
     });
-
+    function loadKlanten() {
+        $.ajax("/api/SSH/Klanten", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("#klantenlijst").append("<option class=klant> " + value.Naam + "</option>");
+                })            
+    });
+    }
     function showVmNames() {
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr").remove();
             $("#VmInfo").css("display", "none");
 
         }
-        $.ajax("/api/SSH/vms", {
+        $.ajax("/api/SSH/vmsDB", {
             type: "GET",
             dataType: "json"
         })
@@ -55,7 +66,7 @@
         $(this).css('background-color', 'rgb(58, 187, 252)');
     }
     function addVM(vm) {
-        $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" + "<td>" + vm.Status + "</td>" + "</tr>");
+        $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
         $("#ListVmInfo").find("tr").remove();
@@ -140,7 +151,7 @@
     <table id="LijstServerVMs" class="table">
         <tr>
             <th>Name</th>
-            <th>Status</th>
+            @*<th>Status</th>*@
 
         </tr>
     </table>
@@ -155,5 +166,7 @@
     <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
     <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
 </div>
-
+<select id="klantenlijst">
+   
+</select>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

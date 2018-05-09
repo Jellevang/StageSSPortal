@@ -55,7 +55,7 @@
         $(this).css('background-color', 'rgb(58, 187, 252)');
     }
     function addVM(vm) {
-        $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" + "<td>" + vm.Status + "</td>" + "</tr>");
+        $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
         $("#ListVmInfo").find("tr").remove();
@@ -136,7 +136,7 @@
     <table id="LijstServerVMs" class="table">
         <tr>
             <th>Name</th>
-            <th>Status</th>
+            @*<th>Status</th>*@
 
         </tr>
     </table>

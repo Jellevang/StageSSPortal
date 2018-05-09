@@ -29,27 +29,28 @@
 
             <div class="navbar-collapse collapse">
 
-                <ul id="Menu" class="nav navbar-nav">
-                    <li class="logo"><img src="~/Content/img/monin.jpg" /></li>
-                    <li>@Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })</li>
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <ul id="Menu" class="nav navbar-fixed-top ">
+                    @*navbar-nav*@
+                                <li class="logo"><img src="~/Content/img/monin.jpg" /></li>
+                                <li>@Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" })</li>
+                                @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
 
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.Partial("_LoginPartial")</li>
-                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
-    {
-                <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+                                <li>@Html.ActionLink("About", "About", "Home")</li>
+                                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                                <li>@Html.Partial("_LoginPartial")</li>
+                                @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                {
+                    <li>@Html.ActionLink("Home", "Index", "Admin")</li>
 }
-                    @if (ViewContext.HttpContext.User.IsInRole("Klant"))
-    {
-                <li>@Html.ActionLink("Home", "Home", "Klant")</li>
+                                @if (ViewContext.HttpContext.User.IsInRole("Klant"))
+                {
+                    <li>@Html.ActionLink("Home", "Home", "Klant")</li>
 }
-                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
-    {
-                <li>@Html.ActionLink("Klanten", "Index", "Klant")</li>
+                                @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                {
+                    <li>@Html.ActionLink("Klanten", "Index", "Klant")</li>
 }
-                </ul>
+                            </ul>
             </div>
         </div>
     </div>

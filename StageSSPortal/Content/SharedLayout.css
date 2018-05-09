@@ -21,4 +21,12 @@ div#LayBar {
  }
  ul#Menu li {
      margin-left:2% !important;
+     float:left;
  }
+    ul#Menu li:hover {
+        background-color: #B83535 !important;
+        color:grey !important;
+    }
+ul.navbar-nav{
+    float:none !important;
+}
