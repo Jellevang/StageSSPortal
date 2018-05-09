@@ -56,10 +56,6 @@ namespace StageSSPortal.Controllers.api
             }
             return vmInfo2;
         }
-
-       
-
-
         [HttpGet]
         [Route("api/SSH/Vms")]
         [Authorize(Roles = "Admin")]
@@ -174,6 +170,15 @@ namespace StageSSPortal.Controllers.api
                 Info = GetInfo(id, ssh, Info);
             }
             return Ok(Info);
+        }
+        [HttpGet]
+        [Route("api/SSH/Klanten")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetKlanten()
+        {
+            List<Klant> klanten = new List<Klant>();
+            klanten = klantmgr.GetKlanten().ToList();
+            return Ok(klanten);
         }
 
         [HttpGet]
