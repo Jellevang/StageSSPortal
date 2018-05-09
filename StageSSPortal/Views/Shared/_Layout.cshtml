@@ -21,42 +21,34 @@
                 </button>
                 <img src="~/Content/img/monin.jpg" />
                 @Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            @*</div>*@
+                <ul id="Menu" class="nav navbar-nav ">
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+                    }
+                    @if (ViewContext.HttpContext.User.IsInRole("Klant"))
+                    {
+                        <li>@Html.ActionLink("Home", "Home", "Klant")</li>
+                    }
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Klanten", "Index", "Klant")</li>
+                    }
 
-            @*<div class="logo">
-        </div>*@
-            @*<div class="navbar opties">*@
-                @*-collapse collapse*@
-                        <ul id="Menu" class="nav navbar-nav ">
-                            @*<li class="logo"><img src="~/Content/img/monin.jpg" /></li>*@
-                            @*<li>@Html.ActionLink("Monin-OVM-Platform", "Index", "Home", new { area = "" })</li>*@
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                            @if (ViewContext.HttpContext.User.IsInRole("Admin"))
-                {
-                    <li>@Html.ActionLink("Home", "Index", "Admin")</li>
-    }
-                            @if (ViewContext.HttpContext.User.IsInRole("Klant"))
-                {
-                    <li>@Html.ActionLink("Home", "Home", "Klant")</li>
-    }
-                            @if (ViewContext.HttpContext.User.IsInRole("Admin"))
-                {
-                    <li>@Html.ActionLink("Klanten", "Index", "Klant")</li>
-    }
+                </ul>
+                @Html.Partial("_LoginPartial")
 
-                        </ul>
-                        @Html.Partial("_LoginPartial")
-
-                    </div>
+            </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
         @*<footer>
-            <p>&copy; @DateTime.Now.Year - Stage Monin</p>
-        </footer>*@
+                <p>&copy; @DateTime.Now.Year - Stage Monin</p>
+            </footer>*@
     </div>
 
     @Scripts.Render("~/bundles/jquery")

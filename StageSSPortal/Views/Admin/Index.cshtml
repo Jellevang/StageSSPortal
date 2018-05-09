@@ -3,24 +3,35 @@
 @{
     ViewBag.Title = "Administratorportaal";
 }
+@Styles.Render("~/Content/Admin.css")
 
 <div class="container">
     <div class="row">
         <div class="col-md-9">
             <h2>Welkom</h2>
         </div>
-        <div >
-                <a href="@Url.Action("Index", "Manage")">Account beheren</a>
-                <a href="@Url.Action("Create", "Klant")">Klant aanmaken</a>
-                <a href="@Url.Action("Index", "Klant")">Lijst van klanten</a>
-                <a href="@Url.Action("StartSSHOVM", "SSH")">Lijst van machines</a>
+        <div class="AdminLink">
+            <table>
+                <tr><td>
+    <a href="@Url.Action("Index", "Manage")">Account beheren</a>
+</td></tr>
+                <tr><td>
+    <a href="@Url.Action("Create", "Klant")">Klant aanmaken</a>
+</td></tr>
+                <tr><td>
+    <a href="@Url.Action("Index", "Klant")">Lijst van klanten</a>
+</td></tr>
+                <tr><td>
+    <a href="@Url.Action("StartSSHOVM", "SSH")">Lijst van machines</a>
+</td></tr>
+            </table>
         </div>
     </div>
 
-    <div class="col-lg-12">
+    @*<div class="col-lg-12">
         <p>U bent nu ingelogd als administrator op dit webplatform. </p>
         <p>U kunt nu navigeren naar de beheerpagina.</p>
-    </div>
+    </div>*@
 
 </div>
 @section scripts{} 

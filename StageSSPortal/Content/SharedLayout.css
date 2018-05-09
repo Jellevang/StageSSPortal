@@ -19,15 +19,10 @@ div#LayBar {
 .navbar-inverse .navbar-brand{
     color:white;
 }
-a:hover {
-    font-weight: bold;
+#LayBar a:hover {
+    color:black
 }
-/* ul li a:hover{
-     color:grey !important;
- }
- ul li a{
-     color:white !important;
- }*/
+
  div img {
      float:left;
      height:49px !important;
