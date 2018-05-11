@@ -108,7 +108,7 @@ namespace StageSSPortal.Controllers.api
             }
             else
             {
-                //--------------------------------------------------------------------------------------------------
+                
                 for (int j = 0; j < orderDbVms.Count(); j++)
                 {
                     mgr.RemoveOVM(orderDbVms[j].OvmId);
