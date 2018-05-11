@@ -13,6 +13,7 @@
     @*<button class="btn-success" onclick="VerzendMails()">Stuur uitnodigingsmail</button>*@
     <table class="table">
         <tr>
+
             <th>
                 @Html.DisplayNameFor(model => model.Naam)
             </th>
@@ -48,33 +49,13 @@
                     else
                     {
                         @Html.ActionLink("Blokkeer", "Block", new { id = item.KlantId })
-                    }
+                    } |
                     @Html.ActionLink("Verwijder", "Delete", new { id = item.KlantId })
                 </td>
             </tr>
+
         }
 
     </table>
 </div>
 
-@*@section scripts
-{
-    <script type="text/javascript">
-
-        function VerzendMails() {
-            $.ajax('/api/Klant/Mail/Verzend',
-                            {
-                                type: 'POST',
-                                dataType: 'json'
-                            })
-                        .done(function (data) {
-
-                        })
-                        .fail(function (data) {
-
-                        });
-        }
-
-    </script>
-
-}*@

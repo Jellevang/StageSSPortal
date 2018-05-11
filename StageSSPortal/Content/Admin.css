@@ -1,0 +1,15 @@
+﻿body {
+}
+
+div.AdminLink{
+    float:left;
+    border:2px black;
+}
+div.AdminLink table tr td  > a{
+    text-decoration:none;
+    color:green;
+    
+}
+.col-md-9{
+    width:100%;
+}

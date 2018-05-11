@@ -1,22 +1,6 @@
-﻿<style>
-    #LijstServerVMs {
-        width: 30%;
-        float: left;
-    }
+﻿@Styles.Render("~/Content/ShowVm.css")
 
-    .VmRow:hover {
-        color: blue;
-    }
 
-    div#VmInfo {
-        float: left;
-        position: relative;
-    }
-
-    div#btns {
-        float: right;
-    }
-</style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
@@ -32,6 +16,22 @@
         showVmNames();
 
     });
+
+    function checkForVms() {
+        //if ($("#ShowVms").css("display") != "none") {
+        //    $("table#LijstServerVMs").find("tr:not(:first)").remove();
+        //    $("#VmInfo").css("display", "none");
+        //}
+        alert("check voor vms");
+        $.ajax("/api/SSH/CheckVms",{
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function(data){
+                //alert("data"+data);
+                ShowVms(data);
+        })
+    }
     function loadKlanten() {
         $("select").show();
         $.ajax("/api/SSH/Klanten", {
@@ -42,25 +42,27 @@
                 $("#klantenlijst").find("option").remove();
                 $.each(data, function (index, value) {              
                     $("#klantenlijst").append("<option class=klant> " + value.Naam + "</option>");
-                })            
+                })
             });
-        
     }
-    function showVmNames() {
+    function showVmNames() {  
+        //alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
-
         }
         $.ajax("/api/SSH/vmsDB", {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
-                ShowVms(data);
+             //   alert("vmnamesdone")
+                checkForVms();
+                //ShowVms(data);
             })
     };
     function ShowVms(LijstServerVMs) {
+        
         $.each(LijstServerVMs, function (index, value) {
             addVM(value);
         })
@@ -70,10 +72,12 @@
         $(this).css('background-color', 'rgb(58, 187, 252)');
     }
     function addVM(vm) {
+        //alert(vm.id)
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
-        loadKlanten();
+        $("select").hide();
+
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
@@ -82,7 +86,7 @@
                 //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
                 //t.replace(".", "-");
-                alert(t);
+              //  alert(t);
             }
         })
         $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
@@ -90,6 +94,7 @@
             dataType: "json"
         })
             .done(function (data) {
+                loadKlanten();
                 var text = data;
                 //alert(text);
                 //alert("test");
@@ -101,7 +106,7 @@
             })
     };
 
-    
+
     function StopVM() {
         var t;
         $("tr.VmRow").each(function () {
@@ -115,10 +120,11 @@
             })
                 .done
                 (function (data) {
+
                 })
-        });
+        }); showVmNames();
+
         //document.location.reload();
-        showVmNames();
 
     };
 
@@ -160,15 +166,17 @@
             })
                 .done
                 (function (data) {
+
                 })
         });
         //document.location.reload();
         showVmNames();
 
+
     };
 </script>
 
-<div class="jumbotron">
+<div>
     <h1>Beheer Virtuele Machines</h1>
 </div>
 
@@ -195,5 +203,17 @@
 <select id="klantenlijst">
    
 </select>
-<button class=" btn btn-default" id="btn" onclick="SaveKlantVM()">Save Klant</button>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
+
+@*<div class="select" tabindex="1">
+    <input class="selectopt" name="test" type="radio" id="opt1" checked>
+    <label for="opt1" class="option">Oranges</label>
+    <input class="selectopt" name="test" type="radio" id="opt2">
+    <label for="opt2" class="option">Apples</label>
+    <input class="selectopt" name="test" type="radio" id="opt3">
+    <label for="opt3" class="option">Grapefruit</label>
+    <input class="selectopt" name="test" type="radio" id="opt4">
+    <label for="opt4" class="option">Bananas</label>
+    <input class="selectopt" name="test" type="radio" id="opt5">
+    <label for="opt5" class="option">Watermelon</label>
+</div>*@

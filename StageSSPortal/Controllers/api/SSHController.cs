@@ -44,7 +44,95 @@ namespace StageSSPortal.Controllers.api
             }
             return vmInfo2;
         }
+
         [HttpGet]
+        [Route("api/SSH/CheckVms")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult checkForVms()
+        {
+            List<VmModel> serverVms = new List<VmModel>();
+            string[] serverVMs;
+            List<VmModel> OrderServerVms = new List<VmModel>();
+            using (ssh)
+            {
+                ssh.Connect();
+                var ServerResult = ssh.RunCommand("show Server name=hes-ora-vmtst01");
+                serverVMs = ServerResult.Result.Split('\n');
+                ssh.Disconnect();
+                string patternVM = @"Vm [0-9]+";
+                for (int i = 0; i < serverVMs.Length; i++)
+                {
+                    VmModel vm = new VmModel();
+                    var resId = Regex.Match(serverVMs[i], patternVM);
+                    if (resId.Length != 0)
+                    {
+                        string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
+                        string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
+                        vm.id = id;
+                        vm.Name=name;
+                        vm.KlantId = 0;
+                        serverVms.Add(vm);
+                    }
+                }
+            }
+            List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+            ovms = mgr.GetOVMs().ToList();
+            List<OracleVirtualMachine> orderDbVms = new List<OracleVirtualMachine>();
+            orderDbVms=ovms.OrderBy(o => o.OvmId).ToList();
+            OrderServerVms = serverVms.OrderBy(o => o.id).ToList();
+            // AANTAL VAN BEIDE LIJSTEN IS GELIJK
+            if (OrderServerVms.Count == orderDbVms.Count())
+            {
+                for (int i = 0; i < OrderServerVms.Count(); i++)
+                {
+                    //MAAR NIET ELKE WAARDE MATCHED
+                    if (orderDbVms[i].OvmId != OrderServerVms[i].id)
+                    {
+                        //EERST OUDE RIJ VERWIJDEREN
+                        mgr.RemoveOVM(orderDbVms[i].OvmId);
+                        for (int k = 0; k < OrderServerVms.Count(); k++)
+                        {
+                            //ALS RIJ ER TOCH IN ZIT, KLANT ID DOORGEVEN AAN OUDE RIJ
+                            if (OrderServerVms[k].id == orderDbVms[i].OvmId)
+                            {
+                                OrderServerVms[k].KlantId = orderDbVms[i].KlantId;
+                            }
+                        }
+                        for (int k = 0; k < OrderServerVms.Count(); k++)
+                        {
+                            //NIEUWE MACHINE TOEVOEGEN
+                            mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //--------------------------------------------------------------------------------------------------
+                for (int j = 0; j < orderDbVms.Count(); j++)
+                {
+                    mgr.RemoveOVM(orderDbVms[j].OvmId);
+                    for (int k = 0; k < OrderServerVms.Count(); k++)
+                    {
+                        if (OrderServerVms[k].id == orderDbVms[j].OvmId)
+                        {
+                            OrderServerVms[k].KlantId = orderDbVms[j].KlantId;
+                        }
+                    }
+
+                }
+                for (int k = 0; k < OrderServerVms.Count(); k++)
+                {
+                    mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
+                }
+                return Ok(serverVms);
+            }
+                return Ok();
+        }            
+
+        
+    
+    [HttpGet]
         [Route("api/SSH/Vms")]
         [Authorize(Roles = "Admin")]
         public IHttpActionResult GetVms(List<VmModel> model)

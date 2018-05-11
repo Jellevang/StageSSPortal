@@ -31,10 +31,18 @@ namespace DAL.Repositories
             ctx.OracleVirtualMachines.Remove(ovm);
             ctx.SaveChanges();
         }
+        
         public OracleVirtualMachine GetMachine(int id)
         {
             OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Find(id);
             return ovm;    
+        }
+
+        public OracleVirtualMachine GetMachineByOvmId(string OvmId)
+        {
+            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o=>o.OvmId.Equals(OvmId)).FirstOrDefault();
+            return ovm;
+
         }
         public IEnumerable<OracleVirtualMachine> ReadMachines()
         {

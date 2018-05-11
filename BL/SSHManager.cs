@@ -29,9 +29,15 @@ namespace BL
             OracleVirtualMachine created = repo.AddMachine(ovm);
             return created;
         }
-        public void RemoveOVM(int id)
+
+        public OracleVirtualMachine GetOVMByOvmId(string OvmId)
         {
-            OracleVirtualMachine ovm = repo.GetMachine(id);
+            return repo.GetMachineByOvmId(OvmId);
+        }
+
+        public void RemoveOVM(string id)
+        {
+            OracleVirtualMachine ovm = repo.GetMachineByOvmId(id);
             repo.DeleteMachine(ovm);
         }
 
