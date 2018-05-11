@@ -27,11 +27,20 @@
                 <ul id="Menu" class="nav navbar-nav ">
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                @if (ViewContext.HttpContext.User.IsInRole("Klant"))
-            {
-            <li>@Html.ActionLink("Home", "Home", "Klant")</li>
-            }
                 </ul>
+                    @if (ViewContext.HttpContext.User.IsInRole("Klant"))
+                {
+                <div class="dropdown">
+                    <button class="dropbtn">Opties</button>
+                    <div class="dropdown-content">
+                        @Html.ActionLink("Beheer Account", "Index", "Manage")
+                        @Html.ActionLink("KlantAccount Aanmaken", "Create", "KlantAccount")
+                        @Html.ActionLink("KlantenAccount overzicht", "Index", "KlantAccount")
+                        @Html.ActionLink("Virtuele Machines", "KlantOVMs", "SSH")
+                    </div>
+                </div>
+                    }
+                
             @if (ViewContext.HttpContext.User.IsInRole("Admin"))
             {
                 <div class="dropdown">
