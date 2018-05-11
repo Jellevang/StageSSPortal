@@ -10,9 +10,10 @@ namespace BL
     public interface ISSHManager
     {
         OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId);
-        void RemoveOVM(int id);
+        void RemoveOVM(string id);
         OracleVirtualMachine GetOVM(int id);
         OracleVirtualMachine GetOVM(string naam);
+        OracleVirtualMachine GetOVMByOvmId(string OvmId);
         IEnumerable<OracleVirtualMachine> GetKlantOVMs(int klantid);
         IEnumerable<OracleVirtualMachine> GetOVMs();
         void ChangeOVM(OracleVirtualMachine ovm);

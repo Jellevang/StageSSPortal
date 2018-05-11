@@ -12,6 +12,7 @@ namespace DAL.Interfaces
         OracleVirtualMachine AddMachine(OracleVirtualMachine ovm);
         void DeleteMachine(OracleVirtualMachine ovm);
         OracleVirtualMachine GetMachine(int id);
+        OracleVirtualMachine GetMachineByOvmId(string OvmId);
         IEnumerable<OracleVirtualMachine> ReadMachines();
         OracleVirtualMachine GetMachine(string naam);
         IEnumerable<OracleVirtualMachine> GetKlantMachines(int klantid);

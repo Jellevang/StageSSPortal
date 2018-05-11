@@ -16,6 +16,22 @@
         showVmNames();
 
     });
+
+    function checkForVms() {
+        //if ($("#ShowVms").css("display") != "none") {
+        //    $("table#LijstServerVMs").find("tr:not(:first)").remove();
+        //    $("#VmInfo").css("display", "none");
+        //}
+        alert("check voor vms");
+        $.ajax("/api/SSH/CheckVms",{
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function(data){
+                //alert("data"+data);
+                ShowVms(data);
+        })
+    }
     function loadKlanten() {
         $("select").show();
         $.ajax("/api/SSH/Klanten", {
@@ -28,21 +44,24 @@
                 })
             });
     }
-    function showVmNames() {
+    function showVmNames() {  
+        //alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
-
         }
         $.ajax("/api/SSH/vmsDB", {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
-                ShowVms(data);
+             //   alert("vmnamesdone")
+                checkForVms();
+                //ShowVms(data);
             })
     };
     function ShowVms(LijstServerVMs) {
+        
         $.each(LijstServerVMs, function (index, value) {
             addVM(value);
         })
@@ -52,6 +71,7 @@
         $(this).css('background-color', 'rgb(58, 187, 252)');
     }
     function addVM(vm) {
+        //alert(vm.id)
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
