@@ -22,7 +22,7 @@
         //    $("table#LijstServerVMs").find("tr:not(:first)").remove();
         //    $("#VmInfo").css("display", "none");
         //}
-        alert("check voor vms");
+        //alert("check voor vms");
         $.ajax("/api/SSH/CheckVms", {
             type: "GET",
             dataType: "json"
@@ -130,27 +130,24 @@
 
     function SaveKlantVM() {
         var t;
+        //alert("t=" + t);
+
+        var k = $("#klantenlijst").val();
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-                alert(t);
-            }
-            var k = $("#klantenlijst").val();
-            //alert(k);
-            //alert(t);
-            $.ajax("/api/SSH/KlantOVM/" + t + '/' + k, {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
+                //alert("t=" + t);
+                $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
+                    type: "GET",
+                    dataType: "json"
                 })
+                    .done
+                    (function (data) {
+                    })
+            }
         });
-        //document.location.reload();
         showVmNames();
-
     }
-
     function StartVM() {
         var t;
         $("tr.VmRow").each(function () {

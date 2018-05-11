@@ -127,7 +127,15 @@ namespace StageSSPortal.Controllers.api
                 }
                 return Ok(serverVms);
             }
-                return Ok();
+            List<VmModel> model = new List<VmModel>();
+            foreach (OracleVirtualMachine vm in ovms)
+            {
+                VmModel vmModel = new VmModel();
+                vmModel.Name = vm.Naam;
+                vmModel.id = vm.OvmId;
+                model.Add(vmModel);
+            }
+            return Ok(model);
         }            
 
         
@@ -287,7 +295,7 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin")]
         public IHttpActionResult SetKlantOVM(string id,string k)
         {
-            OracleVirtualMachine ovm = mgr.GetOVM(id);
+            OracleVirtualMachine ovm = mgr.GetOVMById(id);
             Klant klant = klantmgr.GetKlantByName(k);
             ovm.KlantId = klant.KlantId;
             mgr.ChangeOVM(ovm);
