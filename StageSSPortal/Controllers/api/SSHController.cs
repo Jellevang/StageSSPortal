@@ -81,12 +81,13 @@ namespace StageSSPortal.Controllers.api
                         VmModel vmModel = new VmModel();
                         string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
                         string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
+                        id=id.Trim();
                         vmModel.Name = name;
                         vmModel.id = id;
 
                         if (isEmpty)
                         {
-                            OracleVirtualMachine cutted = mgr.AddOVM(name, id, 1);
+                            OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
                         }
                         else
                         {
@@ -189,16 +190,18 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult GetKlanten()
         {
             List<Klant> klanten = new List<Klant>();
-            klanten = klantmgr.GetKlanten().ToList();
+            klanten = klantmgr.GetHoofdKlanten().ToList();
             return Ok(klanten);
         }
 
         [HttpGet]
-        [Route("api/SSH/KlantOVM/{k}")]
+        [Route("api/SSH/KlantOVM/{id}/{k}")]
         [Authorize(Roles = "Admin")]
-        public IHttpActionResult SetKlantOVM(Klant k, OracleVirtualMachine ovm)
+        public IHttpActionResult SetKlantOVM(string id,string k)
         {
-            ovm.KlantId = k.KlantId;
+            OracleVirtualMachine ovm = mgr.GetOVM(id);
+            Klant klant = klantmgr.GetKlantByName(k);
+            ovm.KlantId = klant.KlantId;
             mgr.ChangeOVM(ovm);
             return Ok();
         }

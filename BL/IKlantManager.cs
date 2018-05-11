@@ -12,7 +12,9 @@ namespace BL
         void UnblockKlant(int id);
         Klant GetKlant(int id);
         Klant GetKlant(string email);
+        Klant GetKlantByName(string naam);
         IEnumerable<Klant> GetKlanten();
+        IEnumerable<Klant> GetHoofdKlanten();
         IEnumerable<Klant> GetKlantenAccounts(Klant k);
         Klant AddKlantAccount(string naam, string email, Klant h);
         void BlockKlantAccount(int id);

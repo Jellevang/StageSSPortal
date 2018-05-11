@@ -8,6 +8,7 @@ namespace DAL.Interfaces
         Klant CreateKlant(Klant Klant);
         Klant GetKlant(int id);
         Klant GetKlant(string email);
+        Klant GetKlantByName(string naam);
         IEnumerable<Klant> ReadKlanten();
         void UpdateKlant(Klant Klant);
         void BlockKlant(int id);

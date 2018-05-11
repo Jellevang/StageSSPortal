@@ -42,6 +42,11 @@ namespace DAL.Repositories
             Klant Klant = ctx.Klanten.Where(k => k.Email.Equals(email)).FirstOrDefault();
             return Klant;
         }
+        public Klant GetKlantByName(string naam)
+        {
+            Klant Klant = ctx.Klanten.Where(k => k.Naam.Equals(naam)).FirstOrDefault();
+            return Klant;
+        }
         public IEnumerable<Klant> ReadKlanten()
         {
             return ctx.Klanten.AsEnumerable();

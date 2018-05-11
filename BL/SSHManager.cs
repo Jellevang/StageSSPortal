@@ -39,9 +39,13 @@ namespace BL
         {
             return repo.GetMachine(id);
         }
-        public OracleVirtualMachine GetOVM(string naam)
+        public OracleVirtualMachine GetOVM(string id)
         {
-            return repo.GetMachine(naam);
+            return repo.GetMachine(id);
+        }
+        public OracleVirtualMachine GetOVMById(string id)
+        {
+            return repo.GetMachineById(id);
         }
         public IEnumerable<OracleVirtualMachine> GetKlantOVMs(int klantid)
         {

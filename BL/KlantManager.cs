@@ -112,9 +112,27 @@ namespace BL
         {
             return repo.GetKlant(email);
         }
+        public Klant GetKlantByName(string naam)
+        {
+            return repo.GetKlantByName(naam);
+        }
         public IEnumerable<Klant> GetKlanten()
         {
             return repo.ReadKlanten();
+        }
+        public IEnumerable<Klant> GetHoofdKlanten()
+        {
+            List<Klant> klantenAcc = new List<Klant>();
+            List<Klant> klantenAccs = new List<Klant>();
+            klantenAcc = GetKlanten().ToList();
+            foreach (Klant acc in klantenAcc)
+            {
+                if (acc.IsKlantAccount == false)
+                {
+                    klantenAccs.Add(acc);
+                }
+            }
+            return klantenAccs;
         }
         public IEnumerable<Klant> GetKlantenAccounts(Klant k)
         {

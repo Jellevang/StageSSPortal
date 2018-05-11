@@ -14,6 +14,7 @@ namespace DAL.Interfaces
         OracleVirtualMachine GetMachine(int id);
         IEnumerable<OracleVirtualMachine> ReadMachines();
         OracleVirtualMachine GetMachine(string naam);
+        OracleVirtualMachine GetMachineById(string id);
         IEnumerable<OracleVirtualMachine> GetKlantMachines(int klantid);
         void UpdateMachine(OracleVirtualMachine ovm);
         OVMLijst AddLijst(OVMLijst lijst);

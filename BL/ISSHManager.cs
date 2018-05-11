@@ -13,6 +13,7 @@ namespace BL
         void RemoveOVM(int id);
         OracleVirtualMachine GetOVM(int id);
         OracleVirtualMachine GetOVM(string naam);
+        OracleVirtualMachine GetOVMById(string id);
         IEnumerable<OracleVirtualMachine> GetKlantOVMs(int klantid);
         IEnumerable<OracleVirtualMachine> GetOVMs();
         void ChangeOVM(OracleVirtualMachine ovm);

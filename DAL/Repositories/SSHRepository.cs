@@ -34,16 +34,32 @@ namespace DAL.Repositories
         public OracleVirtualMachine GetMachine(int id)
         {
             OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Find(id);
-            return ovm;
-            
+            return ovm;    
         }
         public IEnumerable<OracleVirtualMachine> ReadMachines()
         {
             return ctx.OracleVirtualMachines.AsEnumerable();
         }
-        public OracleVirtualMachine  GetMachine(string naam)
+        public OracleVirtualMachine GetMachine(string id)
         {
-            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.Naam.Equals(naam)).FirstOrDefault();
+            //OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Equals(id)).FirstOrDefault();
+            List<OracleVirtualMachine> ovms = ReadMachines().ToList();
+            OracleVirtualMachine ovm = new OracleVirtualMachine();
+            for (int i=0;i<ovms.Count();i++)
+            {
+                string ids = ovms[i].OvmId;
+                //ids = ids.Trim();
+                if(ids.Equals(id))
+                {
+                    ovm = ovms[i];
+                }
+            }
+            return ovm;
+        }
+        public OracleVirtualMachine GetMachineById(string id)
+        {
+            
+            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Equals(id)).FirstOrDefault();           
             return ovm;
         }
         public IEnumerable<OracleVirtualMachine> GetKlantMachines(int klantid)
@@ -54,7 +70,11 @@ namespace DAL.Repositories
 
         public void UpdateMachine(OracleVirtualMachine ovm)
         {
-            ctx.Entry(ovm).State = EntityState.Modified;
+            OracleVirtualMachine ovM = ctx.OracleVirtualMachines.Find(ovm.OracleVirtualMachineId);
+            ctx.Entry(ovM).CurrentValues.SetValues(ovm);
+            ctx.Entry(ovM).State = System.Data.Entity.EntityState.Modified;
+
+            //ctx.Entry(ovm).State = EntityState.Modified;
             ctx.SaveChanges();
         }
 

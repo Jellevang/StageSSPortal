@@ -39,10 +39,12 @@
             dataType: "json"
         })
             .done(function (data) {
-                $.each(data, function (index, value) {
+                $("#klantenlijst").find("option").remove();
+                $.each(data, function (index, value) {              
                     $("#klantenlijst").append("<option class=klant> " + value.Naam + "</option>");
                 })            
-    });
+            });
+        
     }
     function showVmNames() {
         if ($("#ShowVms").css("display") != "none") {
@@ -105,7 +107,7 @@
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-                //alert(t);
+                alert(t);
             }
             $.ajax("/api/SSH/StopVM/" + t, {
                 type: "GET",
@@ -120,6 +122,29 @@
 
     };
 
+    function SaveKlantVM() {
+        var t;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+                alert(t);
+            }
+            var k = $("#klantenlijst").val();  
+            //alert(k);
+            //alert(t);
+            $.ajax("/api/SSH/KlantOVM/" + t +'/'+ k, {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+                (function (data) {
+                })
+        });
+        //document.location.reload();
+        showVmNames();
+
+    }
+
     function StartVM() {
         var t;
         $("tr.VmRow").each(function () {
@@ -127,7 +152,7 @@
                 //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
                 //t.replace(".", "-");
-                // alert(t);
+                alert(t);
             }
             $.ajax("/api/SSH/StartVM/" + t, { //+ $(this).val(), {
                 type: "GET",
@@ -170,4 +195,5 @@
 <select id="klantenlijst">
    
 </select>
+<button class=" btn btn-default" id="btn" onclick="SaveKlantVM()">Save Klant</button>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
