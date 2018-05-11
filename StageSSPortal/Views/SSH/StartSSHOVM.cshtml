@@ -8,6 +8,7 @@
         //$("button#test").click(function () {
         // alert("test");
         $("select").hide();
+        $("#btnSave").hide();
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
@@ -18,10 +19,8 @@
     });
 
     function checkForVms() {
-        //if ($("#ShowVms").css("display") != "none") {
-        //    $("table#LijstServerVMs").find("tr:not(:first)").remove();
-        //    $("#VmInfo").css("display", "none");
-        //}
+        $("select").hide();
+        $("#btnSave").hide();
         //alert("check voor vms");
         $.ajax("/api/SSH/CheckVms", {
             type: "GET",
@@ -34,6 +33,7 @@
     }
     function loadKlanten() {
         $("select").show();
+        $("#btnSave").show();
         $.ajax("/api/SSH/Klanten", {
             type: "GET",
             dataType: "json"
@@ -67,13 +67,18 @@
             addVM(value);
         })
         $("#ShowVms").css("display", "block");
+        
     }
     function changeColor() {
         $(this).css('background-color', 'rgb(58, 187, 252)');
     }
     function addVM(vm) {
-        //alert(vm.id)
+       // alert(vm.KlantId)
+       
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
+        if (vm.KlantId == 0) {
+            $(this).css("font-weigth", "bold");
+        }
     }
     function showInfo() {
         $("select").hide();
@@ -103,6 +108,7 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
+           
             })
     };
 
@@ -143,6 +149,8 @@
                 })
                     .done
                     (function (data) {
+                        $("select").hide();
+                        $("#btnSave").hide();
                     })
             }
         });
@@ -198,7 +206,7 @@
     <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
 </div>
 <select id="klantenlijst"></select>
-<button class=" btn btn-default" id="btn" onclick="SaveKlantVM()">Save Klant</button>
+<button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
 
 @*<div class="select" tabindex="1">
