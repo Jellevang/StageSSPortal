@@ -23,14 +23,14 @@
         //    $("#VmInfo").css("display", "none");
         //}
         alert("check voor vms");
-        $.ajax("/api/SSH/CheckVms",{
+        $.ajax("/api/SSH/CheckVms", {
             type: "GET",
             dataType: "json"
         })
-            .done(function(data){
+            .done(function (data) {
                 //alert("data"+data);
                 ShowVms(data);
-        })
+            })
     }
     function loadKlanten() {
         $("select").show();
@@ -40,12 +40,12 @@
         })
             .done(function (data) {
                 $("#klantenlijst").find("option").remove();
-                $.each(data, function (index, value) {              
+                $.each(data, function (index, value) {
                     $("#klantenlijst").append("<option class=klant> " + value.Naam + "</option>");
                 })
             });
     }
-    function showVmNames() {  
+    function showVmNames() {
         //alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
@@ -56,13 +56,13 @@
             dataType: "json"
         })
             .done(function (data) {
-             //   alert("vmnamesdone")
+                //   alert("vmnamesdone")
                 checkForVms();
                 //ShowVms(data);
             })
     };
     function ShowVms(LijstServerVMs) {
-        
+
         $.each(LijstServerVMs, function (index, value) {
             addVM(value);
         })
@@ -86,7 +86,7 @@
                 //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
                 //t.replace(".", "-");
-              //  alert(t);
+                //  alert(t);
             }
         })
         $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
@@ -135,10 +135,10 @@
                 t = $(this).attr('id');
                 alert(t);
             }
-            var k = $("#klantenlijst").val();  
+            var k = $("#klantenlijst").val();
             //alert(k);
             //alert(t);
-            $.ajax("/api/SSH/KlantOVM/" + t +'/'+ k, {
+            $.ajax("/api/SSH/KlantOVM/" + t + '/' + k, {
                 type: "GET",
                 dataType: "json"
             })
@@ -200,20 +200,19 @@
     <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
     <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
 </div>
-<select id="klantenlijst">
-   
-</select>
+<select id="klantenlijst"></select>
+<button class=" btn btn-default" id="btn" onclick="SaveKlantVM()">Save Klant</button>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
 
 @*<div class="select" tabindex="1">
-    <input class="selectopt" name="test" type="radio" id="opt1" checked>
-    <label for="opt1" class="option">Oranges</label>
-    <input class="selectopt" name="test" type="radio" id="opt2">
-    <label for="opt2" class="option">Apples</label>
-    <input class="selectopt" name="test" type="radio" id="opt3">
-    <label for="opt3" class="option">Grapefruit</label>
-    <input class="selectopt" name="test" type="radio" id="opt4">
-    <label for="opt4" class="option">Bananas</label>
-    <input class="selectopt" name="test" type="radio" id="opt5">
-    <label for="opt5" class="option">Watermelon</label>
-</div>*@
+        <input class="selectopt" name="test" type="radio" id="opt1" checked>
+        <label for="opt1" class="option">Oranges</label>
+        <input class="selectopt" name="test" type="radio" id="opt2">
+        <label for="opt2" class="option">Apples</label>
+        <input class="selectopt" name="test" type="radio" id="opt3">
+        <label for="opt3" class="option">Grapefruit</label>
+        <input class="selectopt" name="test" type="radio" id="opt4">
+        <label for="opt4" class="option">Bananas</label>
+        <input class="selectopt" name="test" type="radio" id="opt5">
+        <label for="opt5" class="option">Watermelon</label>
+    </div>*@
