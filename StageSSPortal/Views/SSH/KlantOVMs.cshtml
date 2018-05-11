@@ -82,8 +82,10 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
+                loadKlantenAccounts();
             })
     };
+
     function StopVM() {
         var t;
         $("tr.VmRow").each(function () {
@@ -125,6 +127,20 @@
         //showVmNames();
 
     };
+
+    function loadKlantenAccounts() {
+        $("#KlantAccCheck").show();
+        $.ajax("/api/Klant/KlantAccounts", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $("#klantenlijst").find("checkbox").remove();
+                $.each(data, function (index, value) {
+                    $("#KlantAccCheck").append("<input type= checkbox name= chk_Klant[] value="+value.Naam +" />"+ value.Naam+"<br />");
+                })
+            });
+    }
 </script>
 
 <div class="jumbotron">
@@ -144,6 +160,9 @@
 
 <div id="VmInfo" style="display:none">
     <table id="ListVmInfo" class="table"></table>
+</div>
+<div id="KlantAccCheck" style="display:none">
+
 </div>
 <div id="btns">
     <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
