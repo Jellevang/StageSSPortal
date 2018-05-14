@@ -26,7 +26,7 @@ namespace StageSSPortal.Controllers.api
         }
         public string[] GetInfo(string vmId, SshClient ssh, string[] vmInfo2)
         {
-            vmInfo2 = new string[7];
+            vmInfo2 = new string[8];
             string[] vmLines;
             ssh.Connect();
             var commandResult = ssh.RunCommand("show vm id=" + "'" + vmId + "'");
@@ -42,6 +42,9 @@ namespace StageSSPortal.Controllers.api
                     j++;
                 }
             }
+            OracleVirtualMachine vm = mgr.GetOVMById(vmId);
+            
+            vmInfo2[7] = Convert.ToString(klantmgr.GetKlant(vm.KlantId).Naam);
             return vmInfo2;
         }
 
@@ -273,11 +276,12 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult GetInfo(string id)
         {
-            string[] Info = new string[7];
+            string[] Info = new string[8];
             using (ssh)
             {
                 Info = GetInfo(id, ssh, Info);
             }
+
             return Ok(Info);
         }
         [HttpGet]
