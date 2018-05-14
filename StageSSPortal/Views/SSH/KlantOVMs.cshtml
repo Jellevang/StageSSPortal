@@ -21,8 +21,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        //$("button#test").click(function () {
-        // alert("test");
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
@@ -142,27 +140,22 @@
         })
             .done(function (data) {
                 $.each(data, function (index, value) {
-                    $("#KlantAccCheck").append("<input type=checkbox id=CheckKlant name=chk_Klant value=" + "'"+value.Naam +"'"+ " />" + value.Naam+"<br />");
+                    $("#KlantAccCheck").append("<input type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Naam + "'" + "/>" + value.Naam);//+"<br />");
                 })
             });
     }
-
     function SaveKlantAccount() {
         var t;
-        //alert("t=" + t);
-
-        //var k = $("#KlantAccCheck").val();
-        var k;
+       // var k;
         $("input#CheckKlant").each(function () {
-            //alert("for lus");
-            //alert($("#CheckKlant").val());
-            if ($('input:checkbox:checked')) {
+            var k;
+            if ($(this).is(":checked")) {
                 alert("if lus");
-                k = $("#CheckKlant").val()
+                k = $(this).val()
+                alert(k);
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        //alert("t=" + t);
                         alert(k);
                         alert(t);
                         $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k, {
@@ -172,9 +165,9 @@
                             .done
                     }
                 })
-            }
-            if ($('input:checkbox:unchecked')) {
-                k = $("#CheckKlant").val()
+          }
+            else {
+                k = $(this).val()
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
