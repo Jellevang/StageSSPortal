@@ -76,7 +76,7 @@ namespace StageSSPortal.Controllers.api
                     if (resId.Length != 0)
                     {
                         string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
-                        string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
+                        string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1).Trim();
                         vm.id = id;
                         vm.Name=name;
                         vm.KlantId = 0;
@@ -114,6 +114,7 @@ namespace StageSSPortal.Controllers.api
                         }
                     }
                 }
+                //return Ok(serverVMs);
             }
             else
             {
@@ -215,7 +216,7 @@ namespace StageSSPortal.Controllers.api
                             }
                         }
 
-                        vmInfo = GetInfo(name, ssh, getVmInfo);
+                        vmInfo = GetInfo(id, ssh, getVmInfo);
                         var regex = @"Status = [A-Z]+";
                         for (int j = 0; j < vmInfo.Length; j++)
                         {
@@ -239,8 +240,8 @@ namespace StageSSPortal.Controllers.api
         {
             model = new List<VmModel>();
             List<string> vmState = new List<string>();
-            string[] vmInfo = new string[7];
-            string[] getVmInfo = new string[7];
+            string[] vmInfo = new string[8];
+            string[] getVmInfo = new string[8];
             List<string> LijstServerVMs = new List<string>();
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             ovms = mgr.GetOVMs().ToList();
@@ -249,7 +250,8 @@ namespace StageSSPortal.Controllers.api
             {
                 VmModel vmModel = new VmModel();
                 vmModel.Name = vm.Naam;
-                vmModel.id = vm.OvmId;
+                vmModel.id = vm.OvmId.Trim();
+                vmModel.KlantId = vm.KlantId;
                 model.Add(vmModel);
             }
 
@@ -309,7 +311,7 @@ namespace StageSSPortal.Controllers.api
             Klant klant = klantmgr.GetKlantByName(k);
             ovm.KlantId = klant.KlantId;
             mgr.ChangeOVM(ovm);
-            return Ok();
+            return Ok(ovm.OvmId);
         }
 
         [HttpGet]
@@ -362,17 +364,6 @@ namespace StageSSPortal.Controllers.api
                 VmModel vmModel = new VmModel();
                 vmModel.Name = vm.Naam;
                 vmModel.id = vm.OvmId;
-                //LijstServerVMs.Add(vm.Naam);
-                //vmInfo = GetInfo(vm.Naam, ssh, getVmInfo);
-                //var regex = @"Status = [A-Z]+";
-                //for (int j = 0; j < vmInfo.Length; j++)
-                //{
-                //    var match = Regex.Match(vmInfo[j], regex);
-                //    if (match.Length != 0)
-                //    {
-                //        vmModel.Status = vmInfo[j].Substring(vmInfo[j].IndexOf("=") + 2, vmInfo[j].Length - vmInfo[j].IndexOf("=") - 2);
-                //    }
-                //}
                 model.Add(vmModel);
             }
             // }

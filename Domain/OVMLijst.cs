@@ -10,6 +10,6 @@ namespace Domain
     {
         public int OVMLijstId { get; set; }
         public int AccountId { get; set; }
-        public int OVMId { get; set; }
+        public string OVMId { get; set; }
     }
 }

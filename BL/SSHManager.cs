@@ -67,7 +67,7 @@ namespace BL
             repo.UpdateMachine(ovm);
         }
 
-        public OVMLijst AddLijst(int ovmid, int klantid)
+        public OVMLijst AddLijst(string ovmid, int klantid)
         {
             OVMLijst ovm = new OVMLijst()
             {

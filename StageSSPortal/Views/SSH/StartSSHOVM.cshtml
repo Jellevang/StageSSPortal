@@ -6,7 +6,7 @@
 <script>
     $(document).ready(function () {
         //$("button#test").click(function () {
-        // alert("test");
+        //alert("test");
         $("select").hide();
         $("#btnSave").hide();
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
@@ -21,7 +21,7 @@
     function checkForVms() {
         $("select").hide();
         $("#btnSave").hide();
-        $.ajax("/api/SSH/CheckVms", {
+        $.ajax("/api/SSH/VmsDb", {
             type: "GET",
             dataType: "json"
         })
@@ -29,6 +29,18 @@
                 ShowVms(data);
             })
     }
+   
+    //function checkForVms() {
+    //    $("select").hide();
+    //    $("#btnSave").hide();
+    //    $.ajax("/api/SSH/CheckVms", {
+    //        type: "GET",
+    //        dataType: "json"
+    //    })
+    //        .done(function (data) {
+    //            ShowVms(data);
+    //        })
+    //}
     function loadKlanten() {
         $("select").show();
         $("#btnSave").show();
@@ -46,6 +58,7 @@
     function showVmNames() {
         $("select").hide();
         $("#btnSave").hide();
+        $(".VmRow").css("background-color", "inherit");
         //alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
@@ -56,53 +69,44 @@
             dataType: "json"
         })
             .done(function (data) {
-                //   alert("vmnamesdone")
-                checkForVms();
-                //ShowVms(data);
+
+                ShowVms(data);
             })
     };
     function ShowVms(LijstServerVMs) {
-
         $.each(LijstServerVMs, function (index, value) {
             addVM(value);
         })
         $("#ShowVms").css("display", "block");
         
     }
-    function changeColor() {
-        $(this).css('background-color', 'rgb(58, 187, 252)');
+    function changeColor(id) {
+        $("#" + id).css('background-color', 'rgb(7, 187, 252)');
     }
+
     function addVM(vm) {
-       // alert(vm.KlantId)
-       
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
         if (vm.KlantId == 0) {
-            $(this).css("font-weigth", "bold");
+           changeColor(vm.id);
         }
     }
     function showInfo() {
         $("select").hide();
-
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
-                //t.replace(".", "-");
-                //  alert(t);
             }
         })
-        $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
+        $.ajax("/api/SSH/info/" + t, { 
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
                 loadKlanten();
                 var text = data;
-                //alert(text);
-                //alert("test");
                 $.each(data, function (index, value) {
                     $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
                 })
@@ -118,7 +122,6 @@
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-               // alert(t);
             }
             $.ajax("/api/SSH/StopVM/" + t, {
                 type: "GET",
@@ -129,28 +132,24 @@
 
                 })
         }); showVmNames();
-
-        //document.location.reload();
-
     };
 
     function SaveKlantVM() {
         var t;
-        //alert("t=" + t);
-
         var k = $("#klantenlijst").val();
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-                //alert("t=" + t);
                 $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
                     type: "GET",
                     dataType: "json"
                 })
+
                     .done
                     (function (data) {
                         $("select").hide();
                         $("#btnSave").hide();
+                        $("#" + data).css('background-color', 'inherit');
                     })
             }
         });
@@ -160,25 +159,29 @@
         var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
-                //t.replace(".", "-");
-                //alert(t);
             }
-            $.ajax("/api/SSH/StartVM/" + t, { //+ $(this).val(), {
+            $.ajax("/api/SSH/StartVM/" + t, { 
                 type: "GET",
                 dataType: "json"
             })
                 .done
                 (function (data) {
-
                 })
         });
-        //document.location.reload();
         showVmNames();
-
-
     };
+
+    $('#Dialog-Box').dialog({
+        autoOpen: false,
+        height: 500,
+        width: 700,
+        modal: false
+    });
+    function OpenDialog() {
+        loadKlanten();
+        $('#Dialog-Box').dialog('open');
+    }
 </script>
 
 <div>
@@ -205,5 +208,9 @@
     <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
     <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
 </div>
-<select id="klantenlijst"></select>
-<button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+<div id="Dialog-Box">
+    <select id="klantenlijst"></select>
+    <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+</div>
+@*<select id="klantenlijst"></select>
+<button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>*@
