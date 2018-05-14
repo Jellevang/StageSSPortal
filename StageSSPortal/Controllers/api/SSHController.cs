@@ -43,8 +43,14 @@ namespace StageSSPortal.Controllers.api
                 }
             }
             OracleVirtualMachine vm = mgr.GetOVMById(vmId);
-            
-            vmInfo2[7] = Convert.ToString(klantmgr.GetKlant(vm.KlantId).Naam);
+            if (vm.KlantId==0)
+            {
+                vmInfo2[7] = "NULL";
+            }
+            else
+            {
+                vmInfo2[7] = Convert.ToString(klantmgr.GetKlant(vm.KlantId).Naam);
+            }
             return vmInfo2;
         }
 
