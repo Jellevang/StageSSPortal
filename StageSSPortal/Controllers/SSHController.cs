@@ -15,7 +15,7 @@ namespace StageSSPortal.Controllers
 {
     public class SSHController : Controller
     {
-        // GET: SSH
+        
         private readonly ISSHManager mgr = new SSHManager();
         private readonly IKlantManager klantmgr = new KlantManager();
         SshClient ssh;
