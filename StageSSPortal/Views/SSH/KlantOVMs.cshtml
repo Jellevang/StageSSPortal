@@ -29,6 +29,7 @@
             showInfo();
         });
         showVmNames();
+        loadKlantenAccounts();
     });
 
     function showVmNames() {
@@ -58,6 +59,7 @@
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
+        $("#KlantAccCheck").hide();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
@@ -66,7 +68,7 @@
                 //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
                 //t.replace(".", "-");
-                alert(t);
+                //alert(t);
             }
         })
         $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
@@ -82,7 +84,8 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
-                loadKlantenAccounts();
+                $("#KlantAccCheck").show();
+
             })
     };
 
@@ -101,8 +104,8 @@
                 (function (data) {
                 })
         });
-        document.location.reload();
-        //showVmNames();
+        //document.location.reload();
+        showVmNames();
 
     };
 
@@ -123,27 +126,29 @@
                 (function (data) {
                 })
         });
-        document.location.reload()
-        //showVmNames();
+        //document.location.reload()
+        showVmNames();
 
     };
 
     function loadKlantenAccounts() {
-        $("#KlantAccCheck").show();
+        //$("#KlantAccCheck").find("input").remove();
+     //   $("#KlantAccCheck").find("#CheckBox").remove();
+
+        $("#KlantAccCheck").hide();
         $.ajax("/api/Klant/KlantAccounts", {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
-                $("#klantenlijst").find("checkbox").remove();
                 $.each(data, function (index, value) {
-                    $("#KlantAccCheck").append("<input type= checkbox name= chk_Klant[] value="+value.Naam +" />"+ value.Naam+"<br />");
+                    $("#KlantAccCheck").append("<input type=checkbox id=CheckBox name=chk_Klant[] value=" + value.Naam + " />" + value.Naam+"<br />");
                 })
             });
     }
 </script>
 
-<div class="jumbotron">
+<div >
     <h1>Beheer Virtuele Machines</h1>
 </div>
 
