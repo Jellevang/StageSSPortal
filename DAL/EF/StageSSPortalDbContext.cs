@@ -19,7 +19,7 @@ namespace DAL.EF
         public StageSSPortalDbContext() : base("stage")
         {
 
-            Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
+           Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
            this.Configuration.LazyLoadingEnabled = false;
         }
        protected override void OnModelCreating(DbModelBuilder modelBuilder)

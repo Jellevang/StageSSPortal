@@ -17,7 +17,9 @@ namespace BL
         IEnumerable<OracleVirtualMachine> GetKlantOVMs(int klantid);
         IEnumerable<OracleVirtualMachine> GetOVMs();
         void ChangeOVM(OracleVirtualMachine ovm);
-        OVMLijst AddLijst(int ovmid, int klantid);
+        OVMLijst AddLijst(string ovmid, int klantid);
+        OVMLijst GetLijst(int klantid, string ovmid);
+        void RemoveLijst(OVMLijst ovmlijst);
 
     }
 }

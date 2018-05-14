@@ -142,31 +142,71 @@
         })
             .done(function (data) {
                 $.each(data, function (index, value) {
-                    $("#KlantAccCheck").append("<input type=checkbox id=CheckBox name=chk_Klant[] value=" + value.Naam + " />" + value.Naam+"<br />");
+                    $("#KlantAccCheck").append("<input type=checkbox id=CheckKlant name=chk_Klant value=" + "'"+value.Naam +"'"+ " />" + value.Naam+"<br />");
                 })
             });
     }
 
-    function SaveKlantVM() {
+    function SaveKlantAccount() {
         var t;
         //alert("t=" + t);
 
-        var k = $("#KlantAccCheck").val();
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                t = $(this).attr('id');
-                //alert("t=" + t);
-                $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
-                    type: "GET",
-                    dataType: "json"
+        //var k = $("#KlantAccCheck").val();
+        var k;
+        $("input#CheckKlant").each(function () {
+            //alert("for lus");
+            //alert($("#CheckKlant").val());
+            if ($('input:checkbox:checked')) {
+                alert("if lus");
+                k = $("#CheckKlant").val()
+                $("tr.VmRow").each(function () {
+                    if ($(this).css('color') == "rgb(244, 78, 66)") {
+                        t = $(this).attr('id');
+                        //alert("t=" + t);
+                        alert(k);
+                        alert(t);
+                        $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k, {
+                            type: "GET",
+                            dataType: "json"
+                        })
+                            .done
+                    }
                 })
-                    .done
-                    (function (data) {
-                        $("select").hide();
-                        $("#btnSave").hide();
-                    })
             }
-        });
+            if ($('input:checkbox:unchecked')) {
+                k = $("#CheckKlant").val()
+                $("tr.VmRow").each(function () {
+                    if ($(this).css('color') == "rgb(244, 78, 66)") {
+                        t = $(this).attr('id');
+                        //alert("t=" + t);
+                        alert(k);
+                        alert(t);
+                        $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k, {
+                            type: "GET",
+                            dataType: "json"
+                        })
+                            .done
+                    }
+                })
+            }
+                   
+                })
+                
+        //$("tr.VmRow").each(function () {
+        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
+        //        t = $(this).attr('id');
+        //        //alert("t=" + t);
+        //        $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
+        //            type: "GET",
+        //            dataType: "json"
+        //        })
+        //            .done
+        //            (function (data) {
+        //                $("select").hide();
+        //                $("#btnSave").hide();
+        //            })
+        //    }
+        //});
         showVmNames();
     }
 </script>
@@ -196,5 +236,5 @@
     <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
     <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
 </div>
-
+<button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

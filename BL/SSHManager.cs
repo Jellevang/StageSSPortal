@@ -67,7 +67,7 @@ namespace BL
             repo.UpdateMachine(ovm);
         }
 
-        public OVMLijst AddLijst(int ovmid, int klantid)
+        public OVMLijst AddLijst(string ovmid, int klantid)
         {
             OVMLijst ovm = new OVMLijst()
             {
@@ -76,6 +76,16 @@ namespace BL
             };
             OVMLijst created = repo.AddLijst(ovm);
             return created;
+        }
+
+        public OVMLijst GetLijst(int klantid, string ovmid)
+        {
+            OVMLijst lijst = repo.GetLijst(klantid, ovmid);
+            return lijst;
+        }
+        public void RemoveLijst(OVMLijst ovmlijst)
+        {
+            repo.DeleteLijst(ovmlijst);
         }
     }
 }

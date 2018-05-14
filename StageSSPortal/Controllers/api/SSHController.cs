@@ -379,6 +379,32 @@ namespace StageSSPortal.Controllers.api
 
             return Ok(model);
         }
+        [HttpGet]
+        [Route("api/Klant/SSH/lijstcreate/{id}/{k}")]
+        [Authorize(Roles = "Klant")]
+        public IHttpActionResult CreateLijst(string id, string k)
+        {
+            Klant klant = klantmgr.GetKlantByName(k);
+            OVMLijst check = mgr.GetLijst(klant.KlantId, id);
+            if (check == null)
+            {
+                OVMLijst lijst = mgr.AddLijst(id, klant.KlantId);
+            } 
+            return Ok();
+        }
+        [HttpGet]
+        [Route("api/Klant/SSH/lijstDelete/{id}/{k}")]
+        [Authorize(Roles = "Klant")]
+        public IHttpActionResult DeleteLijst(string id, string k)
+        {
+            Klant klant = klantmgr.GetKlantByName(k);
+            OVMLijst lijst = mgr.GetLijst(klant.KlantId, id);
+            if(lijst != null)
+            {
+                mgr.RemoveLijst(lijst);
+            }           
+            return Ok();
+        }
 
     }
 }
