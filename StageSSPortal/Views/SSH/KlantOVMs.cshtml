@@ -146,9 +146,9 @@
     }
     function SaveKlantAccount() {
         var t;
-       // var k;
+       var k;
         $("input#CheckKlant").each(function () {
-            var k;
+            
             if ($(this).is(":checked")) {
                 alert("if lus");
                 k = $(this).val()
@@ -166,7 +166,7 @@
                     }
                 })
           }
-            else {
+           if($(this).is(":checked") ==false) {
                 k = $(this).val()
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
