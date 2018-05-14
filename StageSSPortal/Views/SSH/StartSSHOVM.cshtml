@@ -91,6 +91,7 @@
         }
     }
     function showInfo() {
+        $('#Dialog-Box').hide();
         $("select").hide();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
@@ -105,6 +106,7 @@
             dataType: "json"
         })
             .done(function (data) {
+                $('#Dialog-Box').show();
                 loadKlanten();
                 var text = data;
                 $.each(data, function (index, value) {

@@ -59,9 +59,9 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin")]
         public IHttpActionResult checkForVms()
         {
-            List<VmModel> serverVms = new List<VmModel>();
+            List<OracleVirtualMachine> serverVms = new List<OracleVirtualMachine>();
             string[] serverVMs;
-            List<VmModel> OrderServerVms = new List<VmModel>();
+            List<OracleVirtualMachine> OrderServerVms = new List<OracleVirtualMachine>();
             using (ssh)
             {
                 ssh.Connect();
@@ -71,14 +71,14 @@ namespace StageSSPortal.Controllers.api
                 string patternVM = @"Vm [0-9]+";
                 for (int i = 0; i < serverVMs.Length; i++)
                 {
-                    VmModel vm = new VmModel();
+                    OracleVirtualMachine vm = new OracleVirtualMachine();
                     var resId = Regex.Match(serverVMs[i], patternVM);
                     if (resId.Length != 0)
                     {
                         string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
                         string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1).Trim();
-                        vm.id = id;
-                        vm.Name=name;
+                        vm.OvmId = id;
+                        vm.Naam=name;
                         vm.KlantId = 0;
                         serverVms.Add(vm);
                     }
@@ -87,65 +87,97 @@ namespace StageSSPortal.Controllers.api
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             ovms = mgr.GetOVMs().ToList();
             List<OracleVirtualMachine> orderDbVms = new List<OracleVirtualMachine>();
-            orderDbVms=ovms.OrderBy(o => o.OvmId).ToList();
-            OrderServerVms = serverVms.OrderBy(o => o.id).ToList();
-            // AANTAL VAN BEIDE LIJSTEN IS GELIJK
-            if (OrderServerVms.Count == orderDbVms.Count())
-            {
-                for (int i = 0; i < OrderServerVms.Count(); i++)
-                {
-                    //MAAR NIET ELKE WAARDE MATCHED
-                    if (orderDbVms[i].OvmId != OrderServerVms[i].id)
-                    {
-                        //EERST OUDE RIJ VERWIJDEREN
-                        mgr.RemoveOVM(orderDbVms[i].OvmId);
-                        for (int k = 0; k < OrderServerVms.Count(); k++)
-                        {
-                            //ALS RIJ ER TOCH IN ZIT, KLANT ID DOORGEVEN AAN OUDE RIJ
-                            if (OrderServerVms[k].id == orderDbVms[i].OvmId)
-                            {
-                                OrderServerVms[k].KlantId = orderDbVms[i].KlantId;
-                            }
-                        }
-                        for (int k = 0; k < OrderServerVms.Count(); k++)
-                        {
-                            //NIEUWE MACHINE TOEVOEGEN
-                            mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
-                        }
-                    }
-                }
-                //return Ok(serverVMs);
-            }
-            else
-            {
-                
-                for (int j = 0; j < orderDbVms.Count(); j++)
-                {
-                    mgr.RemoveOVM(orderDbVms[j].OvmId);
-                    for (int k = 0; k < OrderServerVms.Count(); k++)
-                    {
-                        if (OrderServerVms[k].id == orderDbVms[j].OvmId)
-                        {
-                            OrderServerVms[k].KlantId = orderDbVms[j].KlantId;
-                        }
-                    }
+            List<string> databaseId = new List<string>();
+            List<string> serverId = new List<string>();
 
-                }
-                for (int k = 0; k < OrderServerVms.Count(); k++)
-                {
-                    mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
-                }
-                return Ok(serverVms);
-            }
-            List<VmModel> model = new List<VmModel>();
-            foreach (OracleVirtualMachine vm in ovms)
+            orderDbVms = ovms.OrderBy(o => o.OvmId).ToList();
+            OrderServerVms = serverVms.OrderBy(o => o.OvmId).ToList();
+
+            for (int i = 0; i < orderDbVms.Count(); i++)
             {
-                VmModel vmModel = new VmModel();
-                vmModel.Name = vm.Naam;
-                vmModel.id = vm.OvmId;
-                model.Add(vmModel);
+                databaseId.Add(orderDbVms[i].OvmId);
             }
-            return Ok(model);
+            for (int i = 0; i < OrderServerVms.Count(); i++)
+            {
+                serverId.Add(OrderServerVms[i].OvmId);
+            }
+
+            for (int i = 0; i < OrderServerVms.Count(); i++)
+            {
+
+                if (!databaseId.Contains(OrderServerVms[i].OvmId))
+                {
+                    mgr.AddOVM(OrderServerVms[i].Naam, OrderServerVms[i].OvmId, 0);
+                    orderDbVms.Add(OrderServerVms[i]);
+                }
+            }
+            for (int i = 0; i < orderDbVms.Count(); i++)
+            {
+                if (!serverId.Contains(orderDbVms[i].OvmId))
+                {
+                    mgr.RemoveOVM(orderDbVms[i].OvmId);
+                    orderDbVms.Remove(orderDbVms[i]);
+                }
+            }
+
+
+            //// AANTAL VAN BEIDE LIJSTEN IS GELIJK
+            //if (OrderServerVms.Count == orderDbVms.Count())
+            //{
+            //    for (int i = 0; i < OrderServerVms.Count(); i++)
+            //    {
+            //        //MAAR NIET ELKE WAARDE MATCHED
+            //        if (orderDbVms[i].OvmId != OrderServerVms[i].id)
+            //        {
+            //            //EERST OUDE RIJ VERWIJDEREN
+            //            mgr.RemoveOVM(orderDbVms[i].OvmId);
+            //            for (int k = 0; k < OrderServerVms.Count(); k++)
+            //            {
+            //                //ALS RIJ ER TOCH IN ZIT, KLANT ID DOORGEVEN AAN OUDE RIJ
+            //                if (OrderServerVms[k].id == orderDbVms[i].OvmId)
+            //                {
+            //                    OrderServerVms[k].KlantId = orderDbVms[i].KlantId;
+            //                }
+            //            }
+            //            for (int k = 0; k < OrderServerVms.Count(); k++)
+            //            {
+            //                //NIEUWE MACHINE TOEVOEGEN
+            //                mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
+            //            }
+            //        }
+            //    }
+            //    //return Ok(serverVMs);
+            //}
+            //else
+            //{
+                
+            //    for (int j = 0; j < orderDbVms.Count(); j++)
+            //    {
+            //        mgr.RemoveOVM(orderDbVms[j].OvmId);
+            //        for (int k = 0; k < OrderServerVms.Count(); k++)
+            //        {
+            //            if (OrderServerVms[k].id == orderDbVms[j].OvmId)
+            //            {
+            //                OrderServerVms[k].KlantId = orderDbVms[j].KlantId;
+            //            }
+            //        }
+
+            //    }
+            //    for (int k = 0; k < OrderServerVms.Count(); k++)
+            //    {
+            //        mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
+            //    }
+            //    return Ok(serverVms);
+            //}
+            //List<VmModel> model = new List<VmModel>();
+            //foreach (OracleVirtualMachine vm in ovms)
+            //{
+            //    VmModel vmModel = new VmModel();
+            //    vmModel.Name = vm.Naam;
+            //    vmModel.id = vm.OvmId;
+            //    model.Add(vmModel);
+            //}
+            return Ok(orderDbVms);
         }            
 
         
