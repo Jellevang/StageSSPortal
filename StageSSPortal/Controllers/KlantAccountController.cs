@@ -87,8 +87,27 @@ namespace StageSSPortal.Controllers
         public ActionResult Create(Klant Klant, FormCollection collection)
         {
             Klant k = mgr.GetKlant(User.Identity.GetUserName());
-            Klant = mgr.AddKlantAccount(Klant.Naam, Klant.Email, k );
-            return RedirectToAction("Details", new { id = Klant.KlantId });
+            Klant email = mgr.GetKlant(Klant.Email);
+            if (email != null)
+            {
+                //ViewBag.errorMessage = "email moet uniek zijn";
+                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                return View("Create");
+            }
+            Klant naam = mgr.GetKlantByName(Klant.Naam);
+            if (naam != null)
+            {
+                //ViewBag.errorMessage = "naam moet uniek zijn";
+                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                return View("Create");
+            }
+            else
+            {
+                Klant = mgr.AddKlantAccount(Klant.Naam, Klant.Email, k);
+                return RedirectToAction("Details", new { id = Klant.KlantId });
+            }
+
+            
         }
 
         [Route("Klant/KlantAccount/Delete/{id}")]
