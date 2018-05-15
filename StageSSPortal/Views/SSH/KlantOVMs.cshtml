@@ -226,8 +226,12 @@
 
 </div>
 <div id="btns">
-    <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-    <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+    <div id="Vm">
+        <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
+        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+    </div>
+    <div>
+        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
+    </div>
 </div>
-<button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

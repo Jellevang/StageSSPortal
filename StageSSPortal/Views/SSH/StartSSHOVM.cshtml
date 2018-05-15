@@ -29,7 +29,7 @@
                 ShowVms(data);
             })
     }
-   
+
     //function checkForVms() {
     //    $("select").hide();
     //    $("#btnSave").hide();
@@ -50,6 +50,7 @@
         })
             .done(function (data) {
                 $("#klantenlijst").find("option").remove();
+                $("#btns").css("display", "block");
                 $.each(data, function (index, value) {
                     $("#klantenlijst").append("<option class=klant> " + value.Naam + "</option>");
                 })
@@ -78,7 +79,7 @@
             addVM(value);
         })
         $("#ShowVms").css("display", "block");
-        
+
     }
     function changeColor(id) {
         $("#" + id).css('background-color', 'rgb(7, 187, 252)');
@@ -87,12 +88,13 @@
     function addVM(vm) {
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
         if (vm.KlantId == 0) {
-           changeColor(vm.id);
+            changeColor(vm.id);
         }
     }
     function showInfo() {
         $('#Dialog-Box').hide();
         $("select").hide();
+        $("#btns").css("display", "none");
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
@@ -101,7 +103,7 @@
                 t = $(this).attr('id');
             }
         })
-        $.ajax("/api/SSH/info/" + t, { 
+        $.ajax("/api/SSH/info/" + t, {
             type: "GET",
             dataType: "json"
         })
@@ -114,7 +116,6 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
-           
             })
     };
 
@@ -163,7 +164,7 @@
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
             }
-            $.ajax("/api/SSH/StartVM/" + t, { 
+            $.ajax("/api/SSH/StartVM/" + t, {
                 type: "GET",
                 dataType: "json"
             })
@@ -206,13 +207,41 @@
 <div id="VmInfo" style="display:none">
     <table id="ListVmInfo" class="table"></table>
 </div>
-<div id="btns">
-    <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-    <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+<div id="btns" style="display:none">
+    <div>
+        <table>
+            <tr><th>Virtuele Machine</th></tr>
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
+                </td>
+            </tr>            
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="Dialog-Box">
+        <table id="klantTable" >
+            <tr><th>Klant</th></tr>
+            <tr>
+                <td>
+                    <select class="form-control" id="klantenlijst"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-<div id="Dialog-Box">
-    <select id="klantenlijst"></select>
-    <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
-</div>
+@*<div id="Dialog-Box">
+        <select id="klantenlijst"></select>
+        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+    </div>*@
 @*<select id="klantenlijst"></select>
-<button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>*@
+    <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>*@
