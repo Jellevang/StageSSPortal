@@ -101,14 +101,14 @@ namespace StageSSPortal.Controllers
             Klant email = mgr.GetKlant(Klant.Email);
             if(email != null)
             {
-                ViewBag.errorMessage = "email moet uniek zijn";
-                return View("Error");
+                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                return View("Create");
             }
             Klant naam = mgr.GetKlantByName(Klant.Naam);
             if (naam != null)
             {
-                ViewBag.errorMessage = "naam moet uniek zijn";
-                return View("Error");
+                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                return View("Create");
             }
             else
             {
