@@ -15,6 +15,7 @@ namespace BL
         Klant GetKlantByName(string naam);
         IEnumerable<Klant> GetKlanten();
         IEnumerable<Klant> GetHoofdKlanten();
+        Klant GetHoofdKlant(int klantId);
         IEnumerable<Klant> GetKlantenAccounts(Klant k);
         Klant AddKlantAccount(string naam, string email, Klant h);
         void BlockKlantAccount(int id);
