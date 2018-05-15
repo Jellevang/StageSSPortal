@@ -86,17 +86,27 @@ namespace BL
                 repoUser.UpdateGebruiker(user);
                 repo.UnblockKlant(id);
                 List<Klant> klantenAcc = new List<Klant>();
-                klantenAcc = GetKlanten().ToList();
+                klantenAcc = GetKlantenAccounts(k).ToList();
                 foreach (Klant acc in klantenAcc)
                 {
-                    if (acc.HoofdKlant == k)
-                    {
+                    
                         Gebruiker userAcc = repoUser.FindGebruiker(acc.KlantId);
                         userAcc.Toegestaan = true;
                         repoUser.UpdateGebruiker(userAcc);
                         repo.UnblockKlant(acc.KlantId);
-                    }
+                    
                 }
+                //klantenAcc = GetKlanten().ToList();
+                //foreach (Klant acc in klantenAcc)
+                //{
+                //    if (acc.HoofdKlant == k)
+                //    {
+                //        Gebruiker userAcc = repoUser.FindGebruiker(acc.KlantId);
+                //        userAcc.Toegestaan = true;
+                //        repoUser.UpdateGebruiker(userAcc);
+                //        repo.UnblockKlant(acc.KlantId);
+                //    }
+                //}
             }
             else
             {               
@@ -130,14 +140,15 @@ namespace BL
             List<Klant> klantenAcc = new List<Klant>();
             List<Klant> klantenAccs = new List<Klant>();
             klantenAcc = GetKlanten().ToList();
-            foreach(Klant acc in klantenAcc)
+            foreach (Klant acc in klantenAcc)
             {
-                if(acc.HoofdKlant==k)
+                if (acc.HoofdKlant == k)
                 {
                     klantenAccs.Add(acc);
                 }
             }
             return klantenAccs;
+
         }
         public Klant AddKlantAccount(string naam, string email, Klant h)
         {
@@ -229,5 +240,6 @@ namespace BL
         //    }
         //    return klantenAccs;
         //}
+        
     }
 }

@@ -40,6 +40,9 @@
     });
 
     function showVmNames() {
+        $("#btns").hide();
+        $("#KlantAccCheck").hide();
+        
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
@@ -219,7 +222,7 @@
             }
 
         })
-        //showVmNames();
+        showVmNames();
         //$("#btns").css("display", "none");
         //$("#KlantAccCheck").hide();
 

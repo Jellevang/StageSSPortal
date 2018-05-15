@@ -16,6 +16,6 @@ namespace DAL.Interfaces
         void UnblockKlant(int id);
         void DeleteKlant(Klant Klant);
         IEnumerable<Klant> ReadHoofdKlanten();
-        IEnumerable<Klant> ReadKlantenAccounts(Klant h);
+        
     }
 }

@@ -98,8 +98,24 @@ namespace StageSSPortal.Controllers
         [HttpPost]
         public ActionResult Create(Klant Klant, FormCollection collection)
         {
-            Klant = mgr.AddKlant(Klant.Naam, Klant.Email);
-            return RedirectToAction("Details", new { id = Klant.KlantId });
+            Klant email = mgr.GetKlant(Klant.Email);
+            if(email != null)
+            {
+                ViewBag.errorMessage = "email moet uniek zijn";
+                return View("Error");
+            }
+            Klant naam = mgr.GetKlantByName(Klant.Naam);
+            if (naam != null)
+            {
+                ViewBag.errorMessage = "naam moet uniek zijn";
+                return View("Error");
+            }
+            else
+            {
+                Klant = mgr.AddKlant(Klant.Naam, Klant.Email);
+                return RedirectToAction("Details", new { id = Klant.KlantId });
+            }
+            
         }
 
         [Route("Admin/Klant/Delete/{id}")]
