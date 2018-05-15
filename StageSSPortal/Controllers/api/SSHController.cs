@@ -120,11 +120,22 @@ namespace StageSSPortal.Controllers.api
                 }
             }
             return Ok(orderDbVms);
-        }            
+        }
 
-        
-    
-    [HttpGet]
+
+        [HttpGet]
+        [Route("api/SSH/getHoofdAcc/{id}")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetHoofdAcc(int id)
+        {
+                Klant temp = klantmgr.GetKlant(id);
+            //klantmgr.GetHoofdKlant(4);
+                return Ok(temp);
+            
+
+        }
+
+        [HttpGet]
         [Route("api/SSH/Vms")]
         [Authorize(Roles = "Admin")]
         public IHttpActionResult GetVms(List<VmModel> model)

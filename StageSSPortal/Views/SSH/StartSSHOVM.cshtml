@@ -185,6 +185,21 @@
         loadKlanten();
         $('#Dialog-Box').dialog('open');
     }
+    function HideKlanten() {
+        //alert("test");
+        //$(".klanten").each(function () {
+        //    var id = $(this).attr("id");
+        //    alert(id);
+        var id = 5
+        $.ajax("/api/SSH/getHoofdAcc/" + id, {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                alert(data.val());
+            })
+    })
+    }
 </script>
 
 @*<div>
@@ -218,11 +233,14 @@
                 </tr>
                 <tr>
                     <td>
-                        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                        <button class=" btn btn-default" id="btn" onclick="HideKlanten()">Start VM </button>
+                     
+                        @*<button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>*@
                     </td>
                 </tr>
             </table>
         </div>
+
         <div id="Dialog-Box">
             <table id="klantTable">
                 <tr><th>Klant</th></tr>

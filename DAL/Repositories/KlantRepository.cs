@@ -68,7 +68,7 @@ namespace DAL.Repositories
         public Klant ReadHoofdKlant(int klantId)
         {
             Klant temp=ctx.Klanten.Where(k=>k.KlantId==klantId).FirstOrDefault();
-            Klant tempHoofd = ctx.Klanten.Where(k => k.HoofdKlant.KlantId == temp.KlantId).FirstOrDefault();
+            Klant tempHoofd = ctx.Klanten.Where(k => k.KlantId == temp.HoofdKlant.KlantId).FirstOrDefault();
             return tempHoofd;
         }
         public IEnumerable<Klant> ReadKlantenAccounts(Klant h)

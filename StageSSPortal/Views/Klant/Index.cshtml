@@ -12,22 +12,31 @@
         
     })
     function HideKlanten() {
+        //alert("test");
         $(".klanten").each(function () {
             var id = $(this).attr("id");
-            alert(id);
-            $.ajax("/api/klant/getHoofdAcc/" + id, {
+            //alert("eee");
+            $.ajax("/api/SSH/getHoofdAcc/" + id+"", {
                 type: "GET",
                 dataType: "json"
             })
                 .done(function (data) {
-                    alert(data.val());
+                    var bool = data.IsKlantAccount;
+                    if (bool == true) {
+                        //      alert(data.KlantId)
+                        $("#" + data.KlantId).css("display", "none");
+                    }
+                    else {
+                        $("#" + data.KlantId).attr("onclick","ShowKlanten()")
+                    }
+                   // alert(data.IsKlantAccount);
                 })
         }) 
     }
 </script>
 <div class="container">
     <h2>Lijst van Klanten</h2>
-
+    @*<button onclick="HideKlanten()">TEST</button>*@
     <p>
         @Html.ActionLink("Nieuwe Klant", "Create") @*| @Html.ActionLink("Inviteer", "Invite")*@
     </p>
