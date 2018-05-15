@@ -18,12 +18,13 @@ namespace BL
         }
         public Klant AddKlant(string naam, string email)
         {
-            Klant k = new Klant()
+        Klant k = new Klant()
             {
                 Naam = naam,
                 Email = email,
-                Tag = naam.Substring(0,3),
+                Tag = naam.Substring(0, 3),
                 IsGeblokkeerd = false
+                
             };
             Klant created = repo.CreateKlant(k);
             created.Tag = created.Tag + created.KlantId.ToString();
@@ -216,6 +217,11 @@ namespace BL
             Gebruiker user = repoUser.FindGebruiker(id);
             repo.DeleteKlant(k);
             repoUser.DeleteGebruiker(user);
+        }
+
+        public Klant GetHoofdKlant(int klantId)
+        {
+            return repo.ReadHoofdKlant(klantId);
         }
 
 

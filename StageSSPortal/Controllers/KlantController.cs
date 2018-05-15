@@ -55,8 +55,8 @@ namespace StageSSPortal.Controllers
             ViewBag.Id = user.GebruikerId;
             return View();
         }
+       
 
-        
 
         [Route("Klant/Profiel/Create")]
         [Authorize(Roles = "Klant")]

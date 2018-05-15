@@ -119,64 +119,6 @@ namespace StageSSPortal.Controllers.api
                     orderDbVms.Remove(orderDbVms[i]);
                 }
             }
-
-
-            //// AANTAL VAN BEIDE LIJSTEN IS GELIJK
-            //if (OrderServerVms.Count == orderDbVms.Count())
-            //{
-            //    for (int i = 0; i < OrderServerVms.Count(); i++)
-            //    {
-            //        //MAAR NIET ELKE WAARDE MATCHED
-            //        if (orderDbVms[i].OvmId != OrderServerVms[i].id)
-            //        {
-            //            //EERST OUDE RIJ VERWIJDEREN
-            //            mgr.RemoveOVM(orderDbVms[i].OvmId);
-            //            for (int k = 0; k < OrderServerVms.Count(); k++)
-            //            {
-            //                //ALS RIJ ER TOCH IN ZIT, KLANT ID DOORGEVEN AAN OUDE RIJ
-            //                if (OrderServerVms[k].id == orderDbVms[i].OvmId)
-            //                {
-            //                    OrderServerVms[k].KlantId = orderDbVms[i].KlantId;
-            //                }
-            //            }
-            //            for (int k = 0; k < OrderServerVms.Count(); k++)
-            //            {
-            //                //NIEUWE MACHINE TOEVOEGEN
-            //                mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
-            //            }
-            //        }
-            //    }
-            //    //return Ok(serverVMs);
-            //}
-            //else
-            //{
-                
-            //    for (int j = 0; j < orderDbVms.Count(); j++)
-            //    {
-            //        mgr.RemoveOVM(orderDbVms[j].OvmId);
-            //        for (int k = 0; k < OrderServerVms.Count(); k++)
-            //        {
-            //            if (OrderServerVms[k].id == orderDbVms[j].OvmId)
-            //            {
-            //                OrderServerVms[k].KlantId = orderDbVms[j].KlantId;
-            //            }
-            //        }
-
-            //    }
-            //    for (int k = 0; k < OrderServerVms.Count(); k++)
-            //    {
-            //        mgr.AddOVM(OrderServerVms[k].Name, OrderServerVms[k].id, OrderServerVms[k].KlantId);
-            //    }
-            //    return Ok(serverVms);
-            //}
-            //List<VmModel> model = new List<VmModel>();
-            //foreach (OracleVirtualMachine vm in ovms)
-            //{
-            //    VmModel vmModel = new VmModel();
-            //    vmModel.Name = vm.Naam;
-            //    vmModel.id = vm.OvmId;
-            //    model.Add(vmModel);
-            //}
             return Ok(orderDbVms);
         }            
 
