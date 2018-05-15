@@ -122,17 +122,7 @@ namespace BL
         }
         public IEnumerable<Klant> GetHoofdKlanten()
         {
-            List<Klant> klantenAcc = new List<Klant>();
-            List<Klant> klantenAccs = new List<Klant>();
-            klantenAcc = GetKlanten().ToList();
-            foreach (Klant acc in klantenAcc)
-            {
-                if (acc.IsKlantAccount == false)
-                {
-                    klantenAccs.Add(acc);
-                }
-            }
-            return klantenAccs;
+            return repo.ReadHoofdKlanten();
         }
         public IEnumerable<Klant> GetKlantenAccounts(Klant k)
         {
@@ -216,5 +206,22 @@ namespace BL
             repo.DeleteKlant(k);
             repoUser.DeleteGebruiker(user);
         }
+        
+
+        // Nodig Voor Backup indien een fout voorkomt in nieuwere methode
+        //public IEnumerable<Klant> GetHoofdKlanten()
+        //{
+        //    List<Klant> klantenAcc = new List<Klant>();
+        //    List<Klant> klantenAccs = new List<Klant>();
+        //    klantenAcc = GetKlanten().ToList();
+        //    foreach (Klant acc in klantenAcc)
+        //    {
+        //        if (acc.IsKlantAccount == false)
+        //        {
+        //            klantenAccs.Add(acc);
+        //        }
+        //    }
+        //    return klantenAccs;
+        //}
     }
 }

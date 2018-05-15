@@ -61,5 +61,13 @@ namespace DAL.Repositories
             ctx.Klanten.Remove(k);
             ctx.SaveChanges();
         }
+        public IEnumerable<Klant> ReadHoofdKlanten()
+        {
+            return ctx.Klanten.Where(k => k.IsKlantAccount ==false);
+        }
+        public IEnumerable<Klant> ReadKlantenAccounts(Klant h)
+        {
+            return ctx.Klanten.Where(k => k.HoofdKlant == h);
+        }
     }
 }

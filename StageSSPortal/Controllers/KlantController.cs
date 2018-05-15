@@ -32,8 +32,18 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            IEnumerable<Klant> Klanten = mgr.GetKlanten();
-            return View(Klanten);
+            //IEnumerable<Klant> Klanten = mgr.GetKlanten();
+            List<Klant> klanten = new List<Klant>();
+            List<Klant> klantAccounts = new List<Klant>();
+            List<Klant> klantenHoofd = mgr.GetHoofdKlanten().ToList();
+            foreach(Klant hoofd in klantenHoofd)
+            {
+                klanten.Add(hoofd);
+                klantAccounts = mgr.GetKlantenAccounts(hoofd).ToList();
+                klanten.AddRange(klantAccounts);
+            }
+
+            return View(klanten);
         }
 
         // GET: Klant-informatie

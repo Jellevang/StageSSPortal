@@ -21,5 +21,6 @@ namespace BL
         void UnblockKlantAccount(int id);
         void RemoveKlant(int id);
         void RemoveKlantAccount(int id);
+        
     }
 }
