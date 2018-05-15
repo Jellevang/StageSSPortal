@@ -13,8 +13,17 @@
         position: relative;
     }
 
+    div#KlantDiv {
+        float: left;
+        width: auto;
+        margin-left: 5%;
+    }
+
     div#btns {
         float: right;
+    }
+    div#scherm {
+        margin-top: 2%;
     }
 </style>
 
@@ -26,13 +35,13 @@
             $(this).css("color", "rgb(244, 78, 66)");
             showInfo();
         });
-        showVmNames();
         loadKlantenAccounts();
+        showVmNames();
     });
 
     function showVmNames() {
         if ($("#ShowVms").css("display") != "none") {
-            $("table#LijstServerVMs").find("tr").remove();
+            $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
 
         }
@@ -57,10 +66,18 @@
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
+        $("#btns").css("display", "none");
         $("#KlantAccCheck").hide();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
+        $("input#CheckKlant").each(function () {
+          //  alert($(this).val())
+            if ($(this).is(":checked")) {
+               // alert($(this).val())
+                $(this).prop("checked", false);
+            }
+        })
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 //t = $(this).children("td:first").attr("id");
@@ -82,7 +99,14 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
+                $("input#CheckKlant").each(function () {
+                    var k = $(this).attr("class");
+                    //alert(t+" "+k)
+                    searchOvmLijst(k, t);
+                })
+                
                 $("#KlantAccCheck").show();
+                $("#btns").css("display", "block");
 
             })
     };
@@ -124,40 +148,54 @@
                 (function (data) {
                 })
         });
-        //document.location.reload()
         showVmNames();
 
     };
-
+    function searchOvmLijst(klantId, ovmId) {
+        //alert("test");
+        //alert(klantId);
+        //alert(ovmId)
+        $.ajax("/api/Klant/OvmLijst/" + klantId + "/" + ovmId, {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                if (!$.trim(data)) {
+                }
+                else {
+                    $("input." + klantId).prop("checked", true);
+                }
+            })
+    }
     function loadKlantenAccounts() {
-        //$("#KlantAccCheck").find("input").remove();
-     //   $("#KlantAccCheck").find("#CheckBox").remove();
-
         $("#KlantAccCheck").hide();
+        //var t;
+        //$("tr.VmRow").each(function () {
+        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
+        //        t = $(this).attr('id');
         $.ajax("/api/Klant/KlantAccounts", {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
                 $.each(data, function (index, value) {
-                    $("#KlantAccCheck").append("<input type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Naam + "'" + "/>" + value.Naam);//+"<br />");
+                    //searchOvmLijst(value,t)
+                    $("#KlantAccCheck").append("<tr><td><input class="+value.KlantId+" type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Naam + "'" + "/>" + value.Naam + "</tr></td>");//+"<br />");
+
                 })
             });
     }
     function SaveKlantAccount() {
         var t;
-       var k;
+        var k;
         $("input#CheckKlant").each(function () {
-            
+
             if ($(this).is(":checked")) {
-                alert("if lus");
+                //alert("if lus");
                 k = $(this).val()
-                alert(k);
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        alert(k);
-                        alert(t);
                         $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k, {
                             type: "GET",
                             dataType: "json"
@@ -165,15 +203,12 @@
                             .done
                     }
                 })
-          }
-           if($(this).is(":checked") ==false) {
+            }
+            if ($(this).is(":checked") == false) {
                 k = $(this).val()
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        //alert("t=" + t);
-                        alert(k);
-                        alert(t);
                         $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k, {
                             type: "GET",
                             dataType: "json"
@@ -182,56 +217,67 @@
                     }
                 })
             }
-                   
-                })
-                
-        //$("tr.VmRow").each(function () {
-        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
-        //        t = $(this).attr('id');
-        //        //alert("t=" + t);
-        //        $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
-        //            type: "GET",
-        //            dataType: "json"
-        //        })
-        //            .done
-        //            (function (data) {
-        //                $("select").hide();
-        //                $("#btnSave").hide();
-        //            })
-        //    }
-        //});
-        showVmNames();
+
+        })
+        //showVmNames();
+        //$("#btns").css("display", "none");
+        //$("#KlantAccCheck").hide();
+
     }
 </script>
 
-<div >
-    <h1>Beheer Virtuele Machines</h1>
-</div>
+@*<div>
+        <h1>Beheer Virtuele Machines</h1>
+    </div>*@
 
+<div id="scherm">
 
-<div id="ShowVms" style="display:none">
-    <table id="LijstServerVMs" class="table">
-        <tr>
-            <th>Name</th>
-            @*<th>Status</th>*@
+    <div id="ShowVms" style="display:none">
+        <table id="LijstServerVMs" class="table">
+            <tr>
+                <th>Name</th>
+                @*<th>Status</th>*@
 
-        </tr>
-    </table>
-</div>
-
-<div id="VmInfo" style="display:none">
-    <table id="ListVmInfo" class="table"></table>
-</div>
-<div id="KlantAccCheck" style="display:none">
-
-</div>
-<div id="btns">
-    <div id="Vm">
-        <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+            </tr>
+        </table>
     </div>
-    <div>
-        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
+
+    <div id="VmInfo" style="display:none">
+        <table id="ListVmInfo" class="table"></table>
+    </div>
+    <div id="KlantDiv">
+        <table id="KlantAccCheck" style="display:none">
+            <tr><th>Medewerkers</th></tr>
+
+        </table>
+
+    </div>
+    <div id="btns" style="display:none">
+        <div id="Vm">
+            <table>
+                <tr><th>Virtuele Machine</th></tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr><th>Klant</th></tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

@@ -187,56 +187,57 @@
     }
 </script>
 
-<div>
+@*<div>
     <h1>Beheer Virtuele Machines</h1>
-</div>
+</div>*@
 
-
-<div id="ShowVms" style="display:none">
-    <table id="LijstServerVMs" class="table">
-        <tr>
-            <th>Name</th>
-            @*<th>Status</th>*@
-
-        </tr>
-    </table>
-</div>
-<div id="ShowVms" style="display:none">
-    <select id="LijstServerVms"></select>
-</div>
-<div id="VmInfo" style="display:none">
-    <table id="ListVmInfo" class="table"></table>
-</div>
-<div id="btns" style="display:none">
-    <div>
-        <table>
-            <tr><th>Virtuele Machine</th></tr>
+<div id="scherm">
+    <div id="ShowVms" style="display:none">
+        <table id="LijstServerVMs" class="table">
             <tr>
-                <td>
-                    <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-                </td>
-            </tr>            
-            <tr>
-                <td>
-                    <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
-                </td>
+                <th>Name</th>
+                @*<th>Status</th>*@
+
             </tr>
         </table>
     </div>
-    <div id="Dialog-Box">
-        <table id="klantTable" >
-            <tr><th>Klant</th></tr>
-            <tr>
-                <td>
-                    <select class="form-control" id="klantenlijst"></select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
-                </td>
-            </tr>
-        </table>
+    <div id="ShowVms" style="display:none">
+        <select id="LijstServerVms"></select>
+    </div>
+    <div id="VmInfo" style="display:none">
+        <table id="ListVmInfo" class="table"></table>
+    </div>
+    <div id="btns" style="display:none">
+        <div>
+            <table>
+                <tr><th>Virtuele Machine</th></tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="Dialog-Box">
+            <table id="klantTable">
+                <tr><th>Klant</th></tr>
+                <tr>
+                    <td>
+                        <select class="form-control" id="klantenlijst"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 @*<div id="Dialog-Box">

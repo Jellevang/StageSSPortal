@@ -94,6 +94,7 @@ div.test {
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
 .dropbtn:hover{
     color:black;
 }
