@@ -109,6 +109,11 @@ namespace DAL.Repositories
             OVMLijst lijst = ovmsL.Where(l => l.AccountId == klantid).FirstOrDefault();
             return lijst;
         }
+        public IEnumerable<OVMLijst> GetLijstAccount(int klantid)
+        {
+            IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.AccountId==klantid);
+            return ovmsL;
+        }
         public IEnumerable<OVMLijst> ReadLijsten()
         {
             return ctx.OVMLijsten.AsEnumerable();

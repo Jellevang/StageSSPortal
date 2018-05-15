@@ -83,6 +83,11 @@ namespace BL
             OVMLijst lijst = repo.GetLijst(klantid, ovmid);
             return lijst;
         }
+        public IEnumerable<OVMLijst> GetLijstAccount(int klantid)
+        {
+            IEnumerable<OVMLijst> lijsten = repo.GetLijstAccount(klantid);
+            return lijsten;
+        }
         public void RemoveLijst(OVMLijst ovmlijst)
         {
             repo.DeleteLijst(ovmlijst);

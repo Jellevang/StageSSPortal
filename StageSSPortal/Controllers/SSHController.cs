@@ -33,9 +33,17 @@ namespace StageSSPortal.Controllers
             return View();
         }
         [HttpGet]
-        [Route("Admin/SSH/KlantOVMs")]
+        //[Route("Admin/SSH/KlantOVMs")]
+        [Route("Klant/SSH/KlantOVMs")]
         [Authorize(Roles = "Klant")]
         public ActionResult KlantOVMs()
+        {
+            return View();
+        }
+        [HttpGet]
+        [Route("KlantAccount/SSH/Account")]
+        [Authorize(Roles = "KlantAccount")]
+        public ActionResult Account()
         {
             return View();
         }

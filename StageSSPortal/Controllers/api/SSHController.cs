@@ -313,7 +313,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/SSH/Info/{id}")]
-        [Authorize(Roles = "Admin , Klant")]
+        [Authorize(Roles = "Admin , Klant , KlantAccount")]
         public IHttpActionResult GetInfo(string id)
         {
             string[] Info = new string[8];
@@ -348,7 +348,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/SSH/StopVm/{id}")]
-        [Authorize(Roles = "Admin , Klant")]
+        [Authorize(Roles = "Admin , Klant , KlantAccount")]
         public IHttpActionResult StopVm(string id)
         {
             using (ssh)
@@ -363,7 +363,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/SSH/StartVm/{id}")]
-        [Authorize(Roles = "Admin , Klant")]
+        [Authorize(Roles = "Admin , Klant, KlantAccount")]
         public IHttpActionResult StartVm(string id)
         {
             using (ssh)
@@ -427,6 +427,39 @@ namespace StageSSPortal.Controllers.api
                 mgr.RemoveLijst(lijst);
             }           
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/Klant/SSH/AccountOVMs")]
+        [Authorize(Roles = "KlantAccount")]
+        public IHttpActionResult AccountOVMs(List<VmModel> model)
+        {
+            model = new List<VmModel>();
+            //List<string> vmState = new List<string>();
+            string[] vmInfo = new string[7];
+            string[] getVmInfo = new string[7];
+            //List<string> LijstServerVMs = new List<string>();
+            List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+            Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
+            List<OVMLijst> lijsten = mgr.GetLijstAccount(k.KlantId).ToList();
+            for(int i= 0; i< lijsten.Count();i++)
+            {
+                OracleVirtualMachine ovm = mgr.GetOVMById(lijsten[i].OVMId);
+                ovms.Add(ovm);
+            }
+            //List<string> klantovms = new List<string>();
+            //using (ssh)
+            //{
+            foreach (OracleVirtualMachine vm in ovms)
+            {
+                VmModel vmModel = new VmModel();
+                vmModel.Name = vm.Naam;
+                vmModel.id = vm.OvmId;
+                model.Add(vmModel);
+            }
+            // }
+
+            return Ok(model);
         }
 
     }
