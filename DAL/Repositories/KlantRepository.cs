@@ -65,9 +65,6 @@ namespace DAL.Repositories
         {
             return ctx.Klanten.Where(k => k.IsKlantAccount ==false);
         }
-        public IEnumerable<Klant> ReadKlantenAccounts(Klant h)
-        {
-            return ctx.Klanten.Where(k => k.HoofdKlant == h);
-        }
+        
     }
 }

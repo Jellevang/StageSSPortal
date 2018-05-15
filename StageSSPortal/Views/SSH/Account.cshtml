@@ -31,8 +31,9 @@
     });
 
     function showVmNames() {
+        $("#btns").hide();
         if ($("#ShowVms").css("display") != "none") {
-            $("table#LijstServerVMs").find("tr").remove();
+            $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
 
         }
@@ -57,6 +58,7 @@
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
+        $("#btns").show();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
