@@ -34,7 +34,7 @@ namespace StageSSPortal.Controllers
         }
         [HttpGet]
         //[Route("Admin/SSH/KlantOVMs")]
-        [Route("Klant/SSH/KlantOVMs")]
+        [Route("Admin/SSH/KlantOVMs")]
         [Authorize(Roles = "Klant")]
         public ActionResult KlantOVMs()
         {

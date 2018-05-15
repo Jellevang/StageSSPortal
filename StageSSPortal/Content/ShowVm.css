@@ -17,6 +17,9 @@ div#VmInfo {
 div#btns {
     float: right;
 }
+div#scherm {
+    margin-top: 2%;
+}
 
 body {
     /*background: #2d2d2d;
