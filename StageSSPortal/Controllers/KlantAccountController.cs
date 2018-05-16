@@ -92,14 +92,14 @@ namespace StageSSPortal.Controllers
             if (email != null)
             {
                 //ViewBag.errorMessage = "email moet uniek zijn";
-                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                ModelState.AddModelError("", "email moet uniek zijn");
                 return View("Create");
             }
             Klant naam = mgr.GetKlantByName(Klant.Naam);
-            if (naam != null)
+            if (naam !=null && naam.IsKlantAccount == false)
             {
                 //ViewBag.errorMessage = "naam moet uniek zijn";
-                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                ModelState.AddModelError("", "er is al reeds een klant met deze naam enkel accounts mogen dezelfde naam hebben");
                 return View("Create");
             }
             else
