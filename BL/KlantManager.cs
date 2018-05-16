@@ -164,7 +164,7 @@ namespace BL
             Klant created = repo.CreateKlant(k);
             created.Tag = created.Tag + created.KlantId.ToString();
             repo.UpdateKlant(created);
-            repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.Klant);
+            repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.KlantAccount);
             return k;
         }
         public void BlockKlantAccount(int id)

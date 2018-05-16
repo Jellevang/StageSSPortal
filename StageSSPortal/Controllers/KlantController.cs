@@ -104,12 +104,12 @@ namespace StageSSPortal.Controllers
                 ViewBag.errorMessage = "email moet uniek zijn";
                 return View("Error");
             }
-            Klant naam = mgr.GetKlantByName(Klant.Naam);
-            if (naam != null)
-            {
-                ViewBag.errorMessage = "naam moet uniek zijn";
-                return View("Error");
-            }
+            //Klant naam = mgr.GetKlantByName(Klant.Naam);
+            //if (naam != null)
+            //{
+            //    ViewBag.errorMessage = "naam moet uniek zijn";
+            //    return View("Error");
+            //}
             else
             {
                 Klant = mgr.AddKlant(Klant.Naam, Klant.Email);

@@ -246,7 +246,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\api\KlantAccountController.cs" />
-    <Compile Include="Controllers\api\KlantController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KlantAccountController.cs" />
     <Compile Include="Controllers\KlantController.cs" />

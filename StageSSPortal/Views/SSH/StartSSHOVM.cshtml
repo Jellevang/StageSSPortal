@@ -5,8 +5,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        //$("button#test").click(function () {
-        //alert("test");
+        alert("test");
+
         $("select").hide();
         $("#btnSave").hide();
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
@@ -29,18 +29,6 @@
                 ShowVms(data);
             })
     }
-
-    //function checkForVms() {
-    //    $("select").hide();
-    //    $("#btnSave").hide();
-    //    $.ajax("/api/SSH/CheckVms", {
-    //        type: "GET",
-    //        dataType: "json"
-    //    })
-    //        .done(function (data) {
-    //            ShowVms(data);
-    //        })
-    //}
     function loadKlanten() {
         $("select").show();
         $("#btnSave").show();
@@ -60,7 +48,7 @@
         $("select").hide();
         $("#btnSave").hide();
         $(".VmRow").css("background-color", "inherit");
-        //alert("vmnames");
+        alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
@@ -70,7 +58,6 @@
             dataType: "json"
         })
             .done(function (data) {
-
                 ShowVms(data);
             })
     };
@@ -185,21 +172,6 @@
         loadKlanten();
         $('#Dialog-Box').dialog('open');
     }
-    function HideKlanten() {
-        //alert("test");
-        //$(".klanten").each(function () {
-        //    var id = $(this).attr("id");
-        //    alert(id);
-        var id = 5
-        $.ajax("/api/SSH/getHoofdAcc/" + id, {
-            type: "GET",
-            dataType: "json"
-        })
-            .done(function (data) {
-                alert(data.val());
-            })
-    })
-    }
 </script>
 
 @*<div>
@@ -211,7 +183,6 @@
         <table id="LijstServerVMs" class="table">
             <tr>
                 <th>Name</th>
-                @*<th>Status</th>*@
 
             </tr>
         </table>
@@ -232,10 +203,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <button class=" btn btn-default" id="btn" onclick="HideKlanten()">Start VM </button>
-                     
-                        @*<button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>*@
+                    <td>                     
+                        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
                     </td>
                 </tr>
             </table>
@@ -258,9 +227,3 @@
         </div>
     </div>
 </div>
-@*<div id="Dialog-Box">
-        <select id="klantenlijst"></select>
-        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
-    </div>*@
-@*<select id="klantenlijst"></select>
-    <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>*@

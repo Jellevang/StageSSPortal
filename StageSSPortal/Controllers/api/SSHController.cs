@@ -21,6 +21,7 @@ namespace StageSSPortal.Controllers.api
         SshClient ssh;
         public SSHController()
         {
+
             ssh = new SshClient("10.0.12.240", 10000, "admin", "tst0VMman");
 
         }
@@ -129,7 +130,6 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult GetHoofdAcc(int id)
         {
                 Klant temp = klantmgr.GetKlant(id);
-            //klantmgr.GetHoofdKlant(4);
                 return Ok(temp);
             
 
@@ -373,7 +373,7 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Klant")]
         public IHttpActionResult CreateLijst(string id, string k)
         {
-            Klant klant = klantmgr.GetKlantByName(k);
+            Klant klant = klantmgr.GetKlant(k);
             OVMLijst check = mgr.GetLijst(klant.KlantId, id);
             if (check == null)
             {
@@ -386,7 +386,7 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Klant")]
         public IHttpActionResult DeleteLijst(string id, string k)
         {
-            Klant klant = klantmgr.GetKlantByName(k);
+            Klant klant = klantmgr.GetKlant(k);
             OVMLijst lijst = mgr.GetLijst(klant.KlantId, id);
             if(lijst != null)
             {
