@@ -18,22 +18,22 @@ namespace StageSSPortal.Controllers.api
         private readonly IKlantManager mgr = new KlantManager();
         private readonly UserManager<Gebruiker> userManager = new UserManager<Gebruiker>(new UserStore<Gebruiker>(new StageSSPortalDbContext()));
 
-        [HttpGet]
-        [Route("api/klant/getHoofdAcc/{id}")]
-      //  [Authorize(Roles = "Admin")]
-        public IHttpActionResult GetHoofdAcc(int klantId)
-        {
-            try
-            {
-                Klant temp = mgr.GetHoofdKlant(klantId);
-                return Ok(temp.KlantId);
-            }
-            catch
-            {
-                return Ok(0);
-            }
+        //[HttpGet]
+        //[Route("api/klant/getHoofdAcc/{id}")]
+        //[Authorize(Roles = "Admin")]
+        //public IHttpActionResult GetHoofdAcc(int klantId)
+        //{
+        //    try
+        //    {
+        //        Klant temp = mgr.GetHoofdKlant(klantId);
+        //        return Ok(temp.KlantId);
+        //    }
+        //    catch
+        //    {
+        //        return Ok(0);
+        //    }
             
-        }
+        //}
 
 
     }

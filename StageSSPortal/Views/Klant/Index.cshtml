@@ -4,30 +4,71 @@
     ViewBag.Title = "Klanten";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .klanten{
+        display:none;
+    }
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+    var ShowKlantId;
     $(document).ready(function () {
         HideKlanten();
+        $(".klanten").click(function (event) {
+            ShowKlantId = $(this).attr("id");
+        });
         
     })
     function HideKlanten() {
+        //alert("test");
         $(".klanten").each(function () {
             var id = $(this).attr("id");
-            alert(id);
-            $.ajax("/api/klant/getHoofdAcc/" + id, {
+            //alert("eee");
+            $.ajax("/api/SSH/getHoofdAcc/" + id+"", {
                 type: "GET",
                 dataType: "json"
             })
                 .done(function (data) {
-                    alert(data.val());
+                    var bool = data.IsKlantAccount;
+                    if (bool == true) {
+                        //      alert(data.KlantId)
+                        $("#" + data.KlantId).hide();
+                    }
+                    else {
+                        $("#" + data.KlantId).show();
+
+                        $("#" + data.KlantId).attr("onclick", "ShowKlanten()")
+                        $("#" + data.KlantId).css("font-weight", "bold")
+                        $("#" + data.KlantId).hover(function () {
+                            $(this).css("background-color", "lightgrey");
+                        }, function () {
+                            $(this).css("background-color", "white");
+                        })
+
+                    }
+                   // alert(data.IsKlantAccount);
                 })
         }) 
+    }
+    function ShowKlanten() {
+        // alert(ShowKlantId);
+        HideKlanten();
+        $.ajax("/api/SSH/getKlantAcc/" + ShowKlantId + "", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index,value) {
+                    //alert(value)
+                    $("#" + value.KlantId).css("display","table-row");
+
+                })
+            })
     }
 </script>
 <div class="container">
     <h2>Lijst van Klanten</h2>
-
+    @*<button onclick="HideKlanten()">TEST</button>*@
     <p>
         @Html.ActionLink("Nieuwe Klant", "Create") @*| @Html.ActionLink("Inviteer", "Invite")*@
     </p>
@@ -50,7 +91,7 @@
 
         @foreach (var item in Model)
         {
-            <tr class="klanten" id="@item.KlantId">
+            <tr class="klanten" id="@item.KlantId" >
                 <td>
                     @Html.DisplayFor(modelItem => item.Naam)
                 </td>
