@@ -127,5 +127,20 @@ namespace DAL.Repositories
             }
             ctx.SaveChanges();
         }
+
+        public IEnumerable<OVMLijst> GetLijstOVM(string id)
+        {
+            IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.OVMId.Contains(id));
+            return ovmsL;
+        }
+        public void DeleteLijstenOvm(string id)
+        {
+            IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.OVMId.Contains(id));
+            foreach (OVMLijst lijst in ovmsL)
+            {
+                ctx.OVMLijsten.Remove(lijst);
+            }
+            ctx.SaveChanges();
+        }
     }
 }

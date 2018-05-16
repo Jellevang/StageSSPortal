@@ -309,6 +309,11 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin")]
         public IHttpActionResult SetKlantOVM(string id,string k)
         {
+            List<OVMLijst> lijsten = mgr.GetLijstOvm(id).ToList();
+            if(lijsten != null)
+            {
+                mgr.RemoveLijstenOvm(id);
+            }
             OracleVirtualMachine ovm = mgr.GetOVMById(id);
             Klant klant = klantmgr.GetKlantByName(k);
             ovm.KlantId = klant.KlantId;

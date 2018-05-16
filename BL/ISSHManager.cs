@@ -22,6 +22,7 @@ namespace BL
         void RemoveLijst(OVMLijst ovmlijst);
         IEnumerable<OVMLijst> GetLijstAccount(int klantid);
         void RemoveLijstenAccount(int klantid);
-
+        IEnumerable<OVMLijst> GetLijstOvm(string id);
+        void RemoveLijstenOvm(string id);
     }
 }

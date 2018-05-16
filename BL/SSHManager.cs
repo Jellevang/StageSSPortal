@@ -96,5 +96,14 @@ namespace BL
         {
             repo.DeleteLijst(ovmlijst);
         }
+        public IEnumerable<OVMLijst> GetLijstOvm(string id)
+        {
+            IEnumerable<OVMLijst> lijsten = repo.GetLijstOVM(id);
+            return lijsten;
+        }
+        public void RemoveLijstenOvm(string id)
+        {
+            repo.DeleteLijstenOvm(id);
+        }
     }
 }
