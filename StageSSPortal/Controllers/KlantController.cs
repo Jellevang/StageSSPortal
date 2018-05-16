@@ -16,6 +16,7 @@ namespace StageSSPortal.Controllers
     public class KlantController : Controller
     {
         private readonly IKlantManager mgr = new KlantManager();
+        private readonly ISSHManager sshmgr = new SSHManager();
         private readonly UserManager<Gebruiker> userManager = new UserManager<Gebruiker>(new UserStore<Gebruiker>(new StageSSPortalDbContext()));
         public virtual ActionResult Klanten()
         {
@@ -133,7 +134,28 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id, FormCollection collection)
         {
-             mgr.RemoveKlant(id);
+            
+            
+            Klant k = mgr.GetKlant(id);
+            if(k.IsKlantAccount==false)
+            {
+                List<OracleVirtualMachine> ovms = sshmgr.GetKlantOVMs(id).ToList();
+                for (int i = 0; i < ovms.Count(); i++)
+                {
+                    ovms[i].KlantId = 0;
+                    sshmgr.ChangeOVM(ovms[i]);
+                }
+                List<Klant> accs = mgr.GetKlantenAccounts(k).ToList();
+                for(int i =0;i<accs.Count();i++)
+                {
+                    sshmgr.RemoveLijstenAccount(accs[i].KlantId);
+                }
+            }
+            else
+            {
+                sshmgr.RemoveLijstenAccount(k.KlantId);
+            }
+            mgr.RemoveKlant(id);
             return RedirectToAction("Index");
         }
 

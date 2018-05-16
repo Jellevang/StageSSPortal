@@ -88,6 +88,14 @@ namespace BL
             IEnumerable<OVMLijst> lijsten = repo.GetLijstAccount(klantid);
             return lijsten;
         }
+        public void RemoveLijstenAccount(int klantid)
+        {
+            IEnumerable<OVMLijst> lijsten = repo.GetLijstAccount(klantid);
+            foreach(OVMLijst lijst in lijsten)
+            {
+                repo.DeleteLijst(lijst);
+            }
+        }
         public void RemoveLijst(OVMLijst ovmlijst)
         {
             repo.DeleteLijst(ovmlijst);

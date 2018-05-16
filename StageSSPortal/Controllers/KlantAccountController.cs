@@ -18,6 +18,7 @@ namespace StageSSPortal.Controllers
         // GET: KlantAccount
         
         private readonly IKlantManager mgr = new KlantManager();
+        private readonly ISSHManager sshmgr = new SSHManager();
         private readonly UserManager<Gebruiker> userManager = new UserManager<Gebruiker>(new UserStore<Gebruiker>(new StageSSPortalDbContext()));
         public virtual ActionResult KlantenAccounten()
         {
@@ -91,16 +92,16 @@ namespace StageSSPortal.Controllers
             if (email != null)
             {
                 //ViewBag.errorMessage = "email moet uniek zijn";
-                ModelState.AddModelError("", "Email moet uniek zijn");
+                ModelState.AddModelError("", "email en naam moeten uniek zijn");
                 return View("Create");
             }
-            //Klant naam = mgr.GetKlantByName(Klant.Naam);
-            //if (naam != null)
-            //{
-            //    //ViewBag.errorMessage = "naam moet uniek zijn";
-            //    ModelState.AddModelError("", "email en naam moeten uniek zijn");
-            //    return View("Create");
-            //}
+            Klant naam = mgr.GetKlantByName(Klant.Naam);
+            if (naam != null)
+            {
+                //ViewBag.errorMessage = "naam moet uniek zijn";
+                ModelState.AddModelError("", "email en naam moeten uniek zijn");
+                return View("Create");
+            }
             else
             {
                 Klant = mgr.AddKlantAccount(Klant.Naam, Klant.Email, k);
@@ -114,7 +115,6 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Klant")]
         public ActionResult Delete(int id)
         {
-
             Klant Klant = mgr.GetKlant(id);
             return View(Klant);
         }
@@ -125,6 +125,7 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Klant")]
         public ActionResult Delete(int id, FormCollection collection)
         {
+            sshmgr.RemoveLijstenAccount(id);
             mgr.RemoveKlantAccount(id);
             return RedirectToAction("Index");
         }
