@@ -118,5 +118,14 @@ namespace DAL.Repositories
         {
             return ctx.OVMLijsten.AsEnumerable();
         }
+        public void DeleteLijstenAccount(int klantid)
+        {
+            IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.AccountId == klantid);
+            foreach(OVMLijst lijst in ovmsL)
+            {
+                ctx.OVMLijsten.Remove(lijst);
+            }
+            ctx.SaveChanges();
+        }
     }
 }

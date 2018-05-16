@@ -54,7 +54,7 @@ namespace DAL.Repositories
             {
                 foreach (var item in rolesForUser.ToList())
                 {
-                    userManager.RemoveFromRole(user.Id, item);
+                    userManager.RemoveFromRoleAsync(user.Id, item);
                 }
             }
 

@@ -125,8 +125,16 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Klant")]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            sshmgr.RemoveLijstenAccount(id);
-            mgr.RemoveKlantAccount(id);
+            List<OVMLijst> ovms = sshmgr.GetLijstAccount(id).ToList();
+            if(ovms==null)
+            {
+                mgr.RemoveKlantAccount(id);
+            }
+            else
+            {
+                sshmgr.RemoveLijstenAccount(id);
+                mgr.RemoveKlantAccount(id);
+            }           
             return RedirectToAction("Index");
         }
 

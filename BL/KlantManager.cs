@@ -190,19 +190,29 @@ namespace BL
             Gebruiker user = repoUser.FindGebruiker(id);
             if (k.IsKlantAccount == false)
             {
-                repo.DeleteKlant(k);
-                repoUser.DeleteGebruiker(user);
+                
                 List<Klant> klantenAcc = new List<Klant>();
-                klantenAcc = GetKlanten().ToList();
+                klantenAcc = GetKlantenAccounts(k).ToList();
                 foreach (Klant acc in klantenAcc)
                 {
-                    if (acc.HoofdKlant == k)
-                    {
+                    
                         Gebruiker userAcc = repoUser.FindGebruiker(acc.KlantId);
                         repo.DeleteKlant(acc);
                         repoUser.DeleteGebruiker(userAcc);
-                    }
+                    
                 }
+                //klantenAcc = GetKlanten().ToList();
+                //foreach (Klant acc in klantenAcc)
+                //{
+                //    if (acc.HoofdKlant == k)
+                //    {
+                //        Gebruiker userAcc = repoUser.FindGebruiker(acc.KlantId);
+                //        repo.DeleteKlant(acc);
+                //        repoUser.DeleteGebruiker(userAcc);
+                //    }
+                //}
+                repo.DeleteKlant(k);
+                repoUser.DeleteGebruiker(user);
             }
             else
             {

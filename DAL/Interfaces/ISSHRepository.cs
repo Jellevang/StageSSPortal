@@ -24,5 +24,6 @@ namespace DAL.Interfaces
         OVMLijst GetLijst(int klantid, string ovmid);
         IEnumerable<OVMLijst> GetLijstAccount(int klantid);
         IEnumerable<OVMLijst> ReadLijsten();
+        void DeleteLijstenAccount(int klantid);
     }
 }

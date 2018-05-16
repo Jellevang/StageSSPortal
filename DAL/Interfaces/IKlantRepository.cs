@@ -17,5 +17,7 @@ namespace DAL.Interfaces
         void DeleteKlant(Klant Klant);
         IEnumerable<Klant> ReadHoofdKlanten();
         
+
+
     }
 }
