@@ -115,6 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GebruikerManager.cs" />
+    <Compile Include="AdminManager.cs" />
+    <Compile Include="IAdminManager.cs" />
     <Compile Include="IGebruikerManager.cs" />
     <Compile Include="IKlantManager.cs" />
     <Compile Include="ISSHManager.cs" />

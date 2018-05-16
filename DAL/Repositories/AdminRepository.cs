@@ -35,6 +35,20 @@ namespace DAL.Repositories
             Admin a = _ctx.Admins.Find(id);
             return a;
         }
+        public string ReadPasswd(Admin admin)
+        {
+            string passwd = admin.OvmPassword;
+            string plaintext = "monin";
+            string decryptedPasswd = StringCipher.Decrypt(passwd, plaintext);
+            return decryptedPasswd;
+        }
+        public void ChangePasswd(string passwd, Admin admin)
+        {
+            string plaintext = "monin";
+            string encryptstring = StringCipher.Encrypt(plaintext, passwd);
+            admin.OvmPassword = encryptstring;
+            _ctx.SaveChanges();
+        }
 
         public IEnumerable<Admin> ReadAdmins()
         {

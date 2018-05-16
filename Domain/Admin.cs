@@ -13,5 +13,7 @@ namespace Domain
         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Geen emailadres gegeven")]
         public string Email { get; set; }
         public string naam { get; set; }
+        public string OvmPassword { get; set; }
     }
+
 }

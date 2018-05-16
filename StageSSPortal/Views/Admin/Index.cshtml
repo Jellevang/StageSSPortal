@@ -7,8 +7,32 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        checkForVms();
-    });
+        checkPasswd();
+       // checkForVms(); 
+             });
+    function checkPasswd() {
+
+        $.ajax("/api/SSH/checkPasswd", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                if (data == false) {
+                    alert("test")
+                    InsertPasswd();
+                } checkForVms();
+            })
+    }
+    function InsertPasswd() {
+        var passwd = prompt("Geef het password");
+        alert(passwd);
+        $.ajax("/api/SSH/InsertPasswd/" + "'" + passwd + "'" + "/", {
+            type: "POST",
+            dataType: "json"
+        }).done(function (data) {
+            checkForVms();
+        })
+    } 
 
     function checkForVms() {
         var redirect = false;
