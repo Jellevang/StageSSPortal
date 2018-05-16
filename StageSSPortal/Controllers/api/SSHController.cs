@@ -136,6 +136,19 @@ namespace StageSSPortal.Controllers.api
         }
 
         [HttpGet]
+        [Route("api/SSH/getKlantAcc/{id}")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetKlantAcc(int id)
+        {
+            Klant temp = klantmgr.GetKlant(id);
+            IEnumerable<Klant> klantAccs = new List<Klant>();
+            klantAccs = klantmgr.GetKlantenAccounts(temp);
+            return Ok(klantAccs);
+
+
+        }
+
+        [HttpGet]
         [Route("api/SSH/Vms")]
         [Authorize(Roles = "Admin")]
         public IHttpActionResult GetVms(List<VmModel> model)

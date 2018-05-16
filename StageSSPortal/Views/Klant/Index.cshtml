@@ -4,11 +4,19 @@
     ViewBag.Title = "Klanten";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .klanten{
+        display:none;
+    }
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+    var ShowKlantId;
     $(document).ready(function () {
         HideKlanten();
+        $(".klanten").click(function (event) {
+            ShowKlantId = $(this).attr("id");
+        });
         
     })
     function HideKlanten() {
@@ -24,14 +32,38 @@
                     var bool = data.IsKlantAccount;
                     if (bool == true) {
                         //      alert(data.KlantId)
-                        $("#" + data.KlantId).css("display", "none");
+                        $("#" + data.KlantId).hide();
                     }
                     else {
-                        $("#" + data.KlantId).attr("onclick","ShowKlanten()")
+                        $("#" + data.KlantId).show();
+
+                        $("#" + data.KlantId).attr("onclick", "ShowKlanten()")
+                        $("#" + data.KlantId).css("font-weight", "bold")
+                        $("#" + data.KlantId).hover(function () {
+                            $(this).css("background-color", "lightgrey");
+                        }, function () {
+                            $(this).css("background-color", "white");
+                        })
+
                     }
                    // alert(data.IsKlantAccount);
                 })
         }) 
+    }
+    function ShowKlanten() {
+        // alert(ShowKlantId);
+        HideKlanten();
+        $.ajax("/api/SSH/getKlantAcc/" + ShowKlantId + "", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index,value) {
+                    //alert(value)
+                    $("#" + value.KlantId).css("display","table-row");
+
+                })
+            })
     }
 </script>
 <div class="container">
@@ -59,7 +91,7 @@
 
         @foreach (var item in Model)
         {
-            <tr class="klanten" id="@item.KlantId">
+            <tr class="klanten" id="@item.KlantId" >
                 <td>
                     @Html.DisplayFor(modelItem => item.Naam)
                 </td>
