@@ -183,7 +183,7 @@
             .done(function (data) {
                 $.each(data, function (index, value) {
                     //searchOvmLijst(value,t)
-                    $("#KlantAccCheck").append("<tr><td><input class="+value.KlantId+" type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Naam + "'" + "/>" + value.Naam + "</tr></td>");//+"<br />");
+                    $("#KlantAccCheck").append("<tr><td><input class="+value.KlantId+" type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</tr></td>");//+"<br />");
 
                 })
             });
@@ -196,10 +196,11 @@
             if ($(this).is(":checked")) {
                 //alert("if lus");
                 k = $(this).val()
+                alert(k)
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k, {
+                        $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k+"/", {
                             type: "GET",
                             dataType: "json"
                         })
@@ -212,7 +213,7 @@
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k, {
+                        $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k+"/", {
                             type: "GET",
                             dataType: "json"
                         })

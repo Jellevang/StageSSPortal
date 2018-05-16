@@ -21,6 +21,7 @@ namespace StageSSPortal.Controllers
         SshClient ssh;
         public SSHController()
         {
+            
             ssh = new SshClient("10.0.12.240", 10000, "admin", "tst0VMman");
 
         }
