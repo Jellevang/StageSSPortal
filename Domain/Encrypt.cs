@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    class Encrypt
+    public class Encrypt
     {
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";

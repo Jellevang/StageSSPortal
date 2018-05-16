@@ -22,6 +22,11 @@ namespace DAL.Repositories
         {
             _ctx = uow.Context;
         }*/
+        public Admin ReadAdmin()
+        {
+            Admin a = _ctx.Admins.FirstOrDefault();
+            return a;
+        }
 
         public Admin CreateAdmin(Admin admin)
         {
@@ -38,14 +43,13 @@ namespace DAL.Repositories
         public string ReadPasswd(Admin admin)
         {
             string passwd = admin.OvmPassword;
-            string plaintext = "monin";
-            string decryptedPasswd = StringCipher.Decrypt(passwd, plaintext);
+            string decryptedPasswd = Encrypt.DecryptString(passwd);
             return decryptedPasswd;
         }
         public void ChangePasswd(string passwd, Admin admin)
         {
-            string plaintext = "monin";
-            string encryptstring = StringCipher.Encrypt(plaintext, passwd);
+            //string plaintext = "monin";
+            string encryptstring = Encrypt.EncryptString(passwd);
             admin.OvmPassword = encryptstring;
             _ctx.SaveChanges();
         }
