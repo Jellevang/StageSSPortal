@@ -75,17 +75,17 @@ namespace DAL.Repositories
                     userRole = ctx.Roles.FirstOrDefault(r => r.Name == "Admin");
                 }
             }
-            if (rol.Equals(3))
+            if (ctx.Roles.Any(r => r.Name == "KlantAccount"))
             {
-                if (!ctx.Roles.Any(r => r.Name == "KlantAccount"))
-                {
-                    userRole = new IdentityRole("KlantAccount");
-                    ctx.Roles.Add(userRole);
-                }
-                else
-                {
+                //if (!ctx.Roles.Any(r => r.Name == "KlantAccount"))
+                //{
+                //    userRole = new IdentityRole("KlantAccount");
+                //    ctx.Roles.Add(userRole);
+                //}
+                //else
+                //{
                     userRole = ctx.Roles.FirstOrDefault(r => r.Name == "KlantAccount");
-                }
+                //}
             }
             else
             {
@@ -114,6 +114,7 @@ namespace DAL.Repositories
                             Naam = naam,
                             EmailConfirmed = true,
                             Toegestaan = true,
+                            MustChangePassword=true,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;
@@ -127,6 +128,7 @@ namespace DAL.Repositories
                             Naam = naam,
                             EmailConfirmed = true,
                             Toegestaan = true,
+                            MustChangePassword = true,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;
@@ -140,6 +142,7 @@ namespace DAL.Repositories
                             Naam = naam,
                             EmailConfirmed = true,
                             Toegestaan = true,
+                            MustChangePassword = true,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;

@@ -12,6 +12,7 @@ namespace Domain.Gebruikers
         public String Naam { get; set; }
         public RolType Rol { get; set; }
         public Boolean Toegestaan { get; set; }
+        public Boolean MustChangePassword { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<Gebruiker> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
