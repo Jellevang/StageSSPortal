@@ -142,5 +142,23 @@ namespace DAL.Repositories
             }
             ctx.SaveChanges();
         }
+        public Server GetServer(int id)
+        {
+            return ctx.Servers.Where(s => s.ServerId == id).FirstOrDefault();
+        }
+        public Server GetServer(string id)
+        {
+            return ctx.Servers.Where(s => s.ServersId.Contains(id)).FirstOrDefault();
+        }
+        public Server AddServer(Server server)
+        {
+            ctx.Servers.Add(server);
+            ctx.SaveChanges();
+            return server;
+        }
+        public IEnumerable<Server> ReadServers()
+        {
+            return ctx.Servers.AsEnumerable();
+        }
     }
 }

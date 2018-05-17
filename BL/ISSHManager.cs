@@ -24,5 +24,9 @@ namespace BL
         void RemoveLijstenAccount(int klantid);
         IEnumerable<OVMLijst> GetLijstOvm(string id);
         void RemoveLijstenOvm(string id);
+        Server GetServer(int id);
+        Server GetServer(string id);
+        Server AddServer(string naam, string id);
+        IEnumerable<Server> GetServer();
     }
 }

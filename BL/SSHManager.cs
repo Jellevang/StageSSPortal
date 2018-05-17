@@ -105,5 +105,27 @@ namespace BL
         {
             repo.DeleteLijstenOvm(id);
         }
+        public Server GetServer(int id)
+        {
+            return repo.GetServer(id);
+        }
+        public Server GetServer(string id)
+        {
+            return repo.GetServer(id);
+        }
+        public Server AddServer(string naam, string id)
+        {
+            Server server = new Server()
+            {
+                ServerNaam = naam,
+                ServersId = id
+            };
+            repo.AddServer(server);
+            return server;
+        }
+        public IEnumerable<Server> GetServer()
+        {
+            return repo.ReadServers();
+        }
     }
 }
