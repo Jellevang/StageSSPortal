@@ -30,6 +30,7 @@ namespace DAL.Interfaces
         Server GetServer(int id);
         Server GetServer(string id);
         Server AddServer(Server server);
-        IEnumerable<Server> ReadServers();
+        List<Server> ReadServers();
+        void DeleteServer(string id);
     }
 }

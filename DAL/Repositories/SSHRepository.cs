@@ -156,9 +156,13 @@ namespace DAL.Repositories
             ctx.SaveChanges();
             return server;
         }
-        public IEnumerable<Server> ReadServers()
+        public List<Server> ReadServers()
         {
-            return ctx.Servers.AsEnumerable();
+            return ctx.Servers.ToList();
+        }
+        public void DeleteServer(string id)
+        {
+            ctx.Servers.Remove(GetServer(id));
         }
     }
 }

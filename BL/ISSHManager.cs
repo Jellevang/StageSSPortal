@@ -9,7 +9,7 @@ namespace BL
 {
     public interface ISSHManager
     {
-        OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId);
+        OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId, int serverId);
         void RemoveOVM(string id);
         OracleVirtualMachine GetOVM(int id);
         OracleVirtualMachine GetOVM(string naam);
@@ -26,7 +26,8 @@ namespace BL
         void RemoveLijstenOvm(string id);
         Server GetServer(int id);
         Server GetServer(string id);
+        void RemoveServer(string id);
         Server AddServer(string naam, string id);
-        IEnumerable<Server> GetServer();
+        List<Server> GetServers();
     }
 }

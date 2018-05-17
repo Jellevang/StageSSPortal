@@ -18,11 +18,14 @@ namespace StageSSPortal.Controllers
         
         private readonly ISSHManager mgr = new SSHManager();
         private readonly IKlantManager klantmgr = new KlantManager();
+        AdminManager admgr = new AdminManager();
         SshClient ssh;
         public SSHController()
         {
-            
-            ssh = new SshClient("10.0.12.240", 10000, "admin", "tst0VMman");
+            Admin admin = admgr.GetAdmin();
+            string passwd = admgr.GetPasswd(admin);
+            string trimpasswd = passwd.Replace("'", "");
+            ssh = new SshClient("10.0.12.240", 10000, "admin", trimpasswd);
 
         }
 

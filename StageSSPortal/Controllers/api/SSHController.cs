@@ -20,7 +20,8 @@ namespace StageSSPortal.Controllers.api
         private readonly IKlantManager klantmgr = new KlantManager();
         SshClient ssh;
         AdminManager admgr = new AdminManager();
-        
+
+        SSHManager sshmgr=new SSHManager();
         public SSHController()
         {
             Admin admin = admgr.GetAdmin();
@@ -60,6 +61,79 @@ namespace StageSSPortal.Controllers.api
             return vmInfo2;
         }
 
+
+        [HttpGet]
+        [Route("api/ssh/getServers")]
+        [Authorize(Roles="Admin")]
+        public IHttpActionResult getServers()
+        {
+            string[] serverVMs;
+            List<Server> servers = new List<Server>();
+            List<Server> OrderServers = new List<Server>();
+            List<Server> DbServers = new List<Server>();
+            List<Server> OrderDbServers = new List<Server>();
+            List<string> databaseId = new List<string>();
+            List<string> ListServerId = new List<string>();
+            string serverId;
+            string serverName;
+            using (ssh)
+            {
+                ssh.Connect();
+                var ServerResult = ssh.RunCommand("list server");
+                serverVMs = ServerResult.Result.Split('\n');
+                ssh.Disconnect();
+                string patternId = @"id:";
+                
+                //string patternName = @"name:";
+                for (int i = 0; i < serverVMs.Length; i++)
+                {
+                    var resId = Regex.Match(serverVMs[i], patternId);
+                    if (resId.Length != 0)
+                    {
+                        string[] serverAttributes=serverVMs[i].Split(' ');
+                        serverId = serverAttributes[2].Substring(serverAttributes[2].IndexOf(":") + 1, serverAttributes[2].Length - (serverAttributes[4].IndexOf(":") -1));
+                        serverName = serverAttributes[4].Substring(serverAttributes[4].IndexOf(":") + 1, serverAttributes[4].Length - serverAttributes[4].IndexOf(":") -1);
+                        Server s = new Server();
+                        s.ServerNaam = serverName;
+                        s.ServersId = serverId;
+                        servers.Add(s);
+                        //sshmgr.AddServer(serverName, serverId);
+                    }
+                }
+                OrderServers = servers.OrderBy(Os => Os.ServersId).ToList();
+                DbServers = sshmgr.GetServers();
+                OrderDbServers = DbServers.OrderBy(ODs => ODs.ServersId).ToList();
+                for (int i = 0; i < OrderDbServers.Count(); i++)
+                {
+                    databaseId.Add(OrderDbServers.ElementAt(i).ServersId);
+                }
+                for (int i = 0; i < OrderServers.Count(); i++)
+                {
+                    ListServerId.Add(OrderServers[i].ServersId);
+                }
+
+                for (int i = 0; i < OrderServers.Count(); i++)
+                {
+
+                    if (!databaseId.Contains(OrderServers[i].ServersId))
+                    {
+                        sshmgr.AddServer(OrderServers[i].ServerNaam, OrderServers[i].ServersId);
+                        OrderDbServers.Add(OrderServers[i]);
+                    }
+                }
+                for (int i = 0; i < OrderDbServers.Count(); i++)
+                {
+                    if (!ListServerId.Contains(OrderDbServers.ElementAt(i).ServersId))
+                    {
+                        sshmgr.RemoveServer(OrderDbServers.ElementAt(i).ServersId);
+                        OrderDbServers.Remove(sshmgr.GetServer(OrderDbServers.ElementAt(i).ServersId));
+                    }
+                }
+                return Ok(true);
+            }
+            //return Ok(true);
+        }
+
         [HttpGet]
         [Route("api/SSH/CheckVms")]
         [Authorize(Roles = "Admin")]
@@ -67,28 +141,36 @@ namespace StageSSPortal.Controllers.api
         {
             List<OracleVirtualMachine> serverVms = new List<OracleVirtualMachine>();
             string[] serverVMs;
+            IEnumerable<Server> serverlist = sshmgr.GetServers();
             List<OracleVirtualMachine> OrderServerVms = new List<OracleVirtualMachine>();
+            
             using (ssh)
             {
-                ssh.Connect();
-                var ServerResult = ssh.RunCommand("show Server name=hes-ora-vmtst01");
-                serverVMs = ServerResult.Result.Split('\n');
-                ssh.Disconnect();
+                for(int i = 0; i < serverlist.Count(); i++)
+                {
+                    ssh.Connect();
+                    var ServerResult = ssh.RunCommand("show Server name="+serverlist.ElementAt(i).ServerNaam);
+                    serverVMs = ServerResult.Result.Split('\n');
+                    ssh.Disconnect();
+                
+                
                 string patternVM = @"Vm [0-9]+";
-                //string patternId=@"id = "
-                for (int i = 0; i < serverVMs.Length; i++)
+               
+                for (int j = 0; j < serverVMs.Length; j++)
                 {
                     OracleVirtualMachine vm = new OracleVirtualMachine();
-                    var resId = Regex.Match(serverVMs[i], patternVM);
+                    var resId = Regex.Match(serverVMs[j], patternVM);
                     if (resId.Length != 0)
                     {
-                        string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
-                        string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1).Trim();
+                        string name = serverVMs[j].Substring(serverVMs[j].IndexOf("[") + 1, serverVMs[j].IndexOf("]") - serverVMs[j].IndexOf("[") - 1);
+                        string id = serverVMs[j].Substring(serverVMs[j].IndexOf("=") + 1, (serverVMs[j].IndexOf("[")) - serverVMs[j].IndexOf("=") - 1).Trim();
                         vm.OvmId = id;
                         vm.Naam=name;
                         vm.KlantId = 0;
+                        vm.ServerId = serverlist.ElementAt(i).ServerId;
                         serverVms.Add(vm);
                     }
+                }
                 }
             }
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
@@ -114,7 +196,7 @@ namespace StageSSPortal.Controllers.api
 
                 if (!databaseId.Contains(OrderServerVms[i].OvmId))
                 {
-                    mgr.AddOVM(OrderServerVms[i].Naam, OrderServerVms[i].OvmId, 0);
+                    mgr.AddOVM(OrderServerVms[i].Naam, OrderServerVms[i].OvmId, 0,OrderServerVms[i].ServerId);
                     orderDbVms.Add(OrderServerVms[i]);
                 }
             }
@@ -154,88 +236,88 @@ namespace StageSSPortal.Controllers.api
 
         }
 
-        [HttpGet]
-        [Route("api/SSH/Vms")]
-        [Authorize(Roles = "Admin")]
-        public IHttpActionResult GetVms(List<VmModel> model)
-        {
-            model = new List<VmModel>();
-            List<string> vmState = new List<string>();
-            string[] vmInfo = new string[7];
-            string[] getVmInfo = new string[7];
-            List<string> LijstServerVMs = new List<string>();
+        //[HttpGet]
+        //[Route("api/SSH/Vms")]
+        //[Authorize(Roles = "Admin")]
+        //public IHttpActionResult GetVms(List<VmModel> model)
+        //{
+        //    model = new List<VmModel>();
+        //    List<string> vmState = new List<string>();
+        //    string[] vmInfo = new string[7];
+        //    string[] getVmInfo = new string[7];
+        //    List<string> LijstServerVMs = new List<string>();
 
-            string[] serverVMs;
-            string[] VmNames;
-            using (ssh)
-            {
-                ssh.Connect();
-                var ServerResult = ssh.RunCommand("show Server name=hes-ora-vmtst01");
-                serverVMs = ServerResult.Result.Split('\n');
-                ssh.Disconnect();
-                ssh.Connect();
-                var VmResult = ssh.RunCommand("list vm ");
-                VmNames = VmResult.Result.Split('\n');
-                ssh.Disconnect();
-                string patternVM = @"Vm [0-9]+";
-                string idPattern = @"id: [0-9]+";
-                List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
-                ovms = mgr.GetOVMs().ToList();
-                bool isEmpty = !ovms.Any();
-                for (int i = 0; i < serverVMs.Length; i++)
-                {
-                    var res = Regex.Match(serverVMs[i], patternVM);
-                    var resId = Regex.Match(serverVMs[i], idPattern);
-                    if (res.Length != 0)
-                    {
-                        VmModel vmModel = new VmModel();
-                        string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
-                        string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
-                        id=id.Trim();
-                        vmModel.Name = name;
-                        vmModel.id = id;
+        //    string[] serverVMs;
+        //    string[] VmNames;
+        //    using (ssh)
+        //    {
+        //        ssh.Connect();
+        //        var ServerResult = ssh.RunCommand("show Server name=hes-ora-vmtst01");
+        //        serverVMs = ServerResult.Result.Split('\n');
+        //        ssh.Disconnect();
+        //        ssh.Connect();
+        //        var VmResult = ssh.RunCommand("list vm ");
+        //        VmNames = VmResult.Result.Split('\n');
+        //        ssh.Disconnect();
+        //        string patternVM = @"Vm [0-9]+";
+        //        string idPattern = @"id: [0-9]+";
+        //        List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+        //        ovms = mgr.GetOVMs().ToList();
+        //        bool isEmpty = !ovms.Any();
+        //        for (int i = 0; i < serverVMs.Length; i++)
+        //        {
+        //            var res = Regex.Match(serverVMs[i], patternVM);
+        //            var resId = Regex.Match(serverVMs[i], idPattern);
+        //            if (res.Length != 0)
+        //            {
+        //                VmModel vmModel = new VmModel();
+        //                string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
+        //                string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
+        //                id=id.Trim();
+        //                vmModel.Name = name;
+        //                vmModel.id = id;
 
-                        if (isEmpty)
-                        {
-                            OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
-                        }
-                        else
-                        {
-                            bool bezit = false;
-                            foreach (OracleVirtualMachine ovm in ovms)
-                            {
-                                if (ovm.Naam.Equals(name))
-                                {
-                                    bezit = true;
-                                }
+        //                if (isEmpty)
+        //                {
+        //                    OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
+        //                }
+        //                else
+        //                {
+        //                    bool bezit = false;
+        //                    foreach (OracleVirtualMachine ovm in ovms)
+        //                    {
+        //                        if (ovm.Naam.Equals(name))
+        //                        {
+        //                            bezit = true;
+        //                        }
 
-                            }
-                            if (bezit == true)
-                            {
+        //                    }
+        //                    if (bezit == true)
+        //                    {
 
-                            }
-                            else
-                            {
-                                OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
-                            }
-                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
+        //                    }
+        //                }
 
-                        vmInfo = GetInfo(id, ssh, getVmInfo);
-                        var regex = @"Status = [A-Z]+";
-                        for (int j = 0; j < vmInfo.Length; j++)
-                        {
-                            var match = Regex.Match(vmInfo[j], regex);
-                            if (match.Length != 0)
-                            {
-                                vmModel.Status = vmInfo[j].Substring(vmInfo[j].IndexOf("=") + 2, vmInfo[j].Length - vmInfo[j].IndexOf("=") - 2);
-                            }
-                        }
-                        model.Add(vmModel);
-                    }
-                }
-            }
-            return Ok(model);
-        }
+        //                vmInfo = GetInfo(id, ssh, getVmInfo);
+        //                var regex = @"Status = [A-Z]+";
+        //                for (int j = 0; j < vmInfo.Length; j++)
+        //                {
+        //                    var match = Regex.Match(vmInfo[j], regex);
+        //                    if (match.Length != 0)
+        //                    {
+        //                        vmModel.Status = vmInfo[j].Substring(vmInfo[j].IndexOf("=") + 2, vmInfo[j].Length - vmInfo[j].IndexOf("=") - 2);
+        //                    }
+        //                }
+        //                model.Add(vmModel);
+        //            }
+        //        }
+        //    }
+        //    return Ok(model);
+        //}
 
         [HttpGet]
         [Route("api/SSH/VmsDB")]

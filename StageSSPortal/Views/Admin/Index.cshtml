@@ -8,8 +8,22 @@
 <script>
     $(document).ready(function () {
         checkPasswd();
+        
        // checkForVms(); 
-             });
+    });
+
+
+    function LoadServers() {
+        
+        $.ajax("/api/ssh/getServers", {
+            type: "GET",
+            dataType: "json"
+        }).done(function (data) {
+            if (data == true) {
+                checkForVms();
+            }
+        })
+    }
     function checkPasswd() {
 
         $.ajax("/api/SSH/checkPasswd", {
@@ -20,7 +34,11 @@
                 if (data == false) {
                    // alert("test")
                     InsertPasswd();
-                } else { checkForVms(); }
+                }
+                else
+                {
+                    LoadServers();
+                }
             })
     }
     function InsertPasswd() {
@@ -34,7 +52,7 @@
             dataType: "json"
         }).done(function (data) {
             if (data == true) {
-                checkForVms();
+                LoadServers();
             }
         })
     } 

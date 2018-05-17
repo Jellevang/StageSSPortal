@@ -18,13 +18,14 @@ namespace BL
             repo = new SSHRepository();
         }
 
-        public OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId)
+        public OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId, int serverId)
         {
             OracleVirtualMachine ovm = new OracleVirtualMachine()
             {
                 Naam = naam,
                 OvmId = ovmId,
-                KlantId = klantId
+                KlantId = klantId,
+                ServerId=serverId                
             };
             OracleVirtualMachine created = repo.AddMachine(ovm);
             return created;
@@ -123,7 +124,12 @@ namespace BL
             repo.AddServer(server);
             return server;
         }
-        public IEnumerable<Server> GetServer()
+        public void RemoveServer(string id)
+        {
+            repo.DeleteServer(id);
+        }
+
+        public List<Server> GetServers()
         {
             return repo.ReadServers();
         }
