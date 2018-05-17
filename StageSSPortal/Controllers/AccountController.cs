@@ -92,20 +92,46 @@ namespace StageSSPortal.Controllers
                     switch (result)
                     {
                         case SignInStatus.Success:
+                            
                             if (user.Rol == RolType.KlantAccount)
-                             {
-                                 returnUrl = "~/Home/Index";
-                                 return RedirectToLocal(returnUrl);
+                            {
+                            if (user.MustChangePassword == true)
+                            {
+                                returnUrl = "~/Manage/ChangePassword";
+                                return RedirectToLocal(returnUrl);
+                            }
+                            else
+                            {
+                                returnUrl = "~/Home/Index";
+                                return RedirectToLocal(returnUrl);
+                            }
+                            
                              }
                             if (user.Rol == RolType.Admin)
                             {
-                                returnUrl = "~/Admin/Index";
-                                //returnUrl = "~/Home/Index";
+                                if (user.MustChangePassword == true)
+                                {
+                                    returnUrl = "~/Manage/ChangePassword";
+                                    return RedirectToLocal(returnUrl);
+                                }
+                                else
+                                {
+                                    returnUrl = "~/Admin/Index";
+                                    return RedirectToLocal(returnUrl);
+                                }
+                            
+                            }
+                            if (user.MustChangePassword == true)
+                            {
+                                returnUrl = "~/Manage/ChangePassword";
                                 return RedirectToLocal(returnUrl);
                             }
-                            //returnUrl = "~/Klant/Profiel";
-                            returnUrl = "~/Klant/Home";
-                            return RedirectToLocal(returnUrl);
+                            else
+                            {
+                                returnUrl = "~/Klant/Home";
+                                return RedirectToLocal(returnUrl);
+                            }
+                        
                         case SignInStatus.LockedOut:
                             return View("Lockout");
                         case SignInStatus.RequiresVerification:

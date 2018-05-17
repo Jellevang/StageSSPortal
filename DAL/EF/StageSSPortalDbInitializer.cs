@@ -163,6 +163,7 @@ namespace DAL.EF
                         Naam = "Alfons",
                         EmailConfirmed = true,
                         Toegestaan = true,
+                        MustChangePassword = false,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };
@@ -211,6 +212,7 @@ namespace DAL.EF
                         Naam = klanten[i].Naam,
                         EmailConfirmed = true,
                         Toegestaan = true,
+                        MustChangePassword =false,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };
@@ -229,7 +231,7 @@ namespace DAL.EF
             }
             for (int i = 0; i < klantenAccounts.Count; i++)
             {
-                #region Klant
+                #region KlantAccount
                 if (!context.Roles.Any(r => r.Name == "KlantAccount"))
                 {
                     userRole = new IdentityRole("KlantAccount");
@@ -254,6 +256,7 @@ namespace DAL.EF
                         Naam = klantenAccounts[i].Naam,
                         EmailConfirmed = true,
                         Toegestaan = true,
+                        MustChangePassword = false,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };
