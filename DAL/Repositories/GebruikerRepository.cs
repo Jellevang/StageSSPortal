@@ -63,7 +63,7 @@ namespace DAL.Repositories
         public Gebruiker CreateGebruiker(string email, string naam, int gebruikerid, RolType rol)
         {
             IdentityRole userRole = null;
-            if (rol.Equals(1))
+            if (rol.Equals(RolType.Admin))
             {
                 if (!ctx.Roles.Any(r => r.Name == "Admin"))
                 {
