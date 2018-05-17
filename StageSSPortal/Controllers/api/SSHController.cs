@@ -75,6 +75,7 @@ namespace StageSSPortal.Controllers.api
                 serverVMs = ServerResult.Result.Split('\n');
                 ssh.Disconnect();
                 string patternVM = @"Vm [0-9]+";
+                //string patternId=@"id = "
                 for (int i = 0; i < serverVMs.Length; i++)
                 {
                     OracleVirtualMachine vm = new OracleVirtualMachine();
