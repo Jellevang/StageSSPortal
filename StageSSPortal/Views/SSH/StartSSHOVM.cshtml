@@ -116,7 +116,7 @@
                 loadKlanten();
                 var text = data;
                 $.each(data, function (index, value) {
-                    $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+                    $("table#ListVmInfo").append("<tr class=VmInfoRow cursor:pointer> <td>" + value + "</td> </tr>");
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
