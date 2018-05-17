@@ -147,9 +147,12 @@ namespace StageSSPortal.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                user.MustChangePassword = false;
-                UserManager.UpdateGebruiker(user);
-                return RedirectToAction("Index", "Admin", new { Message = ManageMessageId.ChangePasswordSuccess });
+                if(user.MustChangePassword == true)
+                {
+                    user.MustChangePassword = false;
+                    UserManager.UpdateGebruiker(user);
+                }
+                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
             return View(model);
