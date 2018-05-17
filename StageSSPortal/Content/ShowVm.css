@@ -8,7 +8,9 @@
 .VmRow td:hover {
     color: blue;
 }
-
+.pointerCursor {
+    cursor: pointer;
+}
 div#VmInfo {
     float: left;
     position: relative;

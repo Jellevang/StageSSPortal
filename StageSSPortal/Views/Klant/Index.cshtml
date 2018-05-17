@@ -8,6 +8,9 @@
     .klanten{
         display:none;
     }
+    .pointerCursor {
+        cursor: pointer;
+    }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
@@ -17,6 +20,9 @@
         $(".klanten").click(function (event) {
             ShowKlantId = $(this).attr("id");
         });
+        $('td').contents().filter(function () {
+            return this.nodeType === 3;
+        }).wrap('<span class="pointerCursor" />');
         
     })
     function HideKlanten() {
