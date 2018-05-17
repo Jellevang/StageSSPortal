@@ -10,5 +10,6 @@ namespace BL
     public interface IGebruikerManager
     {
         List<Gebruiker> GetGebruikers();
+        Gebruiker GetGebruiker(string username);
     }
 }

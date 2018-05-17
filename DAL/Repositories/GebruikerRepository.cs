@@ -33,6 +33,12 @@ namespace DAL.Repositories
             Gebruiker user = users.Find(x => x.GebruikerId == gebruikerId);
             return user;
         }
+        public Gebruiker FindGebruiker(string username)
+        {
+            List<Gebruiker> users = ReadGebruikers();
+            Gebruiker user = users.Find(x => x.UserName.Equals(username));
+            return user;
+        }
         public void UpdateGebruiker(Gebruiker user)
         {
             Gebruiker aanTePassenGebruiker = ctx.Users.Find(user.Id);
