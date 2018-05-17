@@ -75,7 +75,8 @@ namespace DAL.Repositories
                     userRole = ctx.Roles.FirstOrDefault(r => r.Name == "Admin");
                 }
             }
-            if (rol.Equals(ctx.Roles.Any(r => r.Name == "KlantAccount")))
+            //if (rol.Equals(ctx.Roles.Any(r => r.Name.Equals("KlantAccount"))))
+            if (rol.Equals(RolType.KlantAccount))
             {
                 //if (!ctx.Roles.Any(r => r.Name == "KlantAccount"))
                 //{
