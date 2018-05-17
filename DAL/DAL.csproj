@@ -118,6 +118,7 @@
     <Compile Include="EF\StageSSPortalDbConfiguration.cs" />
     <Compile Include="EF\StageSSPortalDbContext.cs" />
     <Compile Include="EF\StageSSPortalDbInitializer.cs" />
+    <Compile Include="Encrypt.cs" />
     <Compile Include="Interfaces\IAdminRepository.cs" />
     <Compile Include="Interfaces\IGebruikerRepository.cs" />
     <Compile Include="Interfaces\IKlantRepository.cs" />

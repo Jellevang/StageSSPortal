@@ -12,5 +12,6 @@ namespace Domain
         public string Naam { get; set; }
         public string OvmId { get; set; }
         public int KlantId { get; set; }
+        public int ServerId { get; set; }
     }
 }
