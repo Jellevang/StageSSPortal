@@ -26,6 +26,7 @@ namespace DAL.Interfaces
         IEnumerable<OVMLijst> ReadLijsten();
         void DeleteLijstenAccount(int klantid);
         IEnumerable<OVMLijst> GetLijstOVM(string id);
+        IEnumerable<OracleVirtualMachine> ReadMachinesByServerId(int id);
         void DeleteLijstenOvm(string id);
         Server GetServer(int id);
         Server GetServer(string id);

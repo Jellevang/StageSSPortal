@@ -35,6 +35,10 @@ namespace BL
         {
             return repo.GetMachineByOvmId(OvmId);
         }
+        public IEnumerable<OracleVirtualMachine> GetOVMsByServer(int id)
+        {
+            return repo.ReadMachinesByServerId(id);
+        }
 
         public void RemoveOVM(string id)
         {

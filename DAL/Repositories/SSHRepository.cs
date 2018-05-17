@@ -142,6 +142,11 @@ namespace DAL.Repositories
             }
             ctx.SaveChanges();
         }
+        public IEnumerable<OracleVirtualMachine> ReadMachinesByServerId(int id)
+        {
+            return ctx.OracleVirtualMachines.Where(vm => vm.ServerId == id);
+        }
+
         public Server GetServer(int id)
         {
             return ctx.Servers.Where(s => s.ServerId == id).FirstOrDefault();
