@@ -12,9 +12,10 @@
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
-            showInfo();
+            showInfo($(".VmRow").attr("id"));
         });
-        showVmNames();
+        getServersDB();
+        
 
     });
 
@@ -27,6 +28,21 @@
         })
             .done(function (data) {
                 ShowVms(data);
+            })
+    }
+    function getServersDB() {
+        $.ajax("/api/ssh/getServersDB", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("#servers").append("<option class='" + value.ServersId+"'value='" + value.ServerId+"' > "+ value.ServerNaam + "</option > ");
+                })
+                $("#servers").css("display", "block");
+                $("#servers").change(function () {
+                    showVmNames($("#servers").val());
+                })
             })
     }
     function loadKlanten() {
@@ -44,8 +60,9 @@
                 })
             });
     }
-    function showVmNames() {
-        $("select").hide();
+    function showVmNames(id) {
+        //alert(id);
+        $("div#btns").hide();
         $("#btnSave").hide();
         $(".VmRow").css("background-color", "inherit");
        // alert("vmnames");
@@ -53,7 +70,7 @@
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
         }
-        $.ajax("/api/SSH/vmsDB", {
+        $.ajax("/api/SSH/vmsDB/" + id+"/", {
             type: "GET",
             dataType: "json"
         })
@@ -78,18 +95,18 @@
             changeColor(vm.id);
         }
     }
-    function showInfo() {
+    function showInfo(id) {
         $('#Dialog-Box').hide();
-        $("select").hide();
+        $("select#LijstServerVms").hide();
         $("#btns").css("display", "none");
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                t = $(this).attr('id');
-            }
-        })
+        var t = id;
+        //$("tr.VmRow").each(function () {
+        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
+        //        t = id;//$(this).attr('id');
+        //    }
+        //})
         $.ajax("/api/SSH/info/" + t, {
             type: "GET",
             dataType: "json"
@@ -121,7 +138,10 @@
                 (function (data) {
 
                 })
-        }); showVmNames();
+        });
+        alert($("#servers").val());
+            showVmNames($("#servers").val());
+
     };
 
     function SaveKlantVM() {
@@ -137,13 +157,14 @@
 
                     .done
                     (function (data) {
-                        $("select").hide();
+                        $("div#btns").hide();
                         $("#btnSave").hide();
                         $("#" + data).css('background-color', 'inherit');
                     })
             }
         });
-        showVmNames();
+        alert($("#servers").val());
+        showVmNames($("#servers").val());
     }
     function StartVM() {
         var t;
@@ -159,7 +180,8 @@
                 (function (data) {
                 })
         });
-        showVmNames();
+        alert($("#servers").val());
+        showVmNames($("#servers").val());
     };
 
     $('#Dialog-Box').dialog({
@@ -179,6 +201,9 @@
 </div>*@
 
 <div id="scherm">
+    <select class="form-control" id="servers">
+        <option>Choose Server</option>
+    </select>
     <div id="ShowVms" style="display:none">
         <table id="LijstServerVMs" class="table">
             <tr>
@@ -203,7 +228,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>                     
+                    <td>
                         <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
                     </td>
                 </tr>

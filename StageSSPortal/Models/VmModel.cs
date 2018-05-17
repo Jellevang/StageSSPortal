@@ -11,5 +11,7 @@ namespace SSPortalWebApi.Models
         public string Status { get; set; }
         public string id { get; set; }
         public int KlantId { get; set; }
+        public int Serverid { get; set; }
+
     }
 }

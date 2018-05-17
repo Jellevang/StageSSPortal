@@ -61,7 +61,15 @@ namespace StageSSPortal.Controllers.api
             return vmInfo2;
         }
 
-
+        [HttpGet]
+        [Route("api/ssh/getServersDB")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult getServersDB()
+        {
+            List<Server> servers = new List<Server>();
+            servers=sshmgr.GetServers();
+            return Ok(servers);
+        }
         [HttpGet]
         [Route("api/ssh/getServers")]
         [Authorize(Roles="Admin")]
@@ -320,9 +328,9 @@ namespace StageSSPortal.Controllers.api
         //}
 
         [HttpGet]
-        [Route("api/SSH/VmsDB")]
+        [Route("api/SSH/VmsDB/{id}")]
         [Authorize(Roles = "Admin")]
-        public IHttpActionResult GetVmsDB(List<VmModel> model)
+        public IHttpActionResult GetVmsDB(List<VmModel> model, int id)
         {
             model = new List<VmModel>();
             List<string> vmState = new List<string>();
@@ -330,7 +338,7 @@ namespace StageSSPortal.Controllers.api
             string[] getVmInfo = new string[8];
             List<string> LijstServerVMs = new List<string>();
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
-            ovms = mgr.GetOVMs().ToList();
+            ovms = mgr.GetOVMsByServer(id).ToList();
 
             foreach (OracleVirtualMachine vm in ovms)
             {
@@ -338,6 +346,7 @@ namespace StageSSPortal.Controllers.api
                 vmModel.Name = vm.Naam;
                 vmModel.id = vm.OvmId.Trim();
                 vmModel.KlantId = vm.KlantId;
+                vmModel.Serverid = vm.ServerId;
                 model.Add(vmModel);
             }
 
