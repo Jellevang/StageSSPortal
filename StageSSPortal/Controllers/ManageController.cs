@@ -20,7 +20,6 @@ namespace StageSSPortal.Controllers
     {
         private SignInManager _signInManager;
         private GebruikerManager _userManager;
-        AdminManager adm = new AdminManager();
         public ManageController()
         {
             _userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilerProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
@@ -97,26 +96,26 @@ namespace StageSSPortal.Controllers
             return RedirectToAction("ManageLogins", new { Message = message });
         }
 
-        [HttpPost]
-        public ActionResult ChangeOvmPassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+        //[HttpPost]
+        //public ActionResult ChangeOvmPassword(ChangePasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
             
-            Admin a = adm.GetAdmin();
-            if (adm.GetPasswd(a) == model.OldPassword)
-            {
-                adm.UpdatePasswd(model.NewPassword, a);
-            }
-            else
-            {
-                ModelState.AddModelError("", "Het oude password is niet correct!");
+        //    Admin a = adm.GetAdmin();
+        //    if (adm.GetPasswd(a) == model.OldPassword)
+        //    {
+        //        adm.UpdatePasswd(model.NewPassword, a);
+        //    }
+        //    else
+        //    {
+        //        ModelState.AddModelError("", "Het oude password is niet correct!");
 
-            }
-            return View();
-        }
+        //    }
+        //    return View();
+        //}
 
         // GET: /Manage/ChangeOvmPassword
         public virtual ActionResult ChangeOvmPassword()

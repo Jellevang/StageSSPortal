@@ -18,14 +18,17 @@
         })
             .done(function (data) {
                 if (data == false) {
-                    alert("test")
+                   // alert("test")
                     InsertPasswd();
                 } else { checkForVms(); }
             })
     }
     function InsertPasswd() {
-        var passwd = prompt("Geef het password");
-        alert(passwd);
+        var passwd;
+        while (passwd == "" || passwd == null) {
+            passwd = prompt("Geef het password");
+            alert(passwd);
+        }
         $.ajax("/api/SSH/InsertPasswd/" + "'" + passwd + "'" + "/", {
             type: "POST",
             dataType: "json"
