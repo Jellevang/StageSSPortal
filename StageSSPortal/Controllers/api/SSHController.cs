@@ -25,9 +25,10 @@ namespace StageSSPortal.Controllers.api
         {
             Admin admin = admgr.GetAdmin();
             string passwd = admgr.GetPasswd(admin);
+            string trimpasswd=passwd.Replace("'", "");
             //  ssh = new SshClient("10.0.12.240", 10000, "admin", "tst0VMman");
 
-            ssh = new SshClient("10.0.12.240", 10000, "admin", passwd);
+            ssh = new SshClient("10.0.12.240", 10000, "admin", trimpasswd);
         }
         public string[] GetInfo(string vmId, SshClient ssh, string[] vmInfo2)
         {
