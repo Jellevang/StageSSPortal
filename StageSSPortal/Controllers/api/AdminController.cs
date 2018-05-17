@@ -38,7 +38,7 @@ namespace StageSSPortal.Controllers.api
         {
             Admin admin = mgr.GetAdmin();
             mgr.UpdatePasswd(passwd, admin);
-            return Ok();
+            return Ok(true);
         }
     }
 }
