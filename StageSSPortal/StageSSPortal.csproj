@@ -367,6 +367,7 @@
     <Content Include="Views\SSH\StopVm.cshtml" />
     <Content Include="Views\SSH\KlantOVMs.cshtml" />
     <Content Include="Views\SSH\Account.cshtml" />
+    <Content Include="Views\Manage\ChangeOvmPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

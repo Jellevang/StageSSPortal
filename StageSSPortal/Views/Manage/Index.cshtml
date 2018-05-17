@@ -10,19 +10,38 @@
     <h4>Verander uw accountinstellingen</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
-            @if (Model.HasPassword)
+
+
+        @if (Model.HasPassword && ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <dt>Password:</dt>
+            <dd>
+                [@Html.ActionLink("Change your password", "ChangePassword")]
+            </dd>
+            <dt>OVM Password:</dt>
+            <dd>
+                [@Html.ActionLink("Change OVM Password", "ChangeOvmPassword")]
+            </dd>
+        }
+        else
+        {
+            if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                <dt>Password:</dt>
+                <dd>
+                    [ @Html.ActionLink("Change your password", "ChangePassword")]
+                </dd>
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword")
+                <dt>Password:</dt>
+                <dd>
+                    [@Html.ActionLink("Create", "SetPassword")]
+                </dd>
             }
-            ]
-        </dd>
+        }
+        
+        
     </dl>
 </div>
-@section scripts{} 
+@section scripts{}
