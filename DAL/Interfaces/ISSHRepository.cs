@@ -27,5 +27,9 @@ namespace DAL.Interfaces
         void DeleteLijstenAccount(int klantid);
         IEnumerable<OVMLijst> GetLijstOVM(string id);
         void DeleteLijstenOvm(string id);
+        Server GetServer(int id);
+        Server GetServer(string id);
+        Server AddServer(Server server);
+        IEnumerable<Server> ReadServers();
     }
 }
