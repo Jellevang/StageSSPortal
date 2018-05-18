@@ -326,7 +326,31 @@ namespace StageSSPortal.Controllers.api
         //    }
         //    return Ok(model);
         //}
+        [HttpGet]
+        [Route("api/SSH/GetAllVmsDB")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetAllVmsDB(List<VmModel> model)
+        {
+            model = new List<VmModel>();
+            //List<string> vmState = new List<string>();
+            //string[] vmInfo = new string[8];
+            //string[] getVmInfo = new string[8];
+            //List<string> LijstServerVMs = new List<string>();
+            IEnumerable<OracleVirtualMachine> ovms;//= new List<OracleVirtualMachine>();
+            ovms = mgr.GetOVMs() ;
 
+            foreach (OracleVirtualMachine vm in ovms)
+            {
+                VmModel vmModel = new VmModel();
+                vmModel.Name = vm.Naam;
+                vmModel.id = vm.OvmId.Trim();
+                vmModel.KlantId = vm.KlantId;
+                vmModel.Serverid = vm.ServerId;
+                model.Add(vmModel);
+            }
+
+            return Ok(model);
+        }
         [HttpGet]
         [Route("api/SSH/VmsDB/{id}")]
         [Authorize(Roles = "Admin")]

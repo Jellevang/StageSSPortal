@@ -86,7 +86,7 @@
 
     }
     function changeColor(id) {
-        $("#" + id).css('background-color', 'rgb(7, 187, 252)');
+        $("#" + id).css('background-color', 'rgb(190, 192, 196)');
     }
     function addVM(vm) {
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
@@ -126,39 +126,80 @@
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-            }
-            $.ajax("/api/SSH/StopVM/" + t+"/", {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
 
+                $.ajax("/api/SSH/StopVM/" + t + "/", {
+                    type: "GET",
+                    dataType: "json"
                 })
-        });
-            showVmNames($("#servers").val());
+                    .done
+                    (function (data) {
+                    })
+            }
+        }); showVmNames($("#servers").val());
+
 
     }
 
     function RestartVM() {
+        alert("Dit kan even duren")
+       var t;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+                $.ajax("/api/SSH/RestartVM/" + t + "/", {
+                    type: "GET",
+                    dataType: "json"
+                })
+                    .done
+                    (function (data) {
+                        showVmNames($("#servers").val());
+                    })
+
+                //$.ajax("/api/SSH/StopVM/" + t + "/", {
+                //    type: "GET",
+                //    dataType: "json"
+                //})
+                //    .done
+                //    (function (data) {
+                //        var id;
+                //        $("tr.VmRow").each(function () {
+                //            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                //                id = $(this).attr('id');
+
+                //                $.ajax("/api/SSH/StartVM/" + id + "/", {
+                //                    type: "GET",
+                //                    dataType: "json"
+                //                })
+                //                    .done
+                //                    (function (data) {
+                //                        showVmNames($("#servers").val());
+                //                    })
+                //            }
+                //        });
+                //    })
+            }
+        });
+
+    }
+
+    
+    function StartVM() {
         var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-            }
-            $.ajax("/api/SSH/RestartVM/" + t + "/", {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
 
+                $.ajax("/api/SSH/StartVM/" + t + "/", {
+                    type: "GET",
+                    dataType: "json"
                 })
+                    .done
+                    (function (data) {
+                        showVmNames($("#servers").val());
+                    })
+            }
         });
-        showVmNames($("#servers").val());
-
     }
-
     function SaveKlantVM() {
         var t;
         var k = $("#klantenlijst").val();
@@ -178,27 +219,9 @@
                     })
             }
         });
-   //     alert($("#servers").val());
+        //     alert($("#servers").val());
         showVmNames($("#servers").val());
     }
-    function StartVM() {
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                t = $(this).attr('id');
-            }
-            $.ajax("/api/SSH/StartVM/" + t + "/", {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
-
-                })
-        });
-            showVmNames($("#servers").val());
-    }
-
     $('#Dialog-Box').dialog({
         autoOpen: false,
         height: 500,

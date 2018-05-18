@@ -5,6 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadVMs();
+
+    });
+
+    function loadVMs() {
+        $("#VmCheck").hide();
+        //var t;
+        //$("tr.VmRow").each(function () {
+        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
+        //        t = $(this).attr('id');
+        $.ajax("/api/SSH/GetAllVmsDB", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $("#VmCheck").show();
+                $.each(data, function (index, value) {
+                    //searchOvmLijst(value,t)
+                    if (value.KlantId == 0) {
+                        $("#VmCheck").append("<tr><td><input class=" + value.Id + " type=checkbox id=CheckVM name=chk_VM  value=" + "'" + value.Name + "'" + "/>" + value.Name + "</tr></td>");//+"<br />");
+                    }
+                })
+            });
+    }
+</script>
 <h2>Nieuwe Klant</h2>
 
 
@@ -32,7 +60,13 @@
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div id="KlantDiv">
+            <table id="VmCheck" style="display:none">
+                <tr><th>Virtuele machines</th></tr>
 
+            </table>
+
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -47,26 +81,26 @@
 </div>
 
 @*@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-        $('#myFile').change(function () {
-            var file = this.files[0];
+        @Scripts.Render("~/bundles/jqueryval")
+        <script type="text/javascript">
+            $('#myFile').change(function () {
+                var file = this.files[0];
 
-            var formData = new FormData();
-            formData.append('MyFile', file);
+                var formData = new FormData();
+                formData.append('MyFile', file);
 
-            $.ajax('/api/Klant/File/Create', {
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function () {
-                    alert('File uploaded successfully!');
-                },
-                error: function () {
-                    alert('OOOPS something went wrong!');
-                }
+                $.ajax('/api/Klant/File/Create', {
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+                        alert('File uploaded successfully!');
+                    },
+                    error: function () {
+                        alert('OOOPS something went wrong!');
+                    }
+                });
             });
-        });
-    </script>
-}*@
+        </script>
+    }*@
