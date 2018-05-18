@@ -27,53 +27,82 @@
                 $.each(data, function (index, value) {
                     //searchOvmLijst(value,t)
                     if (value.KlantId == 0) {
-                        $("#VmCheck").append("<tr><td><input class=" + value.Id + " type=checkbox id=CheckVM name=chk_VM  value=" + "'" + value.Name + "'" + "/>" + value.Name + "</tr></td>");//+"<br />");
+                        $("#VmCheck").append("<tr class=VmRow><td><input class=" + value.Id + " type=checkbox id=CheckVM name=chk_VM  value=" + "'" + value.Name + "'" + "/>" + value.Name + "</tr></td>");//+"<br />");
                     }
                 })
             });
     }
+    function SaveVms() {
+        var t;
+        var k;
+        $("input#CheckVm").each(function () {
+
+            if ($(this).is(":checked")) {
+                t = $(this).val()
+                k = $(".klantEmail").val()
+                $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k + "/", {
+                    type: "GET",
+                    dataType: "json"
+                })
+                    .done
+            }
+        })
+        if ($(this).is(":checked") == false) {
+            k = $(this).val()
+            t = $(this).val()
+            k = $(".klantEmail").val()
+            $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k + "/", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+        }
+    }
+       
 </script>
 <h2>Nieuwe Klant</h2>
-@Scripts.Render("~/Scripts/changePass.js")
+
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Klant</h4>
-        <input id="myFile" name="myFile" type="file" value="laad Klanten" />
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div id="KlantDiv">
-            <table id="VmCheck" style="display:none">
-                <tr><th>Virtuele machines</th></tr>
-
-            </table>
-
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Maak" class="btn btn-default" />
-            </div>
+<div class="form-horizontal">
+    <h4>Klant</h4>
+    <input id="myFile" name="myFile" type="file" value="laad Klanten" />
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control klantEmail" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div id="KlantDiv">
+        <table id="VmCheck" style="display:none">
+            <tr><th>Virtuele machines</th></tr>
+
+        </table>
+
+    </div>
+    <div>
+        <button class="btn btn-default" onclick="SaveVms()">Save</button>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Maak" class="btn btn-default" onclick="SaveVms()" />
+        </div>
+    </div>
+</div>
 }
 
 <div>
