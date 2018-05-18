@@ -6,7 +6,6 @@
     <title>@ViewBag.Title - Monin-OVM-Platform</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/SharedLayout.css")
-
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -29,40 +28,40 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @if (ViewContext.HttpContext.User.IsInRole("Klant"))
-    {
-            <div class="dropdown">
-                <button class="dropbtn">Opties</button>
-                <div class="dropdown-content">
-                    @Html.ActionLink("Beheer Account", "Index", "Manage")
-                    @Html.ActionLink("KlantAccount Aanmaken", "Create", "KlantAccount")
-                    @Html.ActionLink("KlantenAccount overzicht", "Index", "KlantAccount")
-                    @Html.ActionLink("Virtuele Machines", "KlantOVMs", "SSH")
-                </div>
-            </div>
-}
+                {
+                    <div class="dropdown">
+                        <button class="dropbtn">Opties</button>
+                        <div class="dropdown-content">
+                            @Html.ActionLink("Beheer Account", "Index", "Manage")
+                            @Html.ActionLink("KlantAccount Aanmaken", "Create", "KlantAccount")
+                            @Html.ActionLink("KlantenAccount overzicht", "Index", "KlantAccount")
+                            @Html.ActionLink("Virtuele Machines", "KlantOVMs", "SSH")
+                        </div>
+                    </div>
+                }
 
                 @if (ViewContext.HttpContext.User.IsInRole("Admin"))
-    {
-            <div class="dropdown">
-                <button class="dropbtn">Opties</button>
-                <div class="dropdown-content">
-                    @Html.ActionLink("Beheer Account", "Index", "Manage")
-                    @Html.ActionLink("Klant Aanmaken", "Create", "Klant")
-                    @Html.ActionLink("Klantenlijst", "Index", "Klant")
-                    @Html.ActionLink("Virtuele Machines", "StartSSHOVM", "SSH")
-                </div>
-            </div>
-}
+                {
+                    <div class="dropdown">
+                        <button class="dropbtn">Opties</button>
+                        <div class="dropdown-content">
+                            @Html.ActionLink("Beheer Account", "Index", "Manage")
+                            @Html.ActionLink("Klant Aanmaken", "Create", "Klant")
+                            @Html.ActionLink("Klantenlijst", "Index", "Klant")
+                            @Html.ActionLink("Virtuele Machines", "StartSSHOVM", "SSH")
+                        </div>
+                    </div>
+                }
                 @if (ViewContext.HttpContext.User.IsInRole("KlantAccount"))
-    {
-            <div class="dropdown">
-                <button class="dropbtn">Opties</button>
-                <div class="dropdown-content">
-                    @Html.ActionLink("Beheer Account", "Index", "Manage")
-                    @Html.ActionLink("Virtuele Machines", "Account", "SSH")
-                </div>
-            </div>
-}
+                {
+                    <div class="dropdown">
+                        <button class="dropbtn">Opties</button>
+                        <div class="dropdown-content">
+                            @Html.ActionLink("Beheer Account", "Index", "Manage")
+                            @Html.ActionLink("Virtuele Machines", "Account", "SSH")
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -76,6 +75,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    
     @RenderSection("scripts", required: false)
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

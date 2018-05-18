@@ -3,39 +3,39 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="container">
     @*<div class="row">
-        <div class="col-md-9">
-            <h2>Welkom</h2>
-        </div>
-        @*<div class="col-md-3">
-            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-        <p>
-            <a href="@Url.Action("Index", "Manage")">Account beheren</a>
-        </p>
-        <p>
-            <a href="@Url.Action("Create", "KlantAccount")">KlantAccount aanmaken</a>
-        </p>
-        <p>
-            <a href="@Url.Action("Index", "KlantAccount")">Lijst van klantenAccounts</a>
-        </p>
-        <p>
-            <a href="@Url.Action("KlantOVMs", "SSH")">Lijst van OVM's</a>
-        </p>
-        <p>
-            <a href="javascript:document.getElementById('logoutForm').submit()">Uitloggen</a>
-        </p>
-}*@
-        @* </div>*@
-    </div>
-
-    <div class="col-lg-12">
-        <p>U bent nu ingelogd als Klantadministrator op dit webplatform. </p>
-        <p>U kunt nu navigeren naar de beheerpagina.</p>
-    </div>
+                <div class="col-md-9">
+                    <h2>Welkom</h2>
+                </div>
+                @*<div class="col-md-3">
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+            {
+                @Html.AntiForgeryToken()
+                <p>
+                    <a href="@Url.Action("Index", "Manage")">Account beheren</a>
+                </p>
+                <p>
+                    <a href="@Url.Action("Create", "KlantAccount")">KlantAccount aanmaken</a>
+                </p>
+                <p>
+                    <a href="@Url.Action("Index", "KlantAccount")">Lijst van klantenAccounts</a>
+                </p>
+                <p>
+                    <a href="@Url.Action("KlantOVMs", "SSH")">Lijst van OVM's</a>
+                </p>
+                <p>
+                    <a href="javascript:document.getElementById('logoutForm').submit()">Uitloggen</a>
+                </p>
+        }*@
+    @* </div>*@
+</div>
+@Scripts.Render("~/Scripts/changePass.js")
+<div class="col-lg-12">
+    <p>U bent nu ingelogd als Klantadministrator op dit webplatform. </p>
+    <p>U kunt nu navigeren naar de beheerpagina.</p>
+</div>
 
 </div>
 @section scripts{} 

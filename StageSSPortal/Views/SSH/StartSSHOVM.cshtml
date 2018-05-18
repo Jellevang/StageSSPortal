@@ -14,7 +14,7 @@
             showInfo($(".VmRow").attr("id"));
         });
         getServersDB();
-        
+
 
     });
 
@@ -36,7 +36,7 @@
         })
             .done(function (data) {
                 $.each(data, function (index, value) {
-                    $("#servers").append("<option class='" + value.ServersId+"'value='" + value.ServerId+"' > "+ value.ServerNaam + "</option > ");
+                    $("#servers").append("<option class='" + value.ServersId + "'value='" + value.ServerId + "' > " + value.ServerNaam + "</option > ");
                 })
                 $("#servers").css("display", "block");
                 $("#servers").change(function () {
@@ -64,12 +64,12 @@
         $("div#btns").hide();
         $("#btnSave").hide();
         $(".VmRow").css("background-color", "inherit");
-       // alert("vmnames");
+        // alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
         }
-        $.ajax("/api/SSH/vmsDB/" + id+"/", {
+        $.ajax("/api/SSH/vmsDB/" + id + "/", {
             type: "GET",
             dataType: "json"
         })
@@ -139,7 +139,7 @@
                 })
         });
         alert($("#servers").val());
-            showVmNames($("#servers").val());
+        showVmNames($("#servers").val());
 
     };
 
@@ -195,10 +195,10 @@
     }
 </script>
 
-@*<div>
+<div>
     <h1>Beheer Virtuele Machines</h1>
-</div>*@
-
+</div>
+@Scripts.Render("~/Scripts/changePass.js")
 <div id="scherm">
     <select class="form-control" id="servers">
         <option>Choose Server</option>

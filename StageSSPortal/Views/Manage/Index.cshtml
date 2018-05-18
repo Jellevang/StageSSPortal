@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Beheer uw account";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <h2>@ViewBag.Title.</h2>
-
+@Scripts.Render("~/Scripts/changePass.js")
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <h4>Verander uw accountinstellingen</h4>
@@ -40,8 +40,8 @@
                 </dd>
             }
         }
-        
-        
+
+
     </dl>
 </div>
 @section scripts{}

@@ -4,43 +4,43 @@
     ViewBag.Title = "Nieuwe Klant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <h2>Nieuwe Klant</h2>
-
+@Scripts.Render("~/Scripts/changePass.js")
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>Klant</h4>
-    <input id="myFile" name="myFile" type="file" value="laad Klanten" />
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>Klant</h4>
+        <input id="myFile" name="myFile" type="file" value="laad Klanten" />
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.ValidationSummary(false)*@
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(false)*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Maak" class="btn btn-default" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Maak" class="btn btn-default" />
+            </div>
         </div>
     </div>
-</div>
 }
 
 <div>
@@ -48,26 +48,26 @@
 </div>
 
 @*@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-        $('#myFile').change(function () {
-            var file = this.files[0];
+        @Scripts.Render("~/bundles/jqueryval")
+        <script type="text/javascript">
+            $('#myFile').change(function () {
+                var file = this.files[0];
 
-            var formData = new FormData();
-            formData.append('MyFile', file);
+                var formData = new FormData();
+                formData.append('MyFile', file);
 
-            $.ajax('/api/Klant/File/Create', {
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function () {
-                    alert('File uploaded successfully!');
-                },
-                error: function () {
-                    alert('OOOPS something went wrong!');
-                }
+                $.ajax('/api/Klant/File/Create', {
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+                        alert('File uploaded successfully!');
+                    },
+                    error: function () {
+                        alert('OOOPS something went wrong!');
+                    }
+                });
             });
-        });
-    </script>
-}*@
+        </script>
+    }*@

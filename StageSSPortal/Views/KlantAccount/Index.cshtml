@@ -4,7 +4,9 @@
     ViewBag.Title = "Klanten";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="container">
+    @Scripts.Render("~/Scripts/changePass.js")
     <h2>Lijst van KlantenAccount</h2>
 
     <p>
@@ -57,24 +59,3 @@
     </table>
 </div>
 
-@*@section scripts
-{
-    <script type="text/javascript">
-
-        function VerzendMails() {
-            $.ajax('/api/Klant/Mail/Verzend',
-                            {
-                                type: 'POST',
-                                dataType: 'json'
-                            })
-                        .done(function (data) {
-
-                        })
-                        .fail(function (data) {
-
-                        });
-        }
-
-    </script>
-
-}*@
