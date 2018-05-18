@@ -4,6 +4,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+   
     $(document).ready(function () {
         //alert("test");
         $("select").hide();
@@ -11,13 +12,24 @@
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
-            showInfo($(".VmRow").attr("id"));
+            showInfo();
         });
         getServersDB();
         
 
     });
+    //window.onbeforeunload = function (e) {
+    //    var message = "Not all vms are assigned to a customer",
+    //        e = e || window.event;
+    //    // For IE and Firefox
+    //    if (e) {
+    //        e.returnValue = message;
+    //    }
 
+    //    // For Safari
+    //    //return message;
+    //};
+    
     function checkForVms() {
         $("select").hide();
         $("#btnSave").hide();
@@ -94,18 +106,18 @@
             changeColor(vm.id);
         }
     }
-    function showInfo(id) {
+    function showInfo() {
         $('#Dialog-Box').hide();
         $("select#LijstServerVms").hide();
         $("#btns").css("display", "none");
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
-        var t = id;
-        //$("tr.VmRow").each(function () {
-        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
-        //        t = id;//$(this).attr('id');
-        //    }
-        //})
+        var t;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+            }
+        })
         $.ajax("/api/SSH/info/" + t, {
             type: "GET",
             dataType: "json"
@@ -129,7 +141,7 @@
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
             }
-            $.ajax("/api/SSH/StopVM/" + t, {
+            $.ajax("/api/SSH/StopVM/" + t+"/", {
                 type: "GET",
                 dataType: "json"
             })
@@ -138,10 +150,9 @@
 
                 })
         });
-        alert($("#servers").val());
             showVmNames($("#servers").val());
 
-    };
+    }
 
     function SaveKlantVM() {
         var t;
@@ -162,7 +173,7 @@
                     })
             }
         });
-        alert($("#servers").val());
+   //     alert($("#servers").val());
         showVmNames($("#servers").val());
     }
     function StartVM() {
@@ -171,17 +182,17 @@
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
             }
-            $.ajax("/api/SSH/StartVM/" + t, {
+            $.ajax("/api/SSH/StartVM/" + t + "/", {
                 type: "GET",
                 dataType: "json"
             })
                 .done
                 (function (data) {
+
                 })
         });
-        alert($("#servers").val());
-        showVmNames($("#servers").val());
-    };
+            showVmNames($("#servers").val());
+    }
 
     $('#Dialog-Box').dialog({
         autoOpen: false,

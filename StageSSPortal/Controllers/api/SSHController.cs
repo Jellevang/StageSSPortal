@@ -425,7 +425,7 @@ namespace StageSSPortal.Controllers.api
                 ssh.RunCommand("stop Vm name=" + id);
                 ssh.Disconnect();
             }
-            return Ok();
+            return Ok(true);
             
         }
 
@@ -440,7 +440,7 @@ namespace StageSSPortal.Controllers.api
                 ssh.RunCommand("start Vm name=" + id);
                 ssh.Disconnect();
             }
-            return Ok();
+            return Ok(true);
         }
 
         [HttpGet]
