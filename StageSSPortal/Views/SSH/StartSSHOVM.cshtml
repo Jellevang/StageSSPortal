@@ -4,6 +4,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+   
     $(document).ready(function () {
         //alert("test");
         $("select").hide();
@@ -11,7 +12,7 @@
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
-            showInfo($(".VmRow").attr("id"));
+            showInfo();
         });
         getServersDB();
 
@@ -87,25 +88,24 @@
     function changeColor(id) {
         $("#" + id).css('background-color', 'rgb(7, 187, 252)');
     }
-
     function addVM(vm) {
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
         if (vm.KlantId == 0) {
             changeColor(vm.id);
         }
     }
-    function showInfo(id) {
+    function showInfo() {
         $('#Dialog-Box').hide();
         $("select#LijstServerVms").hide();
         $("#btns").css("display", "none");
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
-        var t = id;
-        //$("tr.VmRow").each(function () {
-        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
-        //        t = id;//$(this).attr('id');
-        //    }
-        //})
+        var t;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+            }
+        })
         $.ajax("/api/SSH/info/" + t, {
             type: "GET",
             dataType: "json"
@@ -121,15 +121,13 @@
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
             })
     };
-
-
     function StopVM() {
         var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
             }
-            $.ajax("/api/SSH/StopVM/" + t, {
+            $.ajax("/api/SSH/StopVM/" + t+"/", {
                 type: "GET",
                 dataType: "json"
             })
@@ -138,10 +136,28 @@
 
                 })
         });
-        alert($("#servers").val());
+            showVmNames($("#servers").val());
+
+    }
+
+    function RestartVM() {
+        var t;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+            }
+            $.ajax("/api/SSH/RestartVM/" + t + "/", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+                (function (data) {
+
+                })
+        });
         showVmNames($("#servers").val());
 
-    };
+    }
 
     function SaveKlantVM() {
         var t;
@@ -162,7 +178,7 @@
                     })
             }
         });
-        alert($("#servers").val());
+   //     alert($("#servers").val());
         showVmNames($("#servers").val());
     }
     function StartVM() {
@@ -171,17 +187,17 @@
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
             }
-            $.ajax("/api/SSH/StartVM/" + t, {
+            $.ajax("/api/SSH/StartVM/" + t + "/", {
                 type: "GET",
                 dataType: "json"
             })
                 .done
                 (function (data) {
+
                 })
         });
-        alert($("#servers").val());
-        showVmNames($("#servers").val());
-    };
+            showVmNames($("#servers").val());
+    }
 
     $('#Dialog-Box').dialog({
         autoOpen: false,
@@ -229,6 +245,11 @@
                 <tr>
                     <td>
                         <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
                     </td>
                 </tr>
             </table>

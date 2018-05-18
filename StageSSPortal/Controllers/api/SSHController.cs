@@ -425,8 +425,23 @@ namespace StageSSPortal.Controllers.api
                 ssh.RunCommand("stop Vm name=" + id);
                 ssh.Disconnect();
             }
-            return Ok();
+            return Ok(true);
             
+        }
+
+        [HttpGet]
+        [Route("api/SSH/RestartVm/{id}")]
+        [Authorize(Roles = "Admin , Klant , KlantAccount")]
+        public IHttpActionResult RestartVm(string id)
+        {
+            using (ssh)
+            {
+                ssh.Connect();
+                ssh.RunCommand("restart Vm name=" + id);
+                ssh.Disconnect();
+            }
+            return Ok(true);
+
         }
 
         [HttpGet]
@@ -440,7 +455,7 @@ namespace StageSSPortal.Controllers.api
                 ssh.RunCommand("start Vm name=" + id);
                 ssh.Disconnect();
             }
-            return Ok();
+            return Ok(true);
         }
 
         [HttpGet]
