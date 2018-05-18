@@ -22,6 +22,7 @@
     div#btns {
         float: right;
     }
+
     div#scherm {
         margin-top: 2%;
     }
@@ -42,7 +43,7 @@
     function showVmNames() {
         $("#btns").hide();
         $("#KlantAccCheck").hide();
-        
+
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
@@ -75,9 +76,9 @@
         $("#VmInfo").css("display", "none");
         var t;
         $("input#CheckKlant").each(function () {
-          //  alert($(this).val())
+            //  alert($(this).val())
             if ($(this).is(":checked")) {
-               // alert($(this).val())
+                // alert($(this).val())
                 $(this).prop("checked", false);
             }
         })
@@ -107,7 +108,7 @@
                     //alert(t+" "+k)
                     searchOvmLijst(k, t);
                 })
-                
+
                 $("#KlantAccCheck").show();
                 $("#btns").css("display", "block");
 
@@ -201,7 +202,7 @@
             .done(function (data) {
                 $.each(data, function (index, value) {
                     //searchOvmLijst(value,t)
-                    $("#KlantAccCheck").append("<tr><td><input class="+value.KlantId+" type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</tr></td>");//+"<br />");
+                    $("#KlantAccCheck").append("<tr><td><input class=" + value.KlantId + " type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</tr></td>");//+"<br />");
 
                 })
             });
@@ -218,7 +219,7 @@
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k+"/", {
+                        $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k + "/", {
                             type: "GET",
                             dataType: "json"
                         })
@@ -231,7 +232,7 @@
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                        $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k+"/", {
+                        $.ajax("/api/Klant/SSH/lijstDelete/" + t + "/" + k + "/", {
                             type: "GET",
                             dataType: "json"
                         })
@@ -248,10 +249,10 @@
     }
 </script>
 
-@*<div>
-        <h1>Beheer Virtuele Machines</h1>
-    </div>*@
-
+<div>
+    <h1>Beheer Virtuele Machines</h1>
+</div>
+@Scripts.Render("~/Scripts/changePass.js")
 <div id="scherm">
 
     <div id="ShowVms" style="display:none">

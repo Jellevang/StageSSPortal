@@ -73,6 +73,7 @@
     }
 </script>
 <div class="container">
+    @Scripts.Render("~/Scripts/changePass.js")
     <h2>Lijst van Klanten</h2>
     @*<button onclick="HideKlanten()">TEST</button>*@
     <p>
@@ -97,7 +98,7 @@
 
         @foreach (var item in Model)
         {
-            <tr class="klanten" id="@item.KlantId" >
+            <tr class="klanten" id="@item.KlantId">
                 <td>
                     @Html.DisplayFor(modelItem => item.Naam)
                 </td>

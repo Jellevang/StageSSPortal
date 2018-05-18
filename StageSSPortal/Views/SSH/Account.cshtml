@@ -133,7 +133,7 @@
 <div>
     <h1>Beheer Virtuele Machines</h1>
 </div>
-
+@Scripts.Render("~/Scripts/changePass.js")
 
 <div id="ShowVms" style="display:none">
     <table id="LijstServerVMs" class="table">
@@ -156,6 +156,6 @@
         <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
         <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
     </div>
-    
+
 </div>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
