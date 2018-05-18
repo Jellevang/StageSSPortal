@@ -430,6 +430,21 @@ namespace StageSSPortal.Controllers.api
         }
 
         [HttpGet]
+        [Route("api/SSH/RestartVm/{id}")]
+        [Authorize(Roles = "Admin , Klant , KlantAccount")]
+        public IHttpActionResult RestartVm(string id)
+        {
+            using (ssh)
+            {
+                ssh.Connect();
+                ssh.RunCommand("restart Vm name=" + id);
+                ssh.Disconnect();
+            }
+            return Ok(true);
+
+        }
+
+        [HttpGet]
         [Route("api/SSH/StartVm/{id}")]
         [Authorize(Roles = "Admin , Klant, KlantAccount")]
         public IHttpActionResult StartVm(string id)
