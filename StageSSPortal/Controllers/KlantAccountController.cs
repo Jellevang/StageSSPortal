@@ -164,6 +164,7 @@ namespace StageSSPortal.Controllers
         {
             if (ModelState.IsValid)
             {
+                Klant.IsKlantAccount = true;
                 mgr.ChangeKlant(Klant);
                 return RedirectToAction("Index");
             }

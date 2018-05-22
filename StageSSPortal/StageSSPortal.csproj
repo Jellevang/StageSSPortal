@@ -372,6 +372,7 @@
     <Content Include="Views\SSH\Account.cshtml" />
     <Content Include="Views\Manage\ChangeOvmPassword.cshtml" />
     <Content Include="Views\Klant\_VmPartial.cshtml" />
+    <Content Include="Views\Klant\EditAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
