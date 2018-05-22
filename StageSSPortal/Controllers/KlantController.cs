@@ -185,6 +185,36 @@ namespace StageSSPortal.Controllers
         {
             if (ModelState.IsValid)
             {
+               if(Klant.IsKlantAccount==true)
+                {
+                    Klant.IsKlantAccount = true;
+                    mgr.ChangeKlant(Klant);
+                }
+                else
+                {
+                    mgr.ChangeKlant(Klant);
+                }                
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+        [Route("Admin/Klant/EditAccount/{id}")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditAccount(int id)
+        {
+            Klant Klant = mgr.GetKlant(id);
+            return View(Klant);
+        }
+
+        //POST
+        [Route("Admin/Klant/EditAccount/{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditAccount(Klant Klant)
+        {
+            if (ModelState.IsValid)
+            {
+                Klant.IsKlantAccount = true;
                 mgr.ChangeKlant(Klant);
                 return RedirectToAction("Index");
             }

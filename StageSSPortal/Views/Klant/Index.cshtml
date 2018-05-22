@@ -109,7 +109,14 @@
                     @Html.DisplayFor(modelItem => item.IsGeblokkeerd)
                 </td>
                 <td>
-                    @Html.ActionLink("Aanpassen", "Edit", new { id = item.KlantId }) |
+                    @if (item.IsKlantAccount == true)
+                    {
+                        @Html.ActionLink("Aanpassen", "EditAccount", new { id = item.KlantId }) 
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Aanpassen", "Edit", new { id = item.KlantId }) 
+                    } |
                     @Html.ActionLink("Details", "Details", new { id = item.KlantId }) |
                     @if (item.IsGeblokkeerd == true)
                     {
@@ -119,7 +126,7 @@
                     {
                         @Html.ActionLink("Blokkeer", "Block", new { id = item.KlantId })
                     } |
-                    @Html.ActionLink("Verwijder", "Delete", new { id = item.KlantId })
+                    @Html.ActionLink("Verwijder", "Delete", new { id = item.KlantId }) |
                 </td>
             </tr>
 
