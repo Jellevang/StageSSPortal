@@ -206,7 +206,7 @@
             .done(function (data) {
                 $.each(data, function (index, value) {
                     //searchOvmLijst(value,t)
-                    $("#KlantAccCheck").append("<tr><td><input class=" + value.KlantId + " type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</tr></td>");//+"<br />");
+                    $("#KlantAccCheck").append("<tr><td><input class=" + value.KlantId + " type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</td></tr>");//+"<br />");
 
                 })
             });
