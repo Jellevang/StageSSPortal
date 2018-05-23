@@ -119,6 +119,7 @@
     <Compile Include="Gebruikers\RolType.cs" />
     <Compile Include="Klant.cs" />
     <Compile Include="KlantAccount.cs" />
+    <Compile Include="LogLijst.cs" />
     <Compile Include="OracleVirtualMachine.cs" />
     <Compile Include="OVMLijst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

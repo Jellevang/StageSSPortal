@@ -166,6 +166,8 @@ namespace DAL.Migrations
                     Naam = "Alfons",
                     EmailConfirmed = true,
                     Toegestaan = true,
+                    MustChangePassword = false,
+                    LastPasswordChangedDate = DateTime.Now,
                     SecurityStamp = Guid.NewGuid().ToString()
 
                 };
@@ -214,6 +216,8 @@ namespace DAL.Migrations
                         Naam = klanten[i].Naam,
                         EmailConfirmed = true,
                         Toegestaan = true,
+                        MustChangePassword = false,
+                        LastPasswordChangedDate = DateTime.Now,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };
@@ -257,6 +261,8 @@ namespace DAL.Migrations
                         Naam = klantenAccounts[i].Naam,
                         EmailConfirmed = true,
                         Toegestaan = true,
+                        MustChangePassword = false,
+                        LastPasswordChangedDate = DateTime.Now,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };

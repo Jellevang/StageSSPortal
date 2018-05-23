@@ -15,11 +15,12 @@ namespace DAL.EF
         public DbSet<Server> Servers { get; set; }
         public DbSet<OracleVirtualMachine> OracleVirtualMachines { get; set; }
         public DbSet<OVMLijst> OVMLijsten { get; set; }
+        public DbSet<LogLijst> LogLijsten { get; set; }
 
         public StageSSPortalDbContext() : base("stage")
         {
-           Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
-            //this.Configuration.LazyLoadingEnabled= false;
+           //Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
+            this.Configuration.LazyLoadingEnabled= false;
         }
 
        protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -33,6 +34,7 @@ namespace DAL.EF
             modelBuilder.Entity<Server>().HasKey(s => s.Id);
             modelBuilder.Entity<OracleVirtualMachine>().HasKey(o => o.OracleVirtualMachineId);
             modelBuilder.Entity<OVMLijst>().HasKey(ovm => ovm.OVMLijstId);
+            modelBuilder.Entity<LogLijst>().HasKey(l => l.LogLijstId);
             // required properties
             modelBuilder.Entity<Admin>().Property(a => a.Email).IsRequired();
             modelBuilder.Entity<Klant>().Property(k => k.Email).IsRequired();
@@ -45,6 +47,10 @@ namespace DAL.EF
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.OvmId).IsRequired();
             modelBuilder.Entity<OVMLijst>().Property(ovm => ovm.AccountId).IsRequired();
             modelBuilder.Entity<OVMLijst>().Property(ovm => ovm.OVMId).IsRequired();
+            modelBuilder.Entity<LogLijst>().Property(l => l.Naam).IsRequired();
+            modelBuilder.Entity<LogLijst>().Property(l => l.GebruikerId).IsRequired();
+            modelBuilder.Entity<LogLijst>().Property(l => l.OvmId).IsRequired();
+            modelBuilder.Entity<LogLijst>().Property(l => l.ActionDate).IsRequired();
             // Identity
             modelBuilder.Entity<IdentityUserRole>().HasKey(i => i.UserId);
             modelBuilder.Entity<IdentityUserLogin>().HasKey(i => i.UserId);

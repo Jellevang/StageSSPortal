@@ -123,9 +123,9 @@
     <Compile Include="Interfaces\IGebruikerRepository.cs" />
     <Compile Include="Interfaces\IKlantRepository.cs" />
     <Compile Include="Interfaces\ISSHRepository.cs" />
-    <Compile Include="Migrations\201805020841222_create.cs" />
-    <Compile Include="Migrations\201805020841222_create.Designer.cs">
-      <DependentUpon>201805020841222_create.cs</DependentUpon>
+    <Compile Include="Migrations\201805231117369_createDatabase.cs" />
+    <Compile Include="Migrations\201805231117369_createDatabase.Designer.cs">
+      <DependentUpon>201805231117369_createDatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,8 +147,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805020841222_create.resx">
-      <DependentUpon>201805020841222_create.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805231117369_createDatabase.resx">
+      <DependentUpon>201805231117369_createDatabase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
