@@ -90,13 +90,13 @@
     <div id="KlantDiv">
         <table id="VmCheck" style="display:none">
             <tr><th>Virtuele machines</th></tr>
-
+            @*@Html.Partial("_VmPartial",new Domain.OracleVirtualMachine())*@
         </table>
 
     </div>
-    <div>
+    @*<div>
         <button class="btn btn-default" onclick="SaveVms()">Save</button>
-    </div>
+    </div>*@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Maak" class="btn btn-default" onclick="SaveVms()" />

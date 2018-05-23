@@ -26,6 +26,10 @@
     div#scherm {
         margin-top: 2%;
     }
+    hr{
+        border-top:none;
+
+    }
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -202,7 +206,7 @@
             .done(function (data) {
                 $.each(data, function (index, value) {
                     //searchOvmLijst(value,t)
-                    $("#KlantAccCheck").append("<tr><td><input class=" + value.KlantId + " type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</tr></td>");//+"<br />");
+                    $("#KlantAccCheck").append("<tr><td><input class=" + value.KlantId + " type=checkbox id=CheckKlant name=chk_Klant  value=" + "'" + value.Email + "'" + "/>" + value.Email + "</td></tr>");//+"<br />");
 
                 })
             });
@@ -249,9 +253,9 @@
     }
 </script>
 
-<div>
+@*<div>
     <h1>Beheer Virtuele Machines</h1>
-</div>
+</div>*@
 @Scripts.Render("~/Scripts/changePass.js")
 <div id="scherm">
 

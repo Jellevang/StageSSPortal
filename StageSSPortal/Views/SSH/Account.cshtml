@@ -12,7 +12,9 @@
         float: left;
         position: relative;
     }
-
+    hr {
+        border-top:none;
+    }
     div#btns {
         float: right;
     }
@@ -58,7 +60,7 @@
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
     function showInfo() {
-        $("#btns").show();
+        $("#btns").hide();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
@@ -83,6 +85,7 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
+                $("#btns").show();
 
             })
     };
@@ -130,9 +133,9 @@
     };
 </script>
 
-<div>
+@*<div>
     <h1>Beheer Virtuele Machines</h1>
-</div>
+</div>*@
 @Scripts.Render("~/Scripts/changePass.js")
 
 <div id="ShowVms" style="display:none">
@@ -151,11 +154,26 @@
 
 
 
-<div id="btns">
-    <div id="Vm">
-        <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+<div id="btns" style="display:none">
+    <div>
+        <table>
+            <tr><th>Virtuele Machine</th></tr>
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
+                </td>
+            </tr>
+        </table>
     </div>
-
 </div>
-@*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
+    @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

@@ -1,10 +1,14 @@
 ﻿@Styles.Render("~/Content/ShowVm.css")
 @Scripts.Render("~/Script/Main/Ovm.js")
+<style>
+ hr{
+        border-top:none;
 
-
+    }
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-   
+
     $(document).ready(function () {
         //alert("test");
         $("select").hide();
@@ -142,7 +146,7 @@
 
     function RestartVM() {
         alert("Dit kan even duren")
-       var t;
+        var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
@@ -182,7 +186,7 @@
 
     }
 
-    
+
     function StartVM() {
         var t;
         $("tr.VmRow").each(function () {
@@ -234,14 +238,16 @@
     }
 </script>
 
-<div>
-    <h1>Beheer Virtuele Machines</h1>
-</div>
+@*<div>
+        <h1>Beheer Virtuele Machines</h1>
+    </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
 <div id="scherm">
     <select class="form-control" id="servers">
         <option>Choose Server</option>
     </select>
+    @*<input type="checkbox" id=CheckKlant name=chk_Klant value="Toegewezen vms" />Toegewezen vms
+    <input type="checkbox" class="test" id=CheckKlant name=chk_Klant value="Niet-toegewezen vms" />Niet-toegewezen vms*@
     <div id="ShowVms" style="display:none">
         <table id="LijstServerVMs" class="table">
             <tr>

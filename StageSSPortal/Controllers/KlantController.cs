@@ -102,13 +102,13 @@ namespace StageSSPortal.Controllers
             Klant email = mgr.GetKlant(Klant.Email);
             if(email != null)
             {
-                ModelState.AddModelError("", "email moet uniek zijn");
+                ModelState.AddModelError("", "Email moet uniek zijn");
                 return View("Create");
             }
             Klant naam = mgr.GetKlantByName(Klant.Naam);
             if (naam != null && naam.IsKlantAccount == false)
             {
-                ModelState.AddModelError("", "er is al reeds een klant met deze naam enkel accounts mogen dezelfde naam hebben");
+                ModelState.AddModelError("", "Er is al reeds een klant met deze naam enkel accounts mogen dezelfde naam hebben");
                 return View("Create");
             }
             else
