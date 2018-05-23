@@ -1,9 +1,12 @@
 ﻿@Styles.Render("~/Content/ShowVm.css")
 @Scripts.Render("~/Script/Main/Ovm.js")
 <style>
- hr{
-        border-top:none;
-
+    hr {
+        border-top: none;
+    }
+    input#CheckKlant{
+        position:inherit;
+        opacity:100;
     }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -13,6 +16,20 @@
         //alert("test");
         $("select").hide();
         $("#btnSave").hide();
+        $(".checkToeg").change(function () {
+            if ($("input.checkToeg").prop('checked', true)) {
+                $("input.checkNietToeg").prop('checked', false);
+                //showToegekend();
+                showVmNames($("#servers").val(), true);
+            }
+        })
+        $(".checkNietToeg").change(function () {
+            if ($("input.checkNietToeg").prop('checked', true)) {
+                $("input.checkToeg").prop('checked', false);
+                //showNietToegekend();
+                showVmNames($("#servers").val(), false);
+            }
+        })
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
@@ -43,7 +60,7 @@
                 })
                 $("#servers").css("display", "block");
                 $("#servers").change(function () {
-                   // alert($("#servers").val())
+                    // alert($("#servers").val())
                     showVmNames($("#servers").val());
                 })
             })
@@ -63,8 +80,8 @@
                 })
             });
     }
-    function showVmNames(id) {
-        alert(id);
+    function showVmNames(id,bool) {
+        //alert(id+bool);
         $("div#btns").hide();
         $("#btnSave").hide();
         $(".VmRow").css("background-color", "inherit");
@@ -79,21 +96,22 @@
                 dataType: "json"
             })
                 .done(function (data) {
-                    ShowVms(data);
-                })   
+                    ShowVms(data,bool);
+                    //alert(bool);
+                })
         } else {
             $.ajax("/api/SSH/vmsDB/" + id + "/", {
                 type: "GET",
                 dataType: "json"
             })
                 .done(function (data) {
-                    ShowVms(data);
+                    ShowVms(data,bool);
                 })
         };
     }
-    function ShowVms(LijstServerVMs) {
+    function ShowVms(LijstServerVMs,bool) {
         $.each(LijstServerVMs, function (index, value) {
-            addVM(value);
+            addVM(value,bool);
         })
         $("#ShowVms").css("display", "block");
 
@@ -101,10 +119,22 @@
     function changeColor(id) {
         $("#" + id).css('background-color', 'rgb(190, 192, 196)');
     }
-    function addVM(vm) {
+    function addVM(vm, bool) {
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
         if (vm.KlantId == 0) {
             changeColor(vm.id);
+            if (bool == true) {
+                $("#" + vm.id).hide();
+            } else if(bool==false){
+                $("#" + vm.id).show();
+            }
+
+        } else {
+            if (bool == true) {
+                $("#" + vm.id).show();
+            } else if (bool == false){
+                $("#" + vm.id).hide();
+            }
         }
     }
     function showInfo() {
@@ -148,13 +178,17 @@
                     (function (data) {
                     })
             }
-        }); showVmNames($("#servers").val());
+        }); if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }
 
 
     }
 
     function RestartVM() {
-        //alert("Dit kan even duren")
         var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
@@ -165,31 +199,13 @@
                 })
                     .done
                     (function (data) {
-                        showVmNames($("#servers").val());
+                        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+                            showVmNames($("#servers").val(), true);
+                        }
+                        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+                            showVmNames($("#servers").val(), false);
+                        }
                     })
-
-                //$.ajax("/api/SSH/StopVM/" + t + "/", {
-                //    type: "GET",
-                //    dataType: "json"
-                //})
-                //    .done
-                //    (function (data) {
-                //        var id;
-                //        $("tr.VmRow").each(function () {
-                //            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //                id = $(this).attr('id');
-
-                //                $.ajax("/api/SSH/StartVM/" + id + "/", {
-                //                    type: "GET",
-                //                    dataType: "json"
-                //                })
-                //                    .done
-                //                    (function (data) {
-                //                        showVmNames($("#servers").val());
-                //                    })
-                //            }
-                //        });
-                //    })
             }
         });
 
@@ -208,7 +224,12 @@
                 })
                     .done
                     (function (data) {
-                        showVmNames($("#servers").val());
+                        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+                            showVmNames($("#servers").val(), true);
+                        }
+                        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+                            showVmNames($("#servers").val(), false);
+                        }
                     })
             }
         });
@@ -233,7 +254,13 @@
             }
         });
         //     alert($("#servers").val());
-        showVmNames($("#servers").val());
+        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked")==false ) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") ==false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }
+
     }
     $('#Dialog-Box').dialog({
         autoOpen: false,
@@ -245,6 +272,8 @@
         loadKlanten();
         $('#Dialog-Box').dialog('open');
     }
+
+    
 </script>
 
 @*<div>
@@ -252,13 +281,18 @@
     </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
 <div id="scherm">
-    <select class="form-control" id="servers">
-        <option>Kies Server</option>
-        <option value="0">Alle servers</option>
+    <div>
+        <select class="form-control" id="servers">
+            <option>Kies Server</option>
+            <option value="0">Alle servers</option>
 
-    </select>
-    @*<input type="checkbox" id=CheckKlant name=chk_Klant value="Toegewezen vms" />Toegewezen vms
-    <input type="checkbox" class="test" id=CheckKlant name=chk_Klant value="Niet-toegewezen vms" />Niet-toegewezen vms*@
+        </select>
+    </div>
+    <div>
+        <input class="checkToeg" type="checkbox" id="CheckKlant" name="chk_Klant" value="Toegewezen">Toegewezen vms
+        <input class="checkNietToeg" type="checkbox" id="CheckKlant" name="chk_Klant" value="Niet-Toegewezen">Niet-Toegewezen vms
+
+    </div>
     <div id="ShowVms" style="display:none">
         <table id="LijstServerVMs" class="table">
             <tr>
@@ -310,5 +344,6 @@
                 </tr>
             </table>
         </div>
+
     </div>
 </div>
