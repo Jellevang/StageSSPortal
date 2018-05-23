@@ -85,8 +85,8 @@ namespace StageSSPortal.Controllers
                 {
                     if (user.Toegestaan == false)
                     {
-                        ViewBag.errorMessage = "Uw account is geblokkeerd.";
-                        return View("Error");
+                        ModelState.AddModelError("", "Uw account is geblokkeerd. Contacteer uw admin.");                        
+                        return View("Login");
                     }
                     var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
                     switch (result)
