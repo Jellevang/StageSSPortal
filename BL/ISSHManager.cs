@@ -31,5 +31,8 @@ namespace BL
         void RemoveServer(string id);
         Server AddServer(string naam, string id);
         List<Server> GetServers();
+        LogLijst AddLogLijst(string naam, int gebruikersid, string ovmid);
+        void DeleteLogLijstenKlant(int gebruikerid);
+        void DeleteLogLijstenOVM(string id);
     }
 }

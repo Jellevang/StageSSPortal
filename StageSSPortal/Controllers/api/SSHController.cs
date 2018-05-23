@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using Renci.SshNet;
-using StageSSPortal.Models;
+using Microsoft.Owin.Security.DataProtection;
 using Domain;
 using BL;
 using DAL.EF;
 using Microsoft.AspNet.Identity;
 using System.Web.Http;
+using System.Web;
 using SSPortalWebApi.Models;
+using Domain.Gebruikers;
+using Microsoft.AspNet.Identity.Owin;
+using StageSSPortal.Helpers;
 
 namespace StageSSPortal.Controllers.api
 {
@@ -18,12 +22,15 @@ namespace StageSSPortal.Controllers.api
     {
         private readonly ISSHManager mgr = new SSHManager();
         private readonly IKlantManager klantmgr = new KlantManager();
+        private GebruikerManager userManager;
+        //private readonly IGebruikerManager usermanager = new GebruikerManager();
         SshClient ssh;
         AdminManager admgr = new AdminManager();
 
         SSHManager sshmgr=new SSHManager();
         public SSHController()
         {
+            userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
             Admin admin = admgr.GetAdmin();
             string passwd = admgr.GetPasswd(admin);
             string trimpasswd=passwd.Replace("'", "");
@@ -448,8 +455,11 @@ namespace StageSSPortal.Controllers.api
                 ssh.Connect();
                 ssh.RunCommand("stop Vm name=" + id);
                 ssh.Disconnect();
+                Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+                LogLijst lijst = mgr.AddLogLijst("Stop", user.GebruikerId, id);
             }
             return Ok(true);
+            
             
         }
 
@@ -463,7 +473,9 @@ namespace StageSSPortal.Controllers.api
                 ssh.Connect();
                 ssh.RunCommand("restart Vm name=" + id);
                 ssh.Disconnect();
-            }
+                Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+                LogLijst lijst = mgr.AddLogLijst("Restart", user.GebruikerId, id);
+            }           
             return Ok(true);
 
         }
@@ -478,7 +490,9 @@ namespace StageSSPortal.Controllers.api
                 ssh.Connect();
                 ssh.RunCommand("start Vm name=" + id);
                 ssh.Disconnect();
-            }
+                Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+                LogLijst lijst = mgr.AddLogLijst("Start", user.GebruikerId, id);
+            }            
             return Ok(true);
         }
 

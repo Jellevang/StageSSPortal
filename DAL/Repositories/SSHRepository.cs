@@ -31,16 +31,16 @@ namespace DAL.Repositories
             ctx.OracleVirtualMachines.Remove(ovm);
             ctx.SaveChanges();
         }
-        
+
         public OracleVirtualMachine GetMachine(int id)
         {
             OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Find(id);
-            return ovm;    
+            return ovm;
         }
 
         public OracleVirtualMachine GetMachineByOvmId(string OvmId)
         {
-            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o=>o.OvmId.Equals(OvmId)).FirstOrDefault();
+            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Equals(OvmId)).FirstOrDefault();
             return ovm;
 
         }
@@ -53,11 +53,11 @@ namespace DAL.Repositories
             //OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Equals(id)).FirstOrDefault();
             List<OracleVirtualMachine> ovms = ReadMachines().ToList();
             OracleVirtualMachine ovm = new OracleVirtualMachine();
-            for (int i=0;i<ovms.Count();i++)
+            for (int i = 0; i < ovms.Count(); i++)
             {
                 string ids = ovms[i].OvmId;
                 //ids = ids.Trim();
-                if(ids.Equals(id))
+                if (ids.Equals(id))
                 {
                     ovm = ovms[i];
                 }
@@ -66,8 +66,8 @@ namespace DAL.Repositories
         }
         public OracleVirtualMachine GetMachineById(string id)
         {
-            
-            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Contains(id)).FirstOrDefault();           
+
+            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Contains(id)).FirstOrDefault();
             return ovm;
         }
         public IEnumerable<OracleVirtualMachine> GetKlantMachines(int klantid)
@@ -111,7 +111,7 @@ namespace DAL.Repositories
         }
         public IEnumerable<OVMLijst> GetLijstAccount(int klantid)
         {
-            IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.AccountId==klantid);
+            IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.AccountId == klantid);
             return ovmsL;
         }
         public IEnumerable<OVMLijst> ReadLijsten()
@@ -121,7 +121,7 @@ namespace DAL.Repositories
         public void DeleteLijstenAccount(int klantid)
         {
             IEnumerable<OVMLijst> ovmsL = ctx.OVMLijsten.Where(o => o.AccountId == klantid);
-            foreach(OVMLijst lijst in ovmsL)
+            foreach (OVMLijst lijst in ovmsL)
             {
                 ctx.OVMLijsten.Remove(lijst);
             }
@@ -168,6 +168,30 @@ namespace DAL.Repositories
         public void DeleteServer(string id)
         {
             ctx.Servers.Remove(GetServer(id));
+        }
+        public LogLijst CreateLogLijst(LogLijst log)
+        {
+            ctx.LogLijsten.Add(log);
+            ctx.SaveChanges();
+            return log;
+        }
+        public void RemoveLogLijstenKlant(int gebruikersId)
+        {
+            IEnumerable<LogLijst> logs = ctx.LogLijsten.Where(l => l.GebruikerId ==gebruikersId);
+            foreach (LogLijst lijst in logs)
+            {
+                ctx.LogLijsten.Remove(lijst);
+            }
+            ctx.SaveChanges();
+        }
+        public void RemoveLogLijstenOVM(string id)
+        {
+            IEnumerable<LogLijst> logs = ctx.LogLijsten.Where(l => l.OvmId.Contains(id));
+            foreach (LogLijst lijst in logs)
+            {
+                ctx.LogLijsten.Remove(lijst);
+            }
+            ctx.SaveChanges();
         }
     }
 }

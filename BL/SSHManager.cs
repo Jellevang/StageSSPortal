@@ -132,10 +132,29 @@ namespace BL
         {
             repo.DeleteServer(id);
         }
-
         public List<Server> GetServers()
         {
             return repo.ReadServers();
+        }
+        public LogLijst AddLogLijst(string naam, int gebruikersid, string ovmid)
+        {
+            LogLijst lijst = new LogLijst()
+            {
+                Naam = naam,
+                GebruikerId = gebruikersid,
+                OvmId = ovmid,
+                ActionDate = DateTime.Now
+            };
+            repo.CreateLogLijst(lijst);
+            return lijst;
+        }
+        public void DeleteLogLijstenKlant(int gebruikerid)
+        {
+            repo.RemoveLogLijstenKlant(gebruikerid);
+        }
+        public void DeleteLogLijstenOVM(string id)
+        {
+            repo.RemoveLogLijstenOVM(id);
         }
     }
 }

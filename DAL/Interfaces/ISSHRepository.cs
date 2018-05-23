@@ -33,5 +33,8 @@ namespace DAL.Interfaces
         Server AddServer(Server server);
         List<Server> ReadServers();
         void DeleteServer(string id);
+        LogLijst CreateLogLijst(LogLijst log);
+        void RemoveLogLijstenKlant(int gebruikersId);
+        void RemoveLogLijstenOVM(string id);
     }
 }
