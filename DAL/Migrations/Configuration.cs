@@ -33,7 +33,6 @@ namespace DAL.Migrations
             {
                 Naam = "Sam Heirstrate",
                 Email = "sam.heirstrate@stage.be",
-                Tag = "Sam1",
                 IsKlantAccount = false,
                 IsGeblokkeerd = false
             };
@@ -46,7 +45,6 @@ namespace DAL.Migrations
             {
                 Naam = "Jelle van Ginderen",
                 Email = "jelle.van.ginderen@stage.be",
-                Tag = "Jel2",
                 IsKlantAccount = false,
                 IsGeblokkeerd = false
 
@@ -60,7 +58,6 @@ namespace DAL.Migrations
             {
                 Naam = "monin-it",
                 Email = "monin@stage.be",
-                Tag = "Mon3",
                 IsKlantAccount = false,
                 IsGeblokkeerd = false
             };
@@ -81,7 +78,6 @@ namespace DAL.Migrations
             {
                 Naam = "Gert de Neve",
                 Email = "gert@stage.be",
-                Tag = "ger4",
                 IsKlantAccount = true,
                 HoofdKlant = monin,
                 IsGeblokkeerd = false
@@ -91,7 +87,6 @@ namespace DAL.Migrations
             {
                 Naam = "Davy van Mol",
                 Email = "davy@stage.be",
-                Tag = "dav5",
                 IsKlantAccount = true,
                 HoofdKlant = monin,
                 IsGeblokkeerd = false
@@ -101,7 +96,6 @@ namespace DAL.Migrations
             {
                 Naam = "Dries Moelans",
                 Email = "dries@stage.be",
-                Tag = "dri6",
                 IsKlantAccount = true,
                 HoofdKlant = monin,
                 IsGeblokkeerd = false

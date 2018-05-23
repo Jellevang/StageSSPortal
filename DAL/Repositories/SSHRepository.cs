@@ -149,7 +149,7 @@ namespace DAL.Repositories
 
         public Server GetServer(int id)
         {
-            return ctx.Servers.Where(s => s.ServerId == id).FirstOrDefault();
+            return ctx.Servers.Where(s => s.Id == id).FirstOrDefault();
         }
         public Server GetServer(string id)
         {

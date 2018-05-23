@@ -175,7 +175,7 @@ namespace StageSSPortal.Controllers.api
                         vm.OvmId = id;
                         vm.Naam=name;
                         vm.KlantId = 0;
-                        vm.ServerId = serverlist.ElementAt(i).ServerId;
+                        vm.ServerId = serverlist.ElementAt(i).Id;
                         serverVms.Add(vm);
                     }
                 }

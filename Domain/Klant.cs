@@ -9,8 +9,6 @@ namespace Domain
         public string Naam { get; set; }
         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Geen emailadres gegeven")]
         public string Email { get; set; }
-        //public string Status { get; set; }
-        public string Tag { get; set; }
         public bool IsGeblokkeerd { get; set; }
         public bool IsKlantAccount { get; set; }
         public Klant HoofdKlant { get; set; }

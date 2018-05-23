@@ -7,7 +7,6 @@ using MySql.Data.Entity;
 
 namespace DAL.EF
 {
-    //[DbConfigurationType(typeof(StageSSPortalDbConfiguration))]
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public partial class StageSSPortalDbContext : IdentityDbContext<Gebruiker>
     {
@@ -16,12 +15,13 @@ namespace DAL.EF
         public DbSet<Server> Servers { get; set; }
         public DbSet<OracleVirtualMachine> OracleVirtualMachines { get; set; }
         public DbSet<OVMLijst> OVMLijsten { get; set; }
+
         public StageSSPortalDbContext() : base("stage")
         {
-
            Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
-           this.Configuration.LazyLoadingEnabled = false;
+            //this.Configuration.LazyLoadingEnabled= false;
         }
+
        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -30,7 +30,7 @@ namespace DAL.EF
             // primary keys
             modelBuilder.Entity<Admin>().HasKey(a => a.AdminId);
             modelBuilder.Entity<Klant>().HasKey(k => k.KlantId);
-            modelBuilder.Entity<Server>().HasKey(s => s.ServerId);
+            modelBuilder.Entity<Server>().HasKey(s => s.Id);
             modelBuilder.Entity<OracleVirtualMachine>().HasKey(o => o.OracleVirtualMachineId);
             modelBuilder.Entity<OVMLijst>().HasKey(ovm => ovm.OVMLijstId);
             // required properties

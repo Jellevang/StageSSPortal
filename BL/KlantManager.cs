@@ -22,12 +22,10 @@ namespace BL
             {
                 Naam = naam,
                 Email = email,
-                Tag = naam.Substring(0, 3),
                 IsGeblokkeerd = false
                 
             };
             Klant created = repo.CreateKlant(k);
-            created.Tag = created.Tag + created.KlantId.ToString();
             repo.UpdateKlant(created);
             repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.Klant);
             return k;
@@ -156,13 +154,11 @@ namespace BL
             {
                 Naam = naam,
                 Email = email,
-                Tag = naam.Substring(0, 3),
                 IsKlantAccount = true,
                 HoofdKlant = h,
                 IsGeblokkeerd = false
             };
             Klant created = repo.CreateKlant(k);
-            created.Tag = created.Tag + created.KlantId.ToString();
             repo.UpdateKlant(created);
             repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.KlantAccount);
             return k;

@@ -11,7 +11,6 @@ using System.Linq;
 namespace DAL.EF
 {
     internal class StageSSPortalDbInitializer : DropCreateDatabaseIfModelChanges<StageSSPortalDbContext>
-    //internal class StageSSPortalDbInitializer : DropCreateDatabaseAlways<StageSSPortalDbContext>
     {
         
             protected override void Seed(StageSSPortalDbContext context)
@@ -19,15 +18,13 @@ namespace DAL.EF
                 List<String> emails = new List<string>();
                 List<String> namen = new List<string>();
                 List<Klant> klanten = new List<Klant>();
-            List<Klant> klantenAccounts = new List<Klant>();
-            //List<KlantAccount> klantAccounts = new List<KlantAccount>();
+                List<Klant> klantenAccounts = new List<Klant>();
 
                 #region Klanten
                 Klant sam = new Klant()
                 {
                     Naam = "Sam Heirstrate",
                     Email = "sam.heirstrate@stage.be",
-                    Tag = "Sam1",
                     IsKlantAccount = false,
                     IsGeblokkeerd = false
                 };
@@ -40,7 +37,6 @@ namespace DAL.EF
                 {
                     Naam = "Jelle van Ginderen",
                     Email = "jelle.van.ginderen@stage.be",
-                    Tag = "Jel2",
                     IsKlantAccount = false,
                     IsGeblokkeerd = false
 
@@ -54,7 +50,6 @@ namespace DAL.EF
             {
                 Naam = "monin-it",
                 Email = "monin@stage.be",
-                Tag = "Mon3",
                 IsKlantAccount = false,
                 IsGeblokkeerd = false
             };
@@ -207,7 +202,6 @@ namespace DAL.EF
                         Email = klanten[i].Email,
                         UserName = klanten[i].Email,
                         Rol = RolType.Klant,
-                        //GebruikerId = context.Klanten.Single(p => p.Email == emails[i]).KlantId,
                         GebruikerId = klanten[i].KlantId,
                         Naam = klanten[i].Naam,
                         EmailConfirmed = true,

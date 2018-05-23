@@ -8,7 +8,7 @@ namespace Domain
 {
     public class Server
     {
-        public int ServerId { get; set; }
+        public int Id { get; set; }
         public string ServerNaam { get; set; }
         public string ServersId { get; set; }
     }
