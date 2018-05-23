@@ -18,10 +18,6 @@ namespace DAL.Repositories
             _ctx = new StageSSPortalDbContext();
         }
 
-        /*public AdminRepository(UnitOfWork uow): base(uow.Context)
-        {
-            _ctx = uow.Context;
-        }*/
         public Admin ReadAdmin()
         {
             Admin a = _ctx.Admins.FirstOrDefault();
@@ -48,7 +44,6 @@ namespace DAL.Repositories
         }
         public void ChangePasswd(string passwd, Admin admin)
         {
-            //string plaintext = "monin";
             string encryptstring = Encrypt.EncryptString(passwd);
             admin.OvmPassword = encryptstring;
             _ctx.SaveChanges();
