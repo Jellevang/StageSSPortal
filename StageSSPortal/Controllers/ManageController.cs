@@ -20,6 +20,7 @@ namespace StageSSPortal.Controllers
     {
         private SignInManager _signInManager;
         private GebruikerManager _userManager;
+        private readonly IKlantManager mgr = new KlantManager();
         public ManageController()
         {
             _userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilerProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
@@ -156,6 +157,91 @@ namespace StageSSPortal.Controllers
             }
             AddErrors(result);
             return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public virtual ActionResult ResetKlant()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public virtual async Task<ActionResult> ResetKlant(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                ModelState.AddModelError("", "De opgegeven klant bestaat niet");
+                return View("ResetKlant");
+            }
+            string resetToken = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var result = await UserManager.ResetPasswordAsync(user.Id, resetToken, model.NewPassword);
+            if (result.Succeeded)
+            {
+                user.MustChangePassword = true;
+                UserManager.UpdateGebruiker(user);
+                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+            }
+            AddErrors(result);
+            return View();
+        }
+
+        [Authorize(Roles = "Klant")]
+        public virtual ActionResult ResetKlantAccount()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Klant")]
+        public virtual async Task<ActionResult> ResetKlantAccount(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            Klant k = mgr.GetKlant(User.Identity.GetUserName());
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                ModelState.AddModelError("", "De opgegeven medewerker bestaat niet");
+                return View("ResetKlantAccount");
+            }
+            Klant sub = mgr.GetKlant(model.Email);
+            if (sub.IsKlantAccount==false)
+            {
+                ModelState.AddModelError("", "De opgegeven medewerker bestaat niet");
+                return View("ResetKlantAccount");
+            }
+            if (sub.HoofdKlant != k)
+            {
+                ModelState.AddModelError("", "De opgegeven medewerker bestaat niet");
+                return View("ResetKlantAccount");
+            }
+            if (sub.HoofdKlant.Equals(k))
+            {
+                string resetToken = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var result = await UserManager.ResetPasswordAsync(user.Id, resetToken, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    user.MustChangePassword = true;
+                    UserManager.UpdateGebruiker(user);
+                    return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                }
+                AddErrors(result);
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Manage");
+            }
+            
         }
 
         //

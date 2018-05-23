@@ -14,31 +14,46 @@
 
         @if (Model.HasPassword && ViewContext.HttpContext.User.IsInRole("Admin"))
         {
-            <dt>Password:</dt>
-            <dd>
-                [@Html.ActionLink("Change your password", "ChangePassword")]
-            </dd>
-            <dt>OVM Password:</dt>
-            <dd>
-                [@Html.ActionLink("Change OVM Password", "ChangeOvmPassword")]
-            </dd>
+        <dt>Password:</dt>
+        <dd>
+            [@Html.ActionLink("Change your password", "ChangePassword")]
+        </dd>
+        <dt>OVM Password:</dt>
+        <dd>
+            [@Html.ActionLink("Change OVM Password", "ChangeOvmPassword")]
+        </dd>
+        <dt>Klant Reset</dt>
+        <dd>
+            [@Html.ActionLink("Reset Klant Password", "ResetKlant")]
+        </dd>
+        }
+        @if (Model.HasPassword && ViewContext.HttpContext.User.IsInRole("Klant"))
+        {
+        <dt>Password:</dt>
+        <dd>
+            [ @Html.ActionLink("Change your password", "ChangePassword")]
+        </dd>
+        <dt>Medewerker Reset</dt>
+        <dd>
+            [@Html.ActionLink("Reset Medewerker Password", "ResetKlantAccount")]
+        </dd>
         }
         else
         {
-            if (Model.HasPassword)
-            {
-                <dt>Password:</dt>
-                <dd>
-                    [ @Html.ActionLink("Change your password", "ChangePassword")]
-                </dd>
-            }
-            else
-            {
-                <dt>Password:</dt>
-                <dd>
-                    [@Html.ActionLink("Create", "SetPassword")]
-                </dd>
-            }
+        if (Model.HasPassword)
+        {
+        <dt>Password:</dt>
+        <dd>
+            [ @Html.ActionLink("Change your password", "ChangePassword")]
+        </dd>
+        }
+        else
+        {
+        <dt>Password:</dt>
+        <dd>
+        [@Html.ActionLink("Create", "SetPassword")]
+        </dd>
+        }
         }
 
 
