@@ -184,13 +184,13 @@ namespace StageSSPortal.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, resetToken, model.NewPassword);
             if (result.Succeeded)
             {
-                if(user.Toegestaan == false)
-                {
-                    mgr.UnblockKlant(user.GebruikerId);
-                }
                 user.MustChangePassword = true;
                 user.LastPasswordChangedDate = DateTime.Now;
                 UserManager.UpdateGebruiker(user);
+                if (user.Toegestaan == false)
+                {
+                    mgr.UnblockKlant(user.GebruikerId);
+                }
                 return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
@@ -236,13 +236,13 @@ namespace StageSSPortal.Controllers
                 var result = await UserManager.ResetPasswordAsync(user.Id, resetToken, model.NewPassword);
                 if (result.Succeeded)
                 {
+                    user.MustChangePassword = true;
+                    user.LastPasswordChangedDate = DateTime.Now;
+                    UserManager.UpdateGebruiker(user);
                     if (user.Toegestaan == false)
                     {
                         mgr.UnblockKlantAccount(user.GebruikerId);
                     }
-                    user.MustChangePassword = true;
-                    user.LastPasswordChangedDate = DateTime.Now;
-                    UserManager.UpdateGebruiker(user);
                     return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                 }
                 AddErrors(result);

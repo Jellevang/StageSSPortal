@@ -86,11 +86,12 @@ namespace StageSSPortal.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user != null)
                 {
-                    if (user.LastPasswordChangedDate.AddMinutes(10) < DateTime.Now && user.Rol != RolType.Admin)
+                    if (user.LastPasswordChangedDate.AddMonths(6) < DateTime.Now && user.Rol != RolType.Admin)
                     {
-                        mgr.BlockKlant(user.GebruikerId);
+                        //mgr.BlockKlant(user.GebruikerId);
                         user.MustChangePassword = true;
                         UserManager.UpdateGebruiker(user);
+                        mgr.BlockKlant(user.GebruikerId);
                         ModelState.AddModelError("", "Uw passwoord is expired. Contacteer uw admin.");
                         return View("Login");
 
