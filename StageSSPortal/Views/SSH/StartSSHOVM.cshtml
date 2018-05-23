@@ -19,8 +19,6 @@
             showInfo();
         });
         getServersDB();
-
-
     });
 
     function checkForVms() {
@@ -45,6 +43,7 @@
                 })
                 $("#servers").css("display", "block");
                 $("#servers").change(function () {
+                   // alert($("#servers").val())
                     showVmNames($("#servers").val());
                 })
             })
@@ -65,7 +64,7 @@
             });
     }
     function showVmNames(id) {
-        //alert(id);
+        alert(id);
         $("div#btns").hide();
         $("#btnSave").hide();
         $(".VmRow").css("background-color", "inherit");
@@ -74,14 +73,24 @@
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
         }
-        $.ajax("/api/SSH/vmsDB/" + id + "/", {
-            type: "GET",
-            dataType: "json"
-        })
-            .done(function (data) {
-                ShowVms(data);
+        if (id == 0) {
+            $.ajax("/api/SSH/GetAllVmsDB", {
+                type: "GET",
+                dataType: "json"
             })
-    };
+                .done(function (data) {
+                    ShowVms(data);
+                })   
+        } else {
+            $.ajax("/api/SSH/vmsDB/" + id + "/", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done(function (data) {
+                    ShowVms(data);
+                })
+        };
+    }
     function ShowVms(LijstServerVMs) {
         $.each(LijstServerVMs, function (index, value) {
             addVM(value);
@@ -145,7 +154,7 @@
     }
 
     function RestartVM() {
-        alert("Dit kan even duren")
+        //alert("Dit kan even duren")
         var t;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
@@ -244,7 +253,9 @@
 @Scripts.Render("~/Scripts/changePass.js")
 <div id="scherm">
     <select class="form-control" id="servers">
-        <option>Choose Server</option>
+        <option>Kies Server</option>
+        <option value="0">Alle servers</option>
+
     </select>
     @*<input type="checkbox" id=CheckKlant name=chk_Klant value="Toegewezen vms" />Toegewezen vms
     <input type="checkbox" class="test" id=CheckKlant name=chk_Klant value="Niet-toegewezen vms" />Niet-toegewezen vms*@
