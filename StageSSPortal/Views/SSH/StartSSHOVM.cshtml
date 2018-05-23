@@ -178,7 +178,12 @@
                     (function (data) {
                     })
             }
-        }); showVmNames($("#servers").val());
+        }); if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }
 
 
     }
@@ -194,7 +199,12 @@
                 })
                     .done
                     (function (data) {
-                        showVmNames($("#servers").val());
+                        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+                            showVmNames($("#servers").val(), true);
+                        }
+                        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+                            showVmNames($("#servers").val(), false);
+                        }
                     })
             }
         });
@@ -214,7 +224,12 @@
                 })
                     .done
                     (function (data) {
-                        showVmNames($("#servers").val());
+                        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+                            showVmNames($("#servers").val(), true);
+                        }
+                        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+                            showVmNames($("#servers").val(), false);
+                        }
                     })
             }
         });
@@ -239,7 +254,13 @@
             }
         });
         //     alert($("#servers").val());
-        showVmNames($("#servers").val());
+        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked")==false ) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") ==false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }
+
     }
     $('#Dialog-Box').dialog({
         autoOpen: false,
