@@ -12,6 +12,7 @@ using StageSSPortal.Helpers;
 using BL;
 using Domain.Gebruikers;
 using Microsoft.AspNet.Identity;
+using Domain;
 
 namespace StageSSPortal.Controllers
 {
@@ -20,6 +21,7 @@ namespace StageSSPortal.Controllers
     {
         private SignInManager _signInManager;
         private GebruikerManager _userManager;
+        private readonly IKlantManager mgr = new KlantManager();
 
         public AccountController()
         {
@@ -50,6 +52,7 @@ namespace StageSSPortal.Controllers
                 _userManager = value;
             }
         }
+
 
         //
         // GET: /Account/Login
@@ -83,6 +86,15 @@ namespace StageSSPortal.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user != null)
                 {
+                    if (user.LastPasswordChangedDate.AddMinutes(10) < DateTime.Now && user.Rol != RolType.Admin)
+                    {
+                        mgr.BlockKlant(user.GebruikerId);
+                        user.MustChangePassword = true;
+                        UserManager.UpdateGebruiker(user);
+                        ModelState.AddModelError("", "Uw passwoord is expired. Contacteer uw admin.");
+                        return View("Login");
+
+                    }
                     if (user.Toegestaan == false)
                     {
                         ModelState.AddModelError("", "Uw account is geblokkeerd. Contacteer uw admin.");                        
@@ -95,17 +107,17 @@ namespace StageSSPortal.Controllers
                             
                             if (user.Rol == RolType.KlantAccount)
                             {
-                            if (user.MustChangePassword == true)
-                            {
-                                returnUrl = "~/Manage/ChangePassword";
-                                return RedirectToLocal(returnUrl);
-                            }
-                            else
-                            {
-                                returnUrl = "~/Home/Index";
-                                return RedirectToLocal(returnUrl);
-                            }
-                            
+                                if (user.MustChangePassword == true)
+                                {
+                                    returnUrl = "~/Manage/ChangePassword";
+                                    return RedirectToLocal(returnUrl);
+                                }
+                                else
+                                {
+                                    returnUrl = "~/Home/Index";
+                                    return RedirectToLocal(returnUrl);
+                                }
+
                              }
                             if (user.Rol == RolType.Admin)
                             {

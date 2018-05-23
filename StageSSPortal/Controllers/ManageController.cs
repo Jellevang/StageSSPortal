@@ -151,6 +151,7 @@ namespace StageSSPortal.Controllers
                 if(user.MustChangePassword == true)
                 {
                     user.MustChangePassword = false;
+                    user.LastPasswordChangedDate = DateTime.Now;
                     UserManager.UpdateGebruiker(user);
                 }
                 return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -175,7 +176,7 @@ namespace StageSSPortal.Controllers
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
+               
                 ModelState.AddModelError("", "De opgegeven klant bestaat niet");
                 return View("ResetKlant");
             }
@@ -183,7 +184,12 @@ namespace StageSSPortal.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, resetToken, model.NewPassword);
             if (result.Succeeded)
             {
+                if(user.Toegestaan == false)
+                {
+                    mgr.UnblockKlant(user.GebruikerId);
+                }
                 user.MustChangePassword = true;
+                user.LastPasswordChangedDate = DateTime.Now;
                 UserManager.UpdateGebruiker(user);
                 return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
@@ -230,7 +236,12 @@ namespace StageSSPortal.Controllers
                 var result = await UserManager.ResetPasswordAsync(user.Id, resetToken, model.NewPassword);
                 if (result.Succeeded)
                 {
+                    if (user.Toegestaan == false)
+                    {
+                        mgr.UnblockKlantAccount(user.GebruikerId);
+                    }
                     user.MustChangePassword = true;
+                    user.LastPasswordChangedDate = DateTime.Now;
                     UserManager.UpdateGebruiker(user);
                     return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                 }

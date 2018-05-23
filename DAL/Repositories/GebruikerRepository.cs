@@ -122,6 +122,7 @@ namespace DAL.Repositories
                             EmailConfirmed = true,
                             Toegestaan = true,
                             MustChangePassword=true,
+                            LastPasswordChangedDate = DateTime.Now,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;
@@ -136,6 +137,7 @@ namespace DAL.Repositories
                             EmailConfirmed = true,
                             Toegestaan = true,
                             MustChangePassword = true,
+                            LastPasswordChangedDate = DateTime.Now,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;
@@ -150,6 +152,7 @@ namespace DAL.Repositories
                             EmailConfirmed = true,
                             Toegestaan = true,
                             MustChangePassword = true,
+                            LastPasswordChangedDate = DateTime.Now,
                             SecurityStamp = Guid.NewGuid().ToString()
                         };
                         break;

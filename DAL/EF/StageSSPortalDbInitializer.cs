@@ -149,19 +149,20 @@ namespace DAL.EF
                 {
                     var hasher = new PasswordHasher();
 
-                    var user = new Gebruiker()
-                    {
-                        Email = "Admin@stage.be",
-                        UserName = "Admin@stage.be",
-                        Rol = RolType.Admin,
-                        GebruikerId = 10000000,
-                        Naam = "Alfons",
-                        EmailConfirmed = true,
-                        Toegestaan = true,
-                        MustChangePassword = false,
-                        SecurityStamp = Guid.NewGuid().ToString()
+                var user = new Gebruiker()
+                {
+                    Email = "Admin@stage.be",
+                    UserName = "Admin@stage.be",
+                    Rol = RolType.Admin,
+                    GebruikerId = 10000000,
+                    Naam = "Alfons",
+                    EmailConfirmed = true,
+                    Toegestaan = true,
+                    MustChangePassword = false,
+                    LastPasswordChangedDate = DateTime.Now,
+                    SecurityStamp = Guid.NewGuid().ToString()
 
-                    };
+                 };
 
                     new UserManager<Gebruiker>(new GebruikerRepository(context)).Create(user, "stage123");
                     //context.Gebruikers.Add(user);
@@ -207,6 +208,7 @@ namespace DAL.EF
                         EmailConfirmed = true,
                         Toegestaan = true,
                         MustChangePassword =false,
+                        LastPasswordChangedDate = DateTime.Now,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };
@@ -245,12 +247,12 @@ namespace DAL.EF
                         Email = klantenAccounts[i].Email,
                         UserName = klantenAccounts[i].Email,
                         Rol = RolType.KlantAccount,
-                        //GebruikerId = context.Klanten.Single(p => p.Email == emails[i]).KlantId,
                         GebruikerId = klantenAccounts[i].KlantId,
                         Naam = klantenAccounts[i].Naam,
                         EmailConfirmed = true,
                         Toegestaan = true,
                         MustChangePassword = false,
+                        LastPasswordChangedDate = DateTime.Now,
                         SecurityStamp = Guid.NewGuid().ToString()
 
                     };
