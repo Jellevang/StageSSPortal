@@ -9,7 +9,7 @@ using DAL.Interfaces;
 
 namespace DAL.Repositories
 {
-    public class GebruikerRepository : UserStore<Gebruiker>, IGebruikerRepository // Bij ophalen etc checken op actief !!
+    public class GebruikerRepository : UserStore<Gebruiker>, IGebruikerRepository 
     {
         private readonly StageSSPortalDbContext ctx;
         private Gebruiker user;
@@ -81,18 +81,10 @@ namespace DAL.Repositories
                     userRole = ctx.Roles.FirstOrDefault(r => r.Name == "Admin");
                 }
             }
-            //if (rol.Equals(ctx.Roles.Any(r => r.Name.Equals("KlantAccount"))))
             if (rol.Equals(RolType.KlantAccount))
             {
-                //if (!ctx.Roles.Any(r => r.Name == "KlantAccount"))
-                //{
-                //    userRole = new IdentityRole("KlantAccount");
-                //    ctx.Roles.Add(userRole);
-                //}
-                //else
-                //{
-                    userRole = ctx.Roles.FirstOrDefault(r => r.Name == "KlantAccount");
-                //}
+                userRole = ctx.Roles.FirstOrDefault(r => r.Name == "KlantAccount");
+                
             }
             else
             {
