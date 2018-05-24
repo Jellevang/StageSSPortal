@@ -380,6 +380,8 @@
     <Content Include="Views\Klant\EditAccount.cshtml" />
     <Content Include="Views\Manage\ResetKlant.cshtml" />
     <Content Include="Views\Manage\ResetKlantAccount.cshtml" />
+    <Content Include="Views\SSH\LogKlant.cshtml" />
+    <Content Include="Views\SSH\LogAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
