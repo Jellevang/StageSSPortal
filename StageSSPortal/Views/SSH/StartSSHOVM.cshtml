@@ -240,6 +240,7 @@
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
+                alert(k);
                 $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
                     type: "GET",
                     dataType: "json"

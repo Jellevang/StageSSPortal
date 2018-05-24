@@ -93,14 +93,14 @@ namespace StageSSPortal.Controllers
             return View();
         }
 
-        // POST
+        //// POST
         [Route("Admin/Klant/Create")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Create(Klant Klant, FormCollection collection)
         {
             Klant email = mgr.GetKlant(Klant.Email);
-            if(email != null)
+            if (email != null)
             {
                 ModelState.AddModelError("", "Email moet uniek zijn");
                 return View("Create");
@@ -116,7 +116,7 @@ namespace StageSSPortal.Controllers
                 Klant = mgr.AddKlant(Klant.Naam, Klant.Email);
                 return RedirectToAction("Details", new { id = Klant.KlantId });
             }
-            
+
         }
 
         [Route("Admin/Klant/Delete/{id}")]
