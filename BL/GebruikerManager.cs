@@ -29,6 +29,10 @@ namespace BL
         {
             return _gebruikerRepository.FindGebruiker(username);
         }
+        public Gebruiker GetGebruiker(int gebruikersid)
+        {
+            return _gebruikerRepository.FindGebruiker(gebruikersid);
+        }
         public void UpdateGebruiker(Gebruiker user)
         {
             _gebruikerRepository.UpdateGebruiker(user);

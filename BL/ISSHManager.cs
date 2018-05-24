@@ -34,5 +34,8 @@ namespace BL
         LogLijst AddLogLijst(string naam, int gebruikersid, string ovmid);
         void DeleteLogLijstenKlant(int gebruikerid);
         void DeleteLogLijstenOVM(string id);
+        IEnumerable<LogLijst> GetLogLijstsKlant(int id);
+        IEnumerable<LogLijst> GetLogLijstsOVM(string id);
+        IEnumerable<LogLijst> GetLogLijsten();
     }
 }

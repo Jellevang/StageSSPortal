@@ -36,5 +36,8 @@ namespace DAL.Interfaces
         LogLijst CreateLogLijst(LogLijst log);
         void RemoveLogLijstenKlant(int gebruikersId);
         void RemoveLogLijstenOVM(string id);
+        IEnumerable<LogLijst> ReadLogLijstKlant(int gebruikersid);
+        IEnumerable<LogLijst> ReadLogLijstOVM(string id);
+        IEnumerable<LogLijst> ReadLogLijsten();
     }
 }

@@ -11,5 +11,6 @@ namespace BL
     {
         List<Gebruiker> GetGebruikers();
         Gebruiker GetGebruiker(string username);
+        Gebruiker GetGebruiker(int gebruikersid);
     }
 }

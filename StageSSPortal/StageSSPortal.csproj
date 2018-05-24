@@ -262,6 +262,7 @@
     <Compile Include="Helpers\ApplicationOAuthProvider.cs" />
     <Compile Include="Helpers\StreamProvider.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\ManageViewModel.cs" />
     <Compile Include="Models\SSHModel.cs" />
     <Compile Include="Models\VmModel.cs" />

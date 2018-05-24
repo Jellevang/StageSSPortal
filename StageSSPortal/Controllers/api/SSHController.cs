@@ -15,6 +15,7 @@ using SSPortalWebApi.Models;
 using Domain.Gebruikers;
 using Microsoft.AspNet.Identity.Owin;
 using StageSSPortal.Helpers;
+using StageSSPortal.Models;
 
 namespace StageSSPortal.Controllers.api
 {
@@ -582,6 +583,142 @@ namespace StageSSPortal.Controllers.api
 
             return Ok(model);
         }
+        [HttpGet]
+        [Route("api/Klant/SSH/LogLijstOvm/{id}")]
+        [Authorize(Roles = "Admin , Klant")]
+        public IHttpActionResult LogLijstOvm(List<LogModel> model , string id)
+        {
+            List<LogLijst> logs = mgr.GetLogLijstsOVM(id).ToList();
+            OracleVirtualMachine ovm = mgr.GetOVMById(id);
+            for(int i=0;i<logs.Count();i++)
+            {
+                Gebruiker user = userManager.GetGebruiker(logs[i].GebruikerId);
+                LogModel logmodel = new LogModel();
+                logmodel.Naam = logs[i].Naam;
+                logmodel.ActionDate = logs[i].ActionDate;
+                logmodel.Gebruiker = user.Email;
+                model.Add(logmodel);
+            }
+            return Ok(model);
 
+        }
+        [HttpGet]
+        [Route("api/Klant/SSH/LogLijstKlant/{id}")]
+        [Authorize(Roles = "Admin , Klant")]
+        public IHttpActionResult LogLijstKlant(List<LogModel> model, int id)
+        {
+            Klant k = klantmgr.GetKlant(id);
+            if(k.IsKlantAccount==false)
+            {
+                List<LogLijst> logs = mgr.GetLogLijstsKlant(id).ToList();
+                List<Klant> medewerkers = klantmgr.GetKlantenAccounts(k).ToList();
+                for (int i = 0; i < logs.Count(); i++)
+                {
+                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                    LogModel logmodel = new LogModel();
+                    logmodel.Naam = logs[i].Naam;
+                    logmodel.ActionDate = logs[i].ActionDate;
+                    logmodel.Ovm = ovm.Naam;
+                    model.Add(logmodel);
+                }
+                for (int i =0; i < medewerkers.Count(); i++)
+                {
+                    List<LogLijst> logsM = mgr.GetLogLijstsKlant(medewerkers[i].KlantId).ToList();
+                    for (int j = 0; j < logsM.Count(); j++)
+                    {
+                        OracleVirtualMachine ovm = mgr.GetOVMById(logsM[j].OvmId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Naam = logsM[j].Naam;
+                        logmodel.ActionDate = logsM[j].ActionDate;
+                        logmodel.Ovm = ovm.Naam;
+                        model.Add(logmodel);
+                    }
+                }
+            }
+            else
+            {
+                List<LogLijst> logs = mgr.GetLogLijstsKlant(id).ToList();                
+                for (int i = 0; i < logs.Count(); i++)
+                {
+                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                    LogModel logmodel = new LogModel();
+                    logmodel.Naam = logs[i].Naam;
+                    logmodel.ActionDate = logs[i].ActionDate;
+                    logmodel.Ovm = ovm.Naam;
+                    model.Add(logmodel);
+                }
+                
+            }
+            return Ok(model);
+        }
+        [HttpGet]
+        [Route("api/Klant/SSH/LogLijstUser")]
+        [Authorize(Roles = "Admin , Klant")]
+        public IHttpActionResult LogLijstUser(List<LogModel> model)
+        {
+            Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+            List<LogLijst> logs = mgr.GetLogLijstsKlant(user.GebruikerId).ToList();
+            for (int i = 0; i < logs.Count(); i++)
+            {
+                OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                LogModel logmodel = new LogModel();
+                logmodel.Naam = logs[i].Naam;
+                logmodel.ActionDate = logs[i].ActionDate;
+                logmodel.Ovm = ovm.Naam;
+                model.Add(logmodel);
+            }
+            return Ok(model);
+        }
+        [HttpGet]
+        [Route("api/Klant/SSH/LogLijstAll")]
+        [Authorize(Roles = "Admin , Klant")]
+        public IHttpActionResult LogLijstAll(List<LogModel> model)
+        {
+            Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+            if(user.Rol.Equals(RolType.Admin))
+            {
+                List<LogLijst> logs = mgr.GetLogLijsten().ToList();
+                for (int i = 0; i < logs.Count(); i++)
+                {
+                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                    Gebruiker userlog = userManager.GetGebruiker(logs[i].GebruikerId);
+                    LogModel logmodel = new LogModel();
+                    logmodel.Naam = logs[i].Naam;
+                    logmodel.ActionDate = logs[i].ActionDate;
+                    logmodel.Ovm = ovm.Naam;
+                    logmodel.Naam = userlog.Naam;
+                    model.Add(logmodel);
+                }
+            }
+            else
+            {
+                Klant k = klantmgr.GetKlant(user.GebruikerId);
+                List<LogLijst> logs = mgr.GetLogLijstsKlant(k.KlantId).ToList();
+                List<Klant> medewerkers = klantmgr.GetKlantenAccounts(k).ToList();
+                for (int i = 0; i < logs.Count(); i++)
+                {
+                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                    LogModel logmodel = new LogModel();
+                    logmodel.Naam = logs[i].Naam;
+                    logmodel.ActionDate = logs[i].ActionDate;
+                    logmodel.Ovm = ovm.Naam;
+                    model.Add(logmodel);
+                }
+                for (int i = 0; i < medewerkers.Count(); i++)
+                {
+                    List<LogLijst> logsM = mgr.GetLogLijstsKlant(medewerkers[i].KlantId).ToList();
+                    for (int j = 0; j < logsM.Count(); j++)
+                    {
+                        OracleVirtualMachine ovm = mgr.GetOVMById(logsM[j].OvmId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Naam = logsM[j].Naam;
+                        logmodel.ActionDate = logsM[j].ActionDate;
+                        logmodel.Ovm = ovm.Naam;
+                        model.Add(logmodel);
+                    }
+                }
+            }
+            return Ok(model);
+        }
     }
 }

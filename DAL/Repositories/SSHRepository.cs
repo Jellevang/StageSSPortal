@@ -193,5 +193,19 @@ namespace DAL.Repositories
             }
             ctx.SaveChanges();
         }
+        public IEnumerable<LogLijst> ReadLogLijstKlant(int gebruikersid)
+        {
+            IEnumerable<LogLijst> logs = ctx.LogLijsten.Where(l => l.GebruikerId == gebruikersid);
+            return logs;
+        }
+        public IEnumerable<LogLijst> ReadLogLijstOVM(string id)
+        {
+            IEnumerable<LogLijst> logs = ctx.LogLijsten.Where(l => l.OvmId.Contains(id));
+            return logs;
+        }
+        public IEnumerable<LogLijst> ReadLogLijsten()
+        {
+            return ctx.LogLijsten.AsEnumerable();
+        }
     }
 }

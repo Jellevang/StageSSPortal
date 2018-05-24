@@ -156,5 +156,17 @@ namespace BL
         {
             repo.RemoveLogLijstenOVM(id);
         }
+        public IEnumerable<LogLijst> GetLogLijstsKlant(int id)
+        {
+            return repo.ReadLogLijstKlant(id);
+        }
+        public IEnumerable<LogLijst> GetLogLijstsOVM(string id)
+        {
+            return repo.ReadLogLijstOVM(id);
+        }
+        public IEnumerable<LogLijst> GetLogLijsten()
+        {
+            return repo.ReadLogLijsten();
+        }
     }
 }
