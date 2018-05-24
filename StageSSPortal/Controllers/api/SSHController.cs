@@ -238,7 +238,16 @@ namespace StageSSPortal.Controllers.api
             
 
         }
+        [HttpGet]
+        [Route("api/SSH/getKlanten")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetAllKlanten()
+        {
+            IEnumerable<Klant> temp = klantmgr.GetKlanten();
+            return Ok(temp);
 
+
+        }
         [HttpGet]
         [Route("api/SSH/getKlantAcc/{id}")]
         [Authorize(Roles = "Admin")]

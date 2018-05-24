@@ -5,3 +5,30 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <h2>LogAdmin</h2>
 @Scripts.Render("~/Scripts/changePass.js")
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
+            $(".VmRow").css("color", "rgb(0, 0, 0)");
+            $(this).css("color", "rgb(244, 78, 66)");
+            showInfo();
+        });
+        //$("select").hide();
+        getServersDB();
+        $(".Vm").change(function () {
+            if ($("input.Vm").prop('checked', true)) {
+                $("input.Klant").prop('checked', false);
+                //showToegekend();
+                showVmNames($("#servers").val(), true);
+            }
+        })
+        $(".Klant").change(function () {
+            if ($("input.Klant").prop('checked', true)) {
+                $("input.Vm").prop('checked', false);
+                //showNietToegekend();
+                loadKlanten();
+            }
+        })
+        //loadKlanten();
+    });
+

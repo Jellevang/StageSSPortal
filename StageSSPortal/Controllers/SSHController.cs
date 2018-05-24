@@ -51,6 +51,14 @@ namespace StageSSPortal.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("KlantAccount/SSH/LogAdmin")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult LogAdmin()
+        {
+            return View();
+        }
     }
 }
 

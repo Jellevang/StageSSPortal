@@ -60,7 +60,6 @@
                 })
                 $("#servers").css("display", "block");
                 $("#servers").change(function () {
-                    // alert($("#servers").val())
                     showVmNames($("#servers").val());
                 })
             })
@@ -301,9 +300,6 @@
 
             </tr>
         </table>
-    </div>
-    <div id="ShowVms" style="display:none">
-        <select id="LijstServerVms"></select>
     </div>
     <div id="VmInfo" style="display:none">
         <table id="ListVmInfo" class="table"></table>
