@@ -31,4 +31,140 @@
         })
         //loadKlanten();
     });
+    //===========SERVERS====================
+    function getServersDB() {
+        $.ajax("/api/ssh/getServersDB", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("#servers").append("<option class='" + value.ServersId + "'value='" + value.Id + "' > " + value.ServerNaam + "</option > ");
+                })
+                $("#servers").css("display", "block");
+                $("#servers").change(function () {
+                    showVmNames($("#servers").val());
+                })
+            })
+    }
 
+    //=============KLANTEN===================
+    function loadKlanten() {
+        $("select").hide();
+        alert('test')
+        $("#ShowVms").hide();
+        $.ajax("/api/SSH/getKlanten", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                //alert(data)
+                ShowKlanten(data);
+            });
+    }
+    function ShowKlanten(LijstKlanten) {
+        $.each(LijstKlanten, function (index, value) {
+            //alert(value)
+            addKlant(value);
+        })
+        $("#ShowKlanten").css("display", "block");
+
+    }
+    function addKlant(klant) {
+        //alert('add');
+        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Naam + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
+        //if (vm.KlantId == 0) {
+        //    changeColor(vm.id);
+        //    if (bool == true) {
+        //        $("#" + vm.id).hide();
+        //    } else if (bool == false) {
+        //        $("#" + vm.id).show();
+        //    }
+
+        //} else {
+        //    if (bool == true) {
+        //        $("#" + vm.id).show();
+        //    } else if (bool == false) {
+        //        $("#" + vm.id).hide();
+        //    }
+        //}
+    }
+    //=============VMs=========================
+    function showVmNames(id, bool) {
+        //alert(id+bool);
+        $("#ShowKlanten").hide();
+
+        $("select").show();
+
+        $("div#btns").hide();
+        $("#btnSave").hide();
+        $(".VmRow").css("background-color", "inherit");
+        // alert("vmnames");
+        if ($("#ShowVms").css("display") != "none") {
+            $("table#LijstServerVMs").find("tr:not(:first)").remove();
+            $("#VmInfo").css("display", "none");
+        }
+        if (id == 0) {
+            $.ajax("/api/SSH/GetAllVmsDB", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done(function (data) {
+                    ShowVms(data, bool);
+                    //alert(bool);
+                })
+        } else {
+            $.ajax("/api/SSH/vmsDB/" + id + "/", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done(function (data) {
+                    ShowVms(data, bool);
+                })
+        };
+    }
+    function ShowVms(LijstServerVMs, bool) {
+        $.each(LijstServerVMs, function (index, value) {
+            addVM(value, bool);
+        })
+        $("#ShowVms").css("display", "block");
+
+    }
+    function addVM(vm, bool) {
+        if (vm.KlantId != 0) {
+            $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
+        }
+    }
+
+</script>
+<div id="scherm">
+
+</div>
+<div>
+    <input class="Vm" type="checkbox" id="CheckKlant" name="chk_Klant" value="Toegewezen">Vms
+    <input class="Klant" type="checkbox" id="CheckKlant" name="chk_Klant" value="Niet-Toegewezen">Klanten
+
+</div>
+<div>
+    <select class="form-control" id="servers">
+        <option>Kies Server</option>
+        <option value="0">Alle servers</option>
+
+    </select>
+</div>
+<div id="ShowVms" style="display:none">
+    <table id="LijstServerVMs" class="table">
+        <tr>
+            <th>Name</th>
+
+        </tr>
+    </table>
+</div>
+<div id="ShowKlanten" style="display:none">
+    <table id="LijstKlanten" class="table">
+        <tr>
+            <th>Name</th>
+
+        </tr>
+    </table>
+</div>
