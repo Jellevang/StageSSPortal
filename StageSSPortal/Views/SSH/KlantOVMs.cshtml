@@ -58,7 +58,12 @@
             dataType: "json"
         })
             .done(function (data) {
-                ShowVms(data);
+                if (data == false) {
+                    $("#NoVms").css("display", "block");
+                }
+                else {
+                    ShowVms(data);
+                }                
             })
     };
     function ShowVms(LijstServerVMs) {
@@ -267,6 +272,9 @@
 
             </tr>
         </table>
+    </div>
+    <div id="NoVms" style="display:none">
+        <h1>Geen Virtuele Machines toegewezen contacteer de admin</h1>
     </div>
 
     <div id="VmInfo" style="display:none">

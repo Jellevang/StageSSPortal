@@ -520,9 +520,14 @@ namespace StageSSPortal.Controllers.api
                 vmModel.id = vm.OvmId;
                 model.Add(vmModel);
             }
-            // }
-
-            return Ok(model);
+            if (!model.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(model);
+            } 
         }
         [HttpGet]
         [Route("api/Klant/SSH/lijstcreate/{id}/{k}")]
@@ -581,7 +586,14 @@ namespace StageSSPortal.Controllers.api
             }
             // }
 
-            return Ok(model);
+            if (!model.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(model);
+            }
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstOvm/{id}")]
