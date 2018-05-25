@@ -469,7 +469,7 @@ namespace StageSSPortal.Controllers.api
             {
                 OVMLijst lijst = mgr.AddLijst(id, klant.KlantId);
             } 
-            return Ok();
+            return Ok(true);
         }
         [HttpGet]
         [Route("api/Klant/SSH/lijstDelete/{id}/{k}")]
