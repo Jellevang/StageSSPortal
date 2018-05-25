@@ -21,6 +21,7 @@ namespace StageSSPortal.Controllers.api
 {
     public class SSHController : ApiController
     {
+        private readonly IAdminManager Admgr = new AdminManager();
         private readonly ISSHManager mgr = new SSHManager();
         private readonly IKlantManager klantmgr = new KlantManager();
         private GebruikerManager userManager;
@@ -637,6 +638,7 @@ namespace StageSSPortal.Controllers.api
             List<LogLijst> logs = mgr.GetLogLijstsOVM(id).ToList();
             var orderLogs = logs.OrderByDescending(l => l.ActionDate);
             OracleVirtualMachine ovm = mgr.GetOVMById(id);
+            Admin admin = admgr.GetAdmin();
             if (logs.Count() != 0)
             {
                 for (int i = 0; i < 10; i++)
@@ -646,7 +648,17 @@ namespace StageSSPortal.Controllers.api
                     logmodel.Naam = orderLogs.ElementAt(i).Naam;
                     logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
                     logmodel.Gebruiker = user.Email;
-                    model.Add(logmodel);
+                    if (admin.Email == User.Identity.Name)
+                    {
+                        model.Add(logmodel);
+                    }
+                    else
+                    {
+                        if (!logmodel.Gebruiker.Equals(admin.Email))
+                        {
+                            model.Add(logmodel);
+                        }
+                    }
                 }
             }
             return Ok(model);
