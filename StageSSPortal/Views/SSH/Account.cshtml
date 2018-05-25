@@ -94,9 +94,9 @@
 
             })
     };
-
     function StopVM() {
         var t;
+        var naam;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
@@ -111,12 +111,36 @@
                 })
         });
         //document.location.reload();
+        naam = "Stop";
+        CreateLog(t, naam);
         showVmNames();
 
     };
+    function RestartVM() {
+        alert("Dit kan 30 seconden duren");
+        var t;
+        var naam;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+            }
+            $.ajax("/api/SSH/RestartVM/" + t + "/", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+                (function (data) {
 
+                })
+        });
+        naam = "Restart";
+        CreateLog(t, naam);
+        showVmNames($("#servers").val());
+
+    }
     function StartVM() {
         var t;
+        var naam;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 //t = $(this).children("td:first").attr("id");
@@ -132,10 +156,20 @@
                 (function (data) {
                 })
         });
-        //document.location.reload()
+        naam = "Start"
+        CreateLog(t, naam);
         showVmNames();
 
     };
+    function CreateLog(id, naam) {
+        $.ajax("/api/ssh/CreateNaam/" + id + "/" + naam, { //+ $(this).val(), {
+            type: "GET",
+            dataType: "json"
+        })
+            .done
+            (function (data) {
+            })
+    }
 </script>
 
 @*<div>

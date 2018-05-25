@@ -165,73 +165,79 @@
     };
     function StopVM() {
         var t;
+        var naam;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-
-                $.ajax("/api/SSH/StopVM/" + t + "/", {
-                    type: "GET",
-                    dataType: "json"
-                })
-                    .done
-                    (function (data) {
-                    })
+                //alert(t);
             }
-        }); if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
-            showVmNames($("#servers").val(), true);
-        }
-        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
-            showVmNames($("#servers").val(), false);
-        }
-
-
-    }
-
-    function RestartVM() {
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                t = $(this).attr('id');
-                $.ajax("/api/SSH/RestartVM/" + t + "/", {
-                    type: "GET",
-                    dataType: "json"
+            $.ajax("/api/SSH/StopVM/" + t, {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+                (function (data) {
                 })
-                    .done
-                    (function (data) {
-                        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
-                            showVmNames($("#servers").val(), true);
-                        }
-                        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
-                            showVmNames($("#servers").val(), false);
-                        }
-                    })
-            }
         });
+        //document.location.reload();
+        naam = "Stop";
+        CreateLog(t, naam);
+        showVmNames();
+
+    };
+    function RestartVM() {
+        alert("Dit kan 30 seconden duren");
+        var t;
+        var naam;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                t = $(this).attr('id');
+            }
+            $.ajax("/api/SSH/RestartVM/" + t + "/", {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+                (function (data) {
+
+                })
+        });
+        naam = "Restart";
+        CreateLog(t, naam);
+        showVmNames($("#servers").val());
 
     }
-
-
     function StartVM() {
         var t;
+        var naam;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
+                //t = $(this).children("td:first").attr("id");
                 t = $(this).attr('id');
-
-                $.ajax("/api/SSH/StartVM/" + t + "/", {
-                    type: "GET",
-                    dataType: "json"
-                })
-                    .done
-                    (function (data) {
-                        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
-                            showVmNames($("#servers").val(), true);
-                        }
-                        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
-                            showVmNames($("#servers").val(), false);
-                        }
-                    })
+                //t.replace(".", "-");
+                // alert(t);
             }
+            $.ajax("/api/ssh/StartVM/" + t, { //+ $(this).val(), {
+                type: "GET",
+                dataType: "json"
+            })
+                .done
+                (function (data) {
+                })
         });
+        naam = "Start"
+        CreateLog(t, naam);
+        showVmNames();
+
+    };
+    function CreateLog(id, naam) {
+        $.ajax("/api/ssh/CreateNaam/" + id + "/" + naam, { //+ $(this).val(), {
+            type: "GET",
+            dataType: "json"
+        })
+            .done
+            (function (data) {
+            })
     }
     function SaveKlantVM() {
         var t;
