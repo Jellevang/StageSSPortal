@@ -2,6 +2,31 @@
 @{
     ViewBag.Title = "LogAdmin";
 }
+<style>
+    table#LijstServerVMs {
+        width: 15%;
+        float: left;
+        margin-right: 1%;
+    }
+    table#LijstKlanten {
+        width: 15%;
+        float: left;
+        margin-right: 1%;
+    }
+    table#LijstKlanten {
+        width:15%;
+    }
+    table#LijstLogs{
+        width:25%;
+    }
+    table#LijstKlantLogs {
+        width: 25%;
+    }
+    div#ShowKlanten{
+        float:left;
+        position:relative;
+    }
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <h2>LogAdmin</h2>
 @Scripts.Render("~/Scripts/changePass.js")
@@ -11,14 +36,24 @@
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
-            showInfo();
+            ShowLogsVM();
         });
+        $("table#LijstKlanten").delegate("tr:not(:first)", "click", function () {
+            $(".VmRow").css("color", "rgb(0, 0, 0)");
+            $(this).css("color", "rgb(244, 78, 66)");
+            ShowLogsKlant();
+        });
+
         //$("select").hide();
         getServersDB();
+        $("select").hide();
         $(".Vm").change(function () {
             if ($("input.Vm").prop('checked', true)) {
                 $("input.Klant").prop('checked', false);
                 //showToegekend();
+                $("#ShowLogs").css("display", "none");
+                $("#ShowKlantLogs").css("display", "none");
+                $("#servers").css("display", "block");
                 showVmNames($("#servers").val(), true);
             }
         })
@@ -26,6 +61,9 @@
             if ($("input.Klant").prop('checked', true)) {
                 $("input.Vm").prop('checked', false);
                 //showNietToegekend();
+                $("#ShowLogs").css("display", "none");
+                $("#ShowKlantLogs").css("display", "none");
+                $(".VmRow").css("color", "inherit");
                 loadKlanten();
             }
         })
@@ -41,7 +79,7 @@
                 $.each(data, function (index, value) {
                     $("#servers").append("<option class='" + value.ServersId + "'value='" + value.Id + "' > " + value.ServerNaam + "</option > ");
                 })
-                $("#servers").css("display", "block");
+//                $("#servers").css("display", "block");
                 $("#servers").change(function () {
                     showVmNames($("#servers").val());
                 })
@@ -49,9 +87,33 @@
     }
 
     //=============KLANTEN===================
+    function ShowLogsKlant() {
+        $("table#LijstKlantLogs").find("tr:not(:first)").remove();
+
+        var id;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                id = $(this).attr('id');
+            }
+        })
+        // alert(id);
+        $.ajax("/api/Klant/SSH/LogLijstKlant/" + id, {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("table#LijstKlantLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td><td>" + value.Ovm + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
+                })
+                $("#ShowKlantLogs").show();
+            })
+    }
     function loadKlanten() {
+            $("table#LijstKlanten").find("tr:not(:first)").remove();
+            //$("#VmInfo").css("display", "none");
+        
         $("select").hide();
-        alert('test')
+        //alert('test')
         $("#ShowVms").hide();
         $.ajax("/api/SSH/getKlanten", {
             type: "GET",
@@ -72,24 +134,34 @@
     }
     function addKlant(klant) {
         //alert('add');
-        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Naam + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
-        //if (vm.KlantId == 0) {
-        //    changeColor(vm.id);
-        //    if (bool == true) {
-        //        $("#" + vm.id).hide();
-        //    } else if (bool == false) {
-        //        $("#" + vm.id).show();
-        //    }
-
-        //} else {
-        //    if (bool == true) {
-        //        $("#" + vm.id).show();
-        //    } else if (bool == false) {
-        //        $("#" + vm.id).hide();
-        //    }
-        //}
+        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
+        if (klant.IsKlantAccount == false) {
+            $("#" + klant.KlantId).css("font-weight", "bold");
+        }
+           
     }
     //=============VMs=========================
+    function ShowLogsVM() {
+        $("table#LijstLogs").find("tr:not(:first)").remove();
+
+        var id;
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                id = $(this).attr('id');
+            }
+        })
+       // alert(id);
+        $.ajax("/api/Klant/SSH/LogLijstOvm/"+id, {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function(data) {
+                $.each(data, function (index, value) {
+                    $("table#LijstLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
+                })
+                    $("#ShowLogs").show();
+            })
+    }
     function showVmNames(id, bool) {
         //alert(id+bool);
         $("#ShowKlanten").hide();
@@ -165,6 +237,26 @@
         <tr>
             <th>Name</th>
 
+        </tr>
+    </table>
+</div>
+<div id="ShowLogs" style="display:none">
+    <table id="LijstLogs" class="table">
+        <tr>
+            <th>Gebruiker</th>
+            <th>Actie</th>
+            <th>Tijdstip</th>
+
+        </tr>
+    </table>
+</div>
+<div id="ShowKlantLogs" style="display:none">
+    <table id="LijstKlantLogs" class="table">
+        <tr>
+            <th>Gebruiker</th>
+            <th>Machine</th>
+            <th>Actie</th>
+            <th>Tijdstip</th>
         </tr>
     </table>
 </div>

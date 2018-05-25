@@ -53,11 +53,45 @@ namespace StageSSPortal.Controllers
         }
 
         [HttpGet]
-        [Route("KlantAccount/SSH/LogAdmin")]
+        [Route("Admin/SSH/LogAdmin")]
         [Authorize(Roles = "Admin")]
         public ActionResult LogAdmin()
         {
-            return View();
+            List<Klant> klanten = new List<Klant>();
+            List<Klant> klantAccounts = new List<Klant>();
+            List<Klant> klantenHoofd = klantmgr.GetHoofdKlanten().ToList();
+            foreach (Klant hoofd in klantenHoofd)
+            {
+                klanten.Add(hoofd);
+                klantAccounts = klantmgr.GetKlantenAccounts(hoofd).ToList();
+                klanten.AddRange(klantAccounts);
+            }
+
+            return View(klanten);
+           // return View();
+        }
+
+        [HttpGet]
+        [Route("Klant/SSH/LogKlant/{id}")]
+        [Authorize(Roles = "Klant")]
+        public ActionResult LogKlant()
+        {
+            Klant k = klantmgr.GetKlant(User.Identity.Name);
+            List<Klant> klanten = new List<Klant>();
+            List<Klant> klantAccounts = new List<Klant>();
+            try
+            {
+                Klant klantenHoofd = klantmgr.GetHoofdKlant(k.KlantId);
+                klanten.Add(klantenHoofd);
+                klantAccounts = klantmgr.GetKlantenAccounts(klantenHoofd).ToList();
+                klanten.AddRange(klantAccounts);
+            }
+            catch
+            {
+                klanten.Add(k);
+            }
+            return View(klanten);
+            // return View();
         }
     }
 }

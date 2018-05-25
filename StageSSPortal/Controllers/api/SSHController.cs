@@ -239,16 +239,6 @@ namespace StageSSPortal.Controllers.api
 
         }
         [HttpGet]
-        [Route("api/SSH/getKlanten")]
-        [Authorize(Roles = "Admin")]
-        public IHttpActionResult GetAllKlanten()
-        {
-            IEnumerable<Klant> temp = klantmgr.GetKlanten();
-            return Ok(temp);
-
-
-        }
-        [HttpGet]
         [Route("api/SSH/getKlantAcc/{id}")]
         [Authorize(Roles = "Admin")]
         public IHttpActionResult GetKlantAcc(int id)
@@ -260,7 +250,100 @@ namespace StageSSPortal.Controllers.api
 
 
         }
-        
+        [HttpGet]
+        [Route("api/SSH/getKlanten")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetAllKlanten()
+        {
+            IEnumerable<Klant> temp = klantmgr.GetKlanten();
+            return Ok(temp);
+
+
+        }
+       
+
+        //[HttpGet]
+        //[Route("api/SSH/Vms")]
+        //[Authorize(Roles = "Admin")]
+        //public IHttpActionResult GetVms(List<VmModel> model)
+        //{
+        //    model = new List<VmModel>();
+        //    List<string> vmState = new List<string>();
+        //    string[] vmInfo = new string[7];
+        //    string[] getVmInfo = new string[7];
+        //    List<string> LijstServerVMs = new List<string>();
+
+        //    string[] serverVMs;
+        //    string[] VmNames;
+        //    using (ssh)
+        //    {
+        //        ssh.Connect();
+        //        var ServerResult = ssh.RunCommand("show Server name=hes-ora-vmtst01");
+        //        serverVMs = ServerResult.Result.Split('\n');
+        //        ssh.Disconnect();
+        //        ssh.Connect();
+        //        var VmResult = ssh.RunCommand("list vm ");
+        //        VmNames = VmResult.Result.Split('\n');
+        //        ssh.Disconnect();
+        //        string patternVM = @"Vm [0-9]+";
+        //        string idPattern = @"id: [0-9]+";
+        //        List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+        //        ovms = mgr.GetOVMs().ToList();
+        //        bool isEmpty = !ovms.Any();
+        //        for (int i = 0; i < serverVMs.Length; i++)
+        //        {
+        //            var res = Regex.Match(serverVMs[i], patternVM);
+        //            var resId = Regex.Match(serverVMs[i], idPattern);
+        //            if (res.Length != 0)
+        //            {
+        //                VmModel vmModel = new VmModel();
+        //                string name = serverVMs[i].Substring(serverVMs[i].IndexOf("[") + 1, serverVMs[i].IndexOf("]") - serverVMs[i].IndexOf("[") - 1);
+        //                string id = serverVMs[i].Substring(serverVMs[i].IndexOf("=") + 1, (serverVMs[i].IndexOf("[")) - serverVMs[i].IndexOf("=") - 1);
+        //                id=id.Trim();
+        //                vmModel.Name = name;
+        //                vmModel.id = id;
+
+        //                if (isEmpty)
+        //                {
+        //                    OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
+        //                }
+        //                else
+        //                {
+        //                    bool bezit = false;
+        //                    foreach (OracleVirtualMachine ovm in ovms)
+        //                    {
+        //                        if (ovm.Naam.Equals(name))
+        //                        {
+        //                            bezit = true;
+        //                        }
+
+        //                    }
+        //                    if (bezit == true)
+        //                    {
+
+        //                    }
+        //                    else
+        //                    {
+        //                        OracleVirtualMachine cutted = mgr.AddOVM(name,id, 1);
+        //                    }
+        //                }
+
+        //                vmInfo = GetInfo(id, ssh, getVmInfo);
+        //                var regex = @"Status = [A-Z]+";
+        //                for (int j = 0; j < vmInfo.Length; j++)
+        //                {
+        //                    var match = Regex.Match(vmInfo[j], regex);
+        //                    if (match.Length != 0)
+        //                    {
+        //                        vmModel.Status = vmInfo[j].Substring(vmInfo[j].IndexOf("=") + 2, vmInfo[j].Length - vmInfo[j].IndexOf("=") - 2);
+        //                    }
+        //                }
+        //                model.Add(vmModel);
+        //            }
+        //        }
+        //    }
+        //    return Ok(model);
+        //}
         [HttpGet]
         [Route("api/SSH/GetAllVmsDB")]
         [Authorize(Roles = "Admin")]
@@ -353,6 +436,17 @@ namespace StageSSPortal.Controllers.api
         {
             List<Klant> klanten = new List<Klant>();
             klanten = klantmgr.GetHoofdKlanten().ToList();
+            return Ok(klanten);
+        }
+        [HttpGet]
+        [Route("api/SSH/GetKlantenUser")]
+        [Authorize(Roles = "Klant")]
+        public IHttpActionResult GetKlantenBedrijf()
+        {
+            Klant k = klantmgr.GetKlant(User.Identity.Name);
+            List<Klant> klanten = new List<Klant>();
+            klanten.Add(k);
+            klanten.AddRange(klantmgr.GetKlantenAccounts(k));
             return Ok(klanten);
         }
 
@@ -537,18 +631,23 @@ namespace StageSSPortal.Controllers.api
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstOvm/{id}")]
         [Authorize(Roles = "Admin , Klant")]
-        public IHttpActionResult LogLijstOvm(List<LogModel> model , string id)
+        public IHttpActionResult LogLijstOvm(string id)
         {
+            List<LogModel> model = new List<LogModel>();
             List<LogLijst> logs = mgr.GetLogLijstsOVM(id).ToList();
+            var orderLogs = logs.OrderByDescending(l => l.ActionDate);
             OracleVirtualMachine ovm = mgr.GetOVMById(id);
-            for(int i=0;i<logs.Count();i++)
+            if (logs.Count() != 0)
             {
-                Gebruiker user = userManager.GetGebruiker(logs[i].GebruikerId);
-                LogModel logmodel = new LogModel();
-                logmodel.Naam = logs[i].Naam;
-                logmodel.ActionDate = logs[i].ActionDate;
-                logmodel.Gebruiker = user.Email;
-                model.Add(logmodel);
+                for (int i = 0; i < 10; i++)
+                {
+                    Gebruiker user = userManager.GetGebruiker(orderLogs.ElementAt(i).GebruikerId);
+                    LogModel logmodel = new LogModel();
+                    logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                    logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                    logmodel.Gebruiker = user.Email;
+                    model.Add(logmodel);
+                }
             }
             return Ok(model);
 
@@ -558,49 +657,95 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult LogLijstKlant(List<LogModel> model, int id)
         {
+            model = new List<LogModel>();
             Klant k = klantmgr.GetKlant(id);
             if(k.IsKlantAccount==false)
             {
                 List<LogLijst> logs = mgr.GetLogLijstsKlant(id).ToList();
+                var orderLogs = logs.OrderByDescending(l => l.ActionDate);
                 List<Klant> medewerkers = klantmgr.GetKlantenAccounts(k).ToList();
-                for (int i = 0; i < logs.Count(); i++)
+                if (logs.Count() != 0)
                 {
-                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
-                    LogModel logmodel = new LogModel();
-                    logmodel.Naam = logs[i].Naam;
-                    logmodel.ActionDate = logs[i].ActionDate;
-                    logmodel.Ovm = ovm.Naam;
-                    model.Add(logmodel);
-                }
-                for (int i =0; i < medewerkers.Count(); i++)
-                {
-                    List<LogLijst> logsM = mgr.GetLogLijstsKlant(medewerkers[i].KlantId).ToList();
-                    for (int j = 0; j < logsM.Count(); j++)
+                    if (logs.Count() >= 10)
                     {
-                        OracleVirtualMachine ovm = mgr.GetOVMById(logsM[j].OvmId);
-                        LogModel logmodel = new LogModel();
-                        logmodel.Naam = logsM[j].Naam;
-                        logmodel.ActionDate = logsM[j].ActionDate;
-                        logmodel.Ovm = ovm.Naam;
-                        model.Add(logmodel);
+                        for (int i = 0; i < 10; i++)
+                        {
+                            OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                            LogModel logmodel = new LogModel();
+                            logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                            logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                            logmodel.Ovm = ovm.Naam;
+                            logmodel.Gebruiker = k.Email;
+                            model.Add(logmodel);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < logs.Count(); i++)
+                        {
+                            OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                            LogModel logmodel = new LogModel();
+                            logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                            logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                            logmodel.Ovm = ovm.Naam;
+                            logmodel.Gebruiker = k.Email;
+                            model.Add(logmodel);
+                        }
+                    }
+                    for (int i = 0; i < medewerkers.Count(); i++)
+                    {
+                        List<LogLijst> logsM = mgr.GetLogLijstsKlant(medewerkers[i].KlantId).ToList();
+                        var orderLogsM = logsM.OrderByDescending(l => l.ActionDate);
+                        for (int j = 0; j < logsM.Count(); j++)
+                        {
+                            OracleVirtualMachine ovm = mgr.GetOVMById(logsM[j].OvmId);
+                            LogModel logmodel = new LogModel();
+                            logmodel.Naam = orderLogsM.ElementAt(i).Naam;
+                            logmodel.ActionDate = orderLogsM.ElementAt(i).ActionDate;
+                            logmodel.Ovm = ovm.Naam;
+                            logmodel.Gebruiker = medewerkers[i].Email;
+                            model.Add(logmodel);
+                        }
                     }
                 }
             }
             else
             {
-                List<LogLijst> logs = mgr.GetLogLijstsKlant(id).ToList();                
-                for (int i = 0; i < logs.Count(); i++)
+                List<LogLijst> logs = mgr.GetLogLijstsKlant(id).ToList();
+                var orderLogs = logs.OrderByDescending(l => l.ActionDate);
+                if (logs.Count() != 0)
                 {
-                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
-                    LogModel logmodel = new LogModel();
-                    logmodel.Naam = logs[i].Naam;
-                    logmodel.ActionDate = logs[i].ActionDate;
-                    logmodel.Ovm = ovm.Naam;
-                    model.Add(logmodel);
+                    if (logs.Count() >= 10)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                            LogModel logmodel = new LogModel();
+                            logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                            logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                            logmodel.Ovm = ovm.Naam;
+                            logmodel.Gebruiker = k.Email;
+                            model.Add(logmodel);
+                        }
+                    }
+                    if (logs.Count() < 10)
+                    {
+                        for (int i = 0; i <logs.Count(); i++)
+                        {
+                            OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                            LogModel logmodel = new LogModel();
+                            logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                            logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                            logmodel.Ovm = ovm.Naam;
+                            logmodel.Gebruiker = k.Email;
+                            model.Add(logmodel);
+                        }
+                    }
                 }
-                
             }
-            return Ok(model);
+            var OrderModel = model.OrderByDescending(m => m.ActionDate);
+
+            return Ok(OrderModel);
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstUser")]
@@ -608,6 +753,25 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult LogLijstUser(List<LogModel> model)
         {
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+            List<LogLijst> logs = mgr.GetLogLijstsKlant(user.GebruikerId).ToList();
+            for (int i = 0; i < logs.Count(); i++)
+            {
+                OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                LogModel logmodel = new LogModel();
+                logmodel.Naam = logs[i].Naam;
+                logmodel.ActionDate = logs[i].ActionDate;
+                logmodel.Ovm = ovm.Naam;
+                model.Add(logmodel);
+            }
+            return Ok(model);
+        }
+        [HttpGet]
+        [Route("api/Klant/SSH/LogLijstUser/{id}")]
+        [Authorize(Roles = "Klant")]
+        public IHttpActionResult LogLijstUser(int id, List<LogModel> model)
+        {
+            model = new List<LogModel>();
+            Gebruiker user = userManager.GetGebruiker(id);
             List<LogLijst> logs = mgr.GetLogLijstsKlant(user.GebruikerId).ToList();
             for (int i = 0; i < logs.Count(); i++)
             {
