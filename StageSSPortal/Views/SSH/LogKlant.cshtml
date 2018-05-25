@@ -129,7 +129,7 @@
     }
     function addKlant(klant) {
         //alert('add');
-        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
+        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td></tr>");
         if (klant.IsKlantAccount == false) {
             // changeColor(vm.id);
             $("#" + klant.KlantId).css("font-weight", "bold");

@@ -38,15 +38,21 @@
     $(document).ready(function () {
         $("table#LijstServerVMs").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
+            $(".AdminRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
             ShowLogsVM();
         });
         $("table#LijstKlanten").delegate("tr:not(:first)", "click", function () {
             $(".VmRow").css("color", "rgb(0, 0, 0)");
+            $(".AdminRow").css("color", "rgb(0, 0, 0)");
             $(this).css("color", "rgb(244, 78, 66)");
             ShowLogsKlant();
         });
-
+        //$(".AdminRow").delegate("tr", "click", function () {
+        //    $(".AdminRow").css("color", "rgb(0, 0, 0)");
+        //    $(this).css("color", "rgb(244, 78, 66)");
+        //    ShowLogsAdmin();
+        //});
         //$("select").hide();
         getServersDB();
         $("select").hide();
@@ -90,6 +96,21 @@
     }
 
     //=============KLANTEN===================
+    function ShowLogsAdmin() {
+        //alert("heheh")
+        $(".VmRow").css("color", "rgb(0, 0, 0)");
+        $.ajax("/api/Klant/SSH/LogLijstUser", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+            $.each(data, function (index, value) {
+                $("table#LijstKlantLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td><td>" + value.Ovm + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
+            })
+            $("#ShowKlantLogs").show();
+        })
+    }
+
     function ShowLogsKlant() {
         $("table#LijstKlantLogs").find("tr:not(:first)").remove();
 
@@ -117,22 +138,32 @@
             })
     }
     function loadKlanten() {
-            $("table#LijstKlanten").find("tr:not(:first)").remove();
-            //$("#VmInfo").css("display", "none");
-        
+        $("table#LijstKlanten").find("tr:not(:first)").remove();
+        //$("#VmInfo").css("display", "none");
+
         $("select").hide();
         //alert('test')
         $("#ShowVms").hide();
-        $.ajax("/api/SSH/getKlanten", {
+        $.ajax("/api/SSH/getAdmin", {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
-                //alert(data)
-                ShowKlanten(data);
+                $("table#LijstKlanten").append("<tr  class=AdminRow id=" + data.AdminId + " onClick=ShowLogsAdmin()>" + "<td>" + data.Email + "</td></tr>");
+                $.ajax("/api/SSH/getKlanten", {
+                    type: "GET",
+                    dataType: "json"
+                })
+                    .done(function (data) {
+                        ShowKlanten(data)
+
+                    })
+                // alert(data);
             });
+        
     }
     function ShowKlanten(LijstKlanten) {
+       // $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td></tr>");
         $.each(LijstKlanten, function (index, value) {
             //alert(value)
             addKlant(value);
@@ -141,8 +172,7 @@
 
     }
     function addKlant(klant) {
-        //alert('add');
-        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
+        $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td></tr>");
         if (klant.IsKlantAccount == false) {
             $("#" + klant.KlantId).css("font-weight", "bold");
         }

@@ -254,8 +254,15 @@ namespace StageSSPortal.Controllers.api
         {
             IEnumerable<Klant> temp = klantmgr.GetKlanten();
             return Ok(temp);
-
-
+        }
+        [HttpGet]
+        [Route("api/SSH/getAdmin")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetAdmin()
+        {
+            Admin a = admgr.GetAdmin();
+            var g = userManager.GetGebruiker(a.Email);
+            return Ok(g);
         }
 
         [HttpGet]
@@ -684,18 +691,31 @@ namespace StageSSPortal.Controllers.api
             {
                 return Ok(OrderModel);
             }
+            List<LogModel> OrderModel = model.OrderByDescending(m => m.ActionDate).ToList();
+            try
+            {
+                OrderModel.RemoveRange(9, OrderModel.Count() - 10);
+                return Ok(OrderModel);
+            }
+            catch
+            {
+                return Ok(OrderModel);
+
+            }
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstUser")]
         [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult LogLijstUser(List<LogModel> model)
         {
+            model = new List<LogModel>();
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
             List<LogLijst> logs = mgr.GetLogLijstsKlant(user.GebruikerId).ToList();
             for (int i = 0; i < logs.Count(); i++)
             {
                 OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
                 LogModel logmodel = new LogModel();
+                logmodel.Gebruiker = user.Email;
                 logmodel.Naam = logs[i].Naam;
                 logmodel.ActionDate = logs[i].ActionDate;
                 logmodel.Ovm = ovm.Naam;
