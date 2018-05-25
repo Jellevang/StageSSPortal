@@ -127,7 +127,7 @@
         })
             .done(function (data) {
                 if (data == false) {
-                    $("table#LijstKlantLogs").append("<tr  class=LogRowEmpty><td colspan=3>" + "Nog geen Loglijsten" + "</td></tr>");
+                    $("table#LijstKlantLogs").append("<tr  class=LogRowEmpty><td colspan=4>" + "Nog geen Loglijsten" + "</td></tr>");
                 }
                 else {
                 $.each(data, function (index, value) {

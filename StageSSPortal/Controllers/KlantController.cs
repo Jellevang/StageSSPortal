@@ -99,6 +99,17 @@ namespace StageSSPortal.Controllers
         [HttpPost]
         public ActionResult Create(Klant Klant, FormCollection collection)
         {
+            if (Klant.Naam == null || Klant.Naam == "")
+            {
+               // ModelState.AddModelError("", "Geef een gebruikersnaam in");
+                return View("Create");
+            }
+            if (Klant.Email == null || Klant.Email == "")
+            {
+                //ModelState.AddModelError("", "Geef een Emailadres in");
+                return View("Create");
+            }
+
             Klant email = mgr.GetKlant(Klant.Email);
             if (email != null)
             {

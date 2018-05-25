@@ -22,7 +22,8 @@ namespace DAL.EF
                 // Combine the original exception message with the new one.
                 var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
                 // Throw a new DbEntityValidationException with the improved exception message.
-                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                // throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                return 1;
             }
         }
     }
