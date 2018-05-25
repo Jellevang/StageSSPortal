@@ -614,7 +614,7 @@ namespace StageSSPortal.Controllers.api
                 var orderLogs = logs.OrderByDescending(l => l.ActionDate);
                 if (logs.Count() != 0)
                 {
-                    if (logs.Count() >= 10)
+                    if (logs.Count() >= 10)//
                     {
                         for (int i = 0; i < 10; i++)
                         {
@@ -627,7 +627,7 @@ namespace StageSSPortal.Controllers.api
                             model.Add(logmodel);
                         }
                     }
-                    if (logs.Count() < 10)
+                    if (logs.Count() < 10 )
                     {
                         for (int i = 0; i <logs.Count(); i++)
                         {
