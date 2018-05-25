@@ -595,6 +595,7 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult LogLijstKlant(List<LogModel> model, int id)
         {
+            List<LogModel> OrderModel = new List<LogModel>();
             model = new List<LogModel>();
             Klant k = klantmgr.GetKlant(id);
             if(k.IsKlantAccount==false)
@@ -681,7 +682,7 @@ namespace StageSSPortal.Controllers.api
                     }
                 }
             }
-            var OrderModel = model.OrderByDescending(m => m.ActionDate);
+            OrderModel = model.OrderByDescending(m => m.ActionDate).ToList();
             //return Ok(OrderModel);
             if (!OrderModel.Any())
             {
@@ -689,19 +690,19 @@ namespace StageSSPortal.Controllers.api
             }
             else
             {
-                return Ok(OrderModel);
-            }
-            List<LogModel> OrderModel = model.OrderByDescending(m => m.ActionDate).ToList();
-            try
-            {
-                OrderModel.RemoveRange(9, OrderModel.Count() - 10);
-                return Ok(OrderModel);
-            }
-            catch
-            {
-                return Ok(OrderModel);
+                 OrderModel = model.OrderByDescending(m => m.ActionDate).ToList();
+                try
+                {
+                    OrderModel.RemoveRange(9, OrderModel.Count() - 10);
+                    return Ok(OrderModel);
+                }
+                catch
+                {
+                    return Ok(OrderModel);
 
+                }
             }
+            
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstUser")]
