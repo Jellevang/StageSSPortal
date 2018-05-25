@@ -529,22 +529,47 @@ namespace StageSSPortal.Controllers.api
             Admin admin = admgr.GetAdmin();
             if (logs.Count() != 0)
             {
-                for (int i = 0; i < 10; i++)
+                if (logs.Count() >= 10)
                 {
-                    Gebruiker user = userManager.GetGebruiker(orderLogs.ElementAt(i).GebruikerId);
-                    LogModel logmodel = new LogModel();
-                    logmodel.Naam = orderLogs.ElementAt(i).Naam;
-                    logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
-                    logmodel.Gebruiker = user.Email;
-                    if (admin.Email == User.Identity.Name)
+                    for (int i = 0; i < 10; i++)
                     {
-                        model.Add(logmodel);
-                    }
-                    else
-                    {
-                        if (!logmodel.Gebruiker.Equals(admin.Email))
+                        Gebruiker user = userManager.GetGebruiker(orderLogs.ElementAt(i).GebruikerId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                        logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                        logmodel.Gebruiker = user.Email;
+                        if (admin.Email == User.Identity.Name)
                         {
                             model.Add(logmodel);
+                        }
+                        else
+                        {
+                            if (!logmodel.Gebruiker.Equals(admin.Email))
+                            {
+                                model.Add(logmodel);
+                            }
+                        }
+                    }
+                }
+                if (logs.Count() < 10)
+                {
+                    for (int i = 0; i < logs.Count(); i++)
+                    {
+                        Gebruiker user = userManager.GetGebruiker(orderLogs.ElementAt(i).GebruikerId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Naam = orderLogs.ElementAt(i).Naam;
+                        logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
+                        logmodel.Gebruiker = user.Email;
+                        if (admin.Email == User.Identity.Name)
+                        {
+                            model.Add(logmodel);
+                        }
+                        else
+                        {
+                            if (!logmodel.Gebruiker.Equals(admin.Email))
+                            {
+                                model.Add(logmodel);
+                            }
                         }
                     }
                 }
