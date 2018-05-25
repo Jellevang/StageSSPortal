@@ -156,7 +156,7 @@ namespace StageSSPortal.Controllers
                             return View(model);
                     }
                 }
-                ModelState.AddModelError("", "Invalid login attempt.");
+                ModelState.AddModelError("", "Ongeldige inlog gegevens");
                 return View(model);
             
             
