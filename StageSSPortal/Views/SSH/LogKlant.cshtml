@@ -28,6 +28,9 @@
         float: left;
         position: relative;
     }
+    .LogRowEmpty {
+        text-align: center;
+    }
 </style>
 @{
     ViewBag.Title = "LogKlant";
@@ -87,10 +90,16 @@
             dataType: "json"
         })
             .done(function (data) {
+                if (data == false) {
+                    $("table#LijstKlantLogs").append("<tr  class=LogRowEmpty><td colspan=3>"+"Nog geen Loglijsten"+"</td></tr>");
+                }
+                else {
                 $.each(data, function (index, value) {
                     $("table#LijstKlantLogs").append("<tr  class=LogRow><td>" + value.Ovm + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
-                })
+                    })
+                }
                 $("#ShowKlantLogs").show();
+
             })
     }
     function loadKlanten() {
@@ -155,9 +164,14 @@
             dataType: "json"
         })
             .done(function (data) {
-                $.each(data, function (index, value) {
-                    $("table#LijstLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
-                })
+                if (data == false) {
+                    $("table#LijstLogs").append("<tr  class=LogRowEmpty><td colspan=3>" + "Nog geen Loglijsten" + "</td></tr>");
+                }
+                else {
+                    $.each(data, function (index, value) {
+                        $("table#LijstLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
+                    })
+                }
                 $("#ShowLogs").show();
             })
     }

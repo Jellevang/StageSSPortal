@@ -26,6 +26,9 @@
         float:left;
         position:relative;
     }
+    .LogRowEmpty {
+        text-align: center;
+    }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <h2>LogAdmin</h2>
@@ -102,9 +105,14 @@
             dataType: "json"
         })
             .done(function (data) {
+                if (data == false) {
+                    $("table#LijstKlantLogs").append("<tr  class=LogRowEmpty><td colspan=3>" + "Nog geen Loglijsten" + "</td></tr>");
+                }
+                else {
                 $.each(data, function (index, value) {
                     $("table#LijstKlantLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td><td>" + value.Ovm + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
-                })
+                    })
+                }
                 $("#ShowKlantLogs").show();
             })
     }
@@ -155,10 +163,15 @@
             type: "GET",
             dataType: "json"
         })
-            .done(function(data) {
-                $.each(data, function (index, value) {
-                    $("table#LijstLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
-                })
+            .done(function (data) {
+                if (data == false) {
+                    $("table#LijstLogs").append("<tr  class=LogRowEmpty><td colspan=3>" + "Nog geen Loglijsten" + "</td></tr>");
+                }
+                else {
+                    $.each(data, function (index, value) {
+                        $("table#LijstLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
+                    })
+                }
                     $("#ShowLogs").show();
             })
     }

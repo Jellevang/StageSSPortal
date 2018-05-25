@@ -574,7 +574,14 @@ namespace StageSSPortal.Controllers.api
                     }
                 }
             }
-            return Ok(model);
+            if (!model.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(model);
+            }
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstKlant/{id}")]
@@ -668,8 +675,15 @@ namespace StageSSPortal.Controllers.api
                 }
             }
             var OrderModel = model.OrderByDescending(m => m.ActionDate);
-
-            return Ok(OrderModel);
+            //return Ok(OrderModel);
+            if (!OrderModel.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(OrderModel);
+            }
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstUser")]
@@ -687,7 +701,14 @@ namespace StageSSPortal.Controllers.api
                 logmodel.Ovm = ovm.Naam;
                 model.Add(logmodel);
             }
-            return Ok(model);
+            if (!model.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(model);
+            }
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstUser/{id}")]
@@ -706,7 +727,14 @@ namespace StageSSPortal.Controllers.api
                 logmodel.Ovm = ovm.Naam;
                 model.Add(logmodel);
             }
-            return Ok(model);
+            if (!model.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(model);
+            }
         }
         [HttpGet]
         [Route("api/Klant/SSH/LogLijstAll")]
@@ -757,7 +785,14 @@ namespace StageSSPortal.Controllers.api
                     }
                 }
             }
-            return Ok(model);
+            if (!model.Any())
+            {
+                return Ok(false);
+            }
+            else
+            {
+                return Ok(model);
+            }
         }
     }
 }
