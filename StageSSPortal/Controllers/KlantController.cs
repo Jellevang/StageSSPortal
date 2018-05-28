@@ -10,6 +10,7 @@ using BL;
 using Domain.Gebruikers;
 using DAL.EF;
 using Domain;
+using System.Text.RegularExpressions;
 
 namespace StageSSPortal.Controllers
 {
@@ -99,6 +100,7 @@ namespace StageSSPortal.Controllers
         [HttpPost]
         public ActionResult Create(Klant Klant, FormCollection collection)
         {
+            
             if (Klant.Naam == null || Klant.Naam == "")
             {
                // ModelState.AddModelError("", "Geef een gebruikersnaam in");
@@ -114,6 +116,13 @@ namespace StageSSPortal.Controllers
             if (email != null)
             {
                 ModelState.AddModelError("", "Email moet uniek zijn");
+                return View("Create");
+            }
+            string emailregex = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+            var regex = Regex.Match(Klant.Email, emailregex);
+            if (regex.Length == 0)
+            {
+                ModelState.AddModelError("", "Email voldoet niet aan de voorwaarde bv: test@monin.be");
                 return View("Create");
             }
             Klant naam = mgr.GetKlantByName(Klant.Naam);
