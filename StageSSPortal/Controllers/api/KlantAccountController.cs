@@ -41,5 +41,45 @@ namespace StageSSPortal.Controllers.api
            
         }
 
+        [HttpGet]
+        [Route("api/Klant/OvmLijstKlant/{klantEmail}/{ovmId}")]
+        [Authorize(Roles = "Klant")]
+        public IHttpActionResult GetOvmLijstKlant(string klantEmail, string ovmId)
+        {
+            try
+            {
+                Klant k = mgr.GetKlant(klantEmail);
+                OVMLijst ovm = SshMgr.GetLijst(k.KlantId, ovmId);
+                return Ok(ovm);
+            }
+            catch
+            {
+                return Ok();
+            }
+
+        }
+        [HttpGet]
+        [Route("api/Klant/OvmsKlant/{klantEmail}")]
+        [Authorize(Roles = "Klant")]
+        public IHttpActionResult GetOvmsKlant(string klantEmail)
+        {
+            try
+            {
+                List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
+                Klant k = mgr.GetKlant(klantEmail);
+                IEnumerable<OVMLijst> lijst = SshMgr.GetLijstAccount(k.KlantId);
+                foreach(var v in lijst.ToList())
+                {
+                    ovms.Add(SshMgr.GetOVMById(v.OVMId));
+                }
+                return Ok(ovms);
+            }
+            catch
+            {
+                return Ok();
+            }
+
+        }
+
     }
 }

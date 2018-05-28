@@ -27,6 +27,7 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Klant")]
         public ActionResult Home()
         {
+            ViewBag.Melding = TempData["Melding"];
             return View();
         }
         // GET: Klant

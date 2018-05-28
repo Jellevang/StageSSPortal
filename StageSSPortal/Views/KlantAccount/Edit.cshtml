@@ -5,6 +5,71 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadVMs();
+        $("input.CheckVM").each(function () {
+           // searchOvmLijst();
+        })
+    });
+    function searchOvmLijst(row) {
+        var klantId = ('@Model.Email');
+        var ovmId = ($(row).children("td").find("#CheckVM").val()).trim();
+        $.ajax("/api/Klant/OvmLijstKlant/" + klantId + "/" + ovmId, {// + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                if (!$.trim(data)) {
+                }
+                else {
+                    $(row).children("td").find("#CheckVM").prop("checked", true);
+                }
+            })
+    }
+    function loadVMs() {
+        if ($("#VmCheck").css("display") != "none") {
+            $("#VmCheck").find("tr:not(:first)").remove();
+            $("#VmCheck").hide();
+        }
+        $.ajax("/api/Klant/SSH/KlantOVMs", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $("#VmCheck").show();
+                $.each(data, function (index, value) {
+                    $("#VmCheck").append("<tr class=VmRow><td><input type=checkbox class=" + value.id + " id=CheckVM name=chk_VM  value=" + "'" + value.id + "'" + "/>" + value.Name + "</tr></td>");//+"<br />");
+                })
+                $(".VmRow").each(function () {
+                    searchOvmLijst($(this));
+                })
+            });
+    }
+    function SaveVms() {
+        var t;
+        var k = '@Model.Email';
+        //alert(k);
+        $(".VmRow").each(function () {
+            // alert($(this).children("td").find("#CheckVM").val());
+            if ($(this).children("td").find("#CheckVM").is(":checked")) {
+                t = $(this).children("td").find("#CheckVM").val();
+                // alert("woeho" + t)
+                //k = $(".klantEmail").val()
+                $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k + "/", {
+                    type: "GET",
+                    dataType: "json"
+                })
+                    .done(function (data) {
+                        // alert(data)
+                        window.location.href = "/KlantAccount/Index";
+                    })
+            }
+
+        });
+        //loadVMs();
+    }
+</script>
 <h2>Aanpassen Medewerker</h2>
 @Scripts.Render("~/Scripts/changePass.js")
 
@@ -51,7 +116,14 @@
         </div>
     </div>
 }
-
+    <div id="KlantDiv">
+        <table id="VmCheck" style="display:none">
+            <tr><th>Virtuele machines</th></tr>
+        </table>
+        <div>
+            <button class="btn btn-default" onclick="SaveVms()">Save</button>
+        </div>
+    </div>
 <div>
     @Html.ActionLink("Terug naar lijst", "Index")
 </div>

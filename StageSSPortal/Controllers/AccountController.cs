@@ -96,7 +96,14 @@ namespace StageSSPortal.Controllers
                         return View("Login");
 
                     }
-                    if (user.Toegestaan == false)
+                if (user.LastPasswordChangedDate.AddDays(7) < DateTime.Now && user.Rol != RolType.Admin)
+                {
+                    //mgr.BlockKlant(user.GebruikerId);
+                    ViewBag.Melding = "Passwoord vervalt binnen 7 dagen!";
+                    return View(model);
+
+                }
+                if (user.Toegestaan == false)
                     {
                         ModelState.AddModelError("", "Uw account is geblokkeerd. Contacteer uw admin.");                        
                         return View("Login");
@@ -157,7 +164,8 @@ namespace StageSSPortal.Controllers
                     }
                 }
                 ModelState.AddModelError("", "Ongeldige inlog gegevens");
-                return View(model);
+           TempData["Melding"] = "Passwoord vervalt binnen 7 dagen!";
+            return View(model);
             
             
         }
