@@ -4,9 +4,10 @@
     hr {
         border-top: none;
     }
-    input#CheckKlant{
-        position:inherit;
-        opacity:100;
+
+    input#CheckKlant {
+        position: inherit;
+        opacity: 100;
     }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -79,7 +80,7 @@
                 })
             });
     }
-    function showVmNames(id,bool) {
+    function showVmNames(id, bool) {
         //alert(id+bool);
         $("div#btns").hide();
         $("#btnSave").hide();
@@ -95,7 +96,7 @@
                 dataType: "json"
             })
                 .done(function (data) {
-                    ShowVms(data,bool);
+                    ShowVms(data, bool);
                     //alert(bool);
                 })
         } else {
@@ -104,13 +105,13 @@
                 dataType: "json"
             })
                 .done(function (data) {
-                    ShowVms(data,bool);
+                    ShowVms(data, bool);
                 })
         };
     }
-    function ShowVms(LijstServerVMs,bool) {
+    function ShowVms(LijstServerVMs, bool) {
         $.each(LijstServerVMs, function (index, value) {
-            addVM(value,bool);
+            addVM(value, bool);
         })
         $("#ShowVms").css("display", "block");
 
@@ -124,14 +125,14 @@
             changeColor(vm.id);
             if (bool == true) {
                 $("#" + vm.id).hide();
-            } else if(bool==false){
+            } else if (bool == false) {
                 $("#" + vm.id).show();
             }
 
         } else {
             if (bool == true) {
                 $("#" + vm.id).show();
-            } else if (bool == false){
+            } else if (bool == false) {
                 $("#" + vm.id).hide();
             }
         }
@@ -182,6 +183,7 @@
         //document.location.reload();
         naam = "Stop";
         CreateLog(t, naam);
+        DownTime(t);
         showVmNames();
 
     };
@@ -260,10 +262,10 @@
             }
         });
         //     alert($("#servers").val());
-        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked")==false ) {
+        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
             showVmNames($("#servers").val(), true);
         }
-        if ($(".checkToeg").is(":checked") ==false && $(".checkNietToeg").is(":checked")) {
+        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
             showVmNames($("#servers").val(), false);
         }
 
@@ -279,13 +281,14 @@
         $('#Dialog-Box').dialog('open');
     }
 
-    
+
 </script>
 
 @*<div>
         <h1>Beheer Virtuele Machines</h1>
     </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
+@Scripts.Render("~/Scripts/SSHFunctions.js")
 <div id="scherm">
     <div>
         <select class="form-control" id="servers">

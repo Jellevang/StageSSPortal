@@ -16,6 +16,7 @@ using Domain.Gebruikers;
 using Microsoft.AspNet.Identity.Owin;
 using StageSSPortal.Helpers;
 using StageSSPortal.Models;
+using RestSharp;
 
 namespace StageSSPortal.Controllers.api
 {
@@ -814,6 +815,24 @@ namespace StageSSPortal.Controllers.api
             {
                 return Ok(model);
             }
+        }
+
+        [HttpGet]
+        [Route("api/Klant/SSH/PushDowntime/{id}")]
+        [Authorize(Roles = "Admin , Klant, KlantAccount")]
+        public IHttpActionResult PushDowntime(string id)
+        {
+            DateTime start_time = DateTime.Now;
+            DateTime end_time = DateTime.Now.AddMinutes(30);
+            Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+            OracleVirtualMachine ovm = mgr.GetOVM(id);
+            var client = new RestClient("https://api.monitoring.be/command/prod/op5command");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\": \""+ovm.Naam+"\",\n  \"start_time\":"+start_time+",\n  \"end_time\":"+end_time+",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for "+ovm.Naam+" by "+user.Naam+"\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return Ok();
         }
     }
 }

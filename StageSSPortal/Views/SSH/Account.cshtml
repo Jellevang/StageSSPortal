@@ -12,9 +12,11 @@
         float: left;
         position: relative;
     }
+
     hr {
-        border-top:none;
+        border-top: none;
     }
+
     div#btns {
         float: right;
     }
@@ -49,7 +51,7 @@
                 }
                 else {
                     ShowVms(data);
-                }    
+                }
             })
     };
     function ShowVms(LijstServerVMs) {
@@ -113,6 +115,7 @@
         //document.location.reload();
         naam = "Stop";
         CreateLog(t, naam);
+        DownTime(t);
         showVmNames();
 
     };
@@ -173,9 +176,10 @@
 </script>
 
 @*<div>
-    <h1>Beheer Virtuele Machines</h1>
-</div>*@
+        <h1>Beheer Virtuele Machines</h1>
+    </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
+@Scripts.Render("~/Scripts/SSHFunctions.js")
 
 <div id="ShowVms" style="display:none">
     <table id="LijstServerVMs" class="table">
@@ -219,4 +223,4 @@
         </table>
     </div>
 </div>
-    @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
+@*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

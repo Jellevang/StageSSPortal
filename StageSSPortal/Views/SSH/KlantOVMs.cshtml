@@ -26,9 +26,9 @@
     div#scherm {
         margin-top: 2%;
     }
-    hr{
-        border-top:none;
 
+    hr {
+        border-top: none;
     }
 </style>
 
@@ -63,7 +63,7 @@
                 }
                 else {
                     ShowVms(data);
-                }                
+                }
             })
     };
     function ShowVms(LijstServerVMs) {
@@ -143,6 +143,7 @@
         //document.location.reload();
         naam = "Stop";
         CreateLog(t, naam);
+        DownTime(t);
         showVmNames();
 
     };
@@ -192,7 +193,7 @@
 
     };
     function CreateLog(id, naam) {
-        $.ajax("/api/ssh/CreateNaam/" + id + "/"+naam, { //+ $(this).val(), {
+        $.ajax("/api/ssh/CreateNaam/" + id + "/" + naam, { //+ $(this).val(), {
             type: "GET",
             dataType: "json"
         })
@@ -238,15 +239,15 @@
         var t;
         var k;
         $("input#CheckKlant").each(function () {
-          //  alert($(this));
+            //  alert($(this));
             if ($(this).is(":checked")) {
                 //alert("if lus");
                 k = $(this).val()
-               // alert(k)
+                // alert(k)
                 $("tr.VmRow").each(function () {
                     if ($(this).css('color') == "rgb(244, 78, 66)") {
                         t = $(this).attr('id');
-                       // alert(t+" "+ k)
+                        // alert(t+" "+ k)
                         $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k + "/", {
                             type: "GET",
                             dataType: "json"
@@ -278,9 +279,10 @@
 </script>
 
 @*<div>
-    <h1>Beheer Virtuele Machines</h1>
-</div>*@
+        <h1>Beheer Virtuele Machines</h1>
+    </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
+@Scripts.Render("~/Scripts/SSHFunctions.js")
 <div id="scherm">
 
     <div id="ShowVms" style="display:none">
