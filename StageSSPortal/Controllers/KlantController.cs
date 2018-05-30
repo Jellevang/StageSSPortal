@@ -134,7 +134,11 @@ namespace StageSSPortal.Controllers
             }
             else
             {
-                Klant = mgr.AddKlant(Klant.Naam, Klant.Email);
+                if (Klant.Afkorting == "" || Klant.Afkorting == null)
+                {
+                    Klant.Afkorting = Klant.Naam;
+                }
+                Klant = mgr.AddKlant(Klant.Naam, Klant.Email,Klant.Afkorting);
                 return RedirectToAction("Details", new { id = Klant.KlantId });
             }
 
