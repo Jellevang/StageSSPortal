@@ -7,7 +7,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-   
+
 
     //function CreateKlant() {
     //    var naam = $(".naam").val();
@@ -23,55 +23,96 @@
     //        .done(function (data) {
     //            SaveVms(data)
     //        })
+    ////}
+    //function closeModal() {
+    //    $("#id01").css("display", "none");
     //}
-   
+    //function postAfkorting() {
 
+    //}
+    //function postNieuweAfkorting() {
+    //    var afk = $("#afkorting").val();
+    //    var naam = $("input#Naam").val();
+    //    var email = $("input#Email").val();
+    //    $.ajax("/api/klant/AddKlant/" + naam + "/" + email + "/" + afk+"/", {
+    //        type: "POST",
+    //        dataType: "json"
+    //    })
+    //}
 </script>
 <h2>Nieuwe Klant</h2>
 
-
-    @using (Html.BeginForm())
+@*@if (ViewBag.Message != null)
     {
-        @Html.AntiForgeryToken()
+        <script>
 
-<div class="form-horizontal">
-    <h4>Klant</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "naam form-control" } })
-            @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            $(document).ready(function () {
+                $("#id01").css("display", "block");
+       // passwd = prompt('@ViewBag.Message');
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "email form-control klantEmail" } })
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Afkorting, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Afkorting, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Afkorting, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    });
 
-    @*<div>
-            <button class="btn btn-default" onclick="CreateKlant()">Save</button>
-        </div>*@
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Maak" class="btn btn-default" onclick="SaveVms()" />
-        </div>
-    </div>
-</div>
+        </script>
+
     }
+*@
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
+    <div class="form-horizontal">
+        <h4>Klant</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "naam form-control klantNaam" } })
+                @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "email form-control klantEmail" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Afkorting, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Afkorting, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Afkorting, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div>
+                <button class="btn btn-default" onclick="CreateKlant()">Save</button>
+            </div>*@
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Maak" class="btn btn-default" onclick="SaveVms()" />
+            </div>
+        </div>
+    </div>
+}
+@*<div id="id01" class="modal">
+        <div class="modal-content">
+            <div class="container">
+                <span onclick="closeModal()" class="button display-topright">&times;</span>
+                <table>
+                    <tr>
+                        <td><button onclick="postAfkorting()">JA</button></td>
+                    </tr>
+                    <tr>
+                        <td><button onclick="postNieuweAfkorting()">NEE</button></td>
+                        <td><input id="afkorting" type="text" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>*@
 <div>
     @Html.ActionLink("Terug naar lijst", "Index")
 </div>

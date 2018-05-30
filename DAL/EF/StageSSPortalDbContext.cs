@@ -51,9 +51,11 @@ namespace DAL.EF
             modelBuilder.Entity<LogLijst>().Property(l => l.GebruikerId).IsRequired();
             modelBuilder.Entity<LogLijst>().Property(l => l.OvmId).IsRequired();
             modelBuilder.Entity<LogLijst>().Property(l => l.ActionDate).IsRequired();
+            //modelBuilder.Entity<Klant>().Property(k => k.Afkorting).IsRequired();
             // Identity
             modelBuilder.Entity<IdentityUserRole>().HasKey(i => i.UserId);
             modelBuilder.Entity<IdentityUserLogin>().HasKey(i => i.UserId);
+          //  modelBuilder.Entity<Klant>().HasIndex(k => k.Afkorting).IsUnique();
 
 
         }  

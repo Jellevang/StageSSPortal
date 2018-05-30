@@ -53,7 +53,11 @@ namespace DAL.Repositories
         }
         public void UpdateKlant(Klant Klant)
         {
-            ctx.Entry(Klant).State = EntityState.Modified;
+            var test=ctx.Klanten.Where(x => x.KlantId == Klant.KlantId).FirstOrDefault();
+            test.Naam = Klant.Naam;
+            test.Email = Klant.Email;
+            test.Afkorting = Klant.Afkorting;
+           ctx.Entry(test).State = EntityState.Modified;
             ctx.SaveChanges();
         }
         public void DeleteKlant(Klant k)
