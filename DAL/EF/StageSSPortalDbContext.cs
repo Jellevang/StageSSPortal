@@ -16,7 +16,8 @@ namespace DAL.EF
         public DbSet<OracleVirtualMachine> OracleVirtualMachines { get; set; }
         public DbSet<OVMLijst> OVMLijsten { get; set; }
         public DbSet<LogLijst> LogLijsten { get; set; }
-
+        public DbSet<ScheduledDownTime>  ScheduleTDLijst { get; set; }
+         
         public StageSSPortalDbContext() : base("stage")
         {
            //Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
@@ -35,12 +36,17 @@ namespace DAL.EF
             modelBuilder.Entity<OracleVirtualMachine>().HasKey(o => o.OracleVirtualMachineId);
             modelBuilder.Entity<OVMLijst>().HasKey(ovm => ovm.OVMLijstId);
             modelBuilder.Entity<LogLijst>().HasKey(l => l.LogLijstId);
+            modelBuilder.Entity<ScheduledDownTime>().HasKey(s => s.id);
             // required properties
             modelBuilder.Entity<Admin>().Property(a => a.Email).IsRequired();
             modelBuilder.Entity<Klant>().Property(k => k.Email).IsRequired();
             modelBuilder.Entity<Klant>().Property(k => k.Naam).IsRequired();
             modelBuilder.Entity<Server>().Property(s => s.ServerNaam).IsRequired();
             modelBuilder.Entity<Server>().Property(s => s.ServersId).IsRequired();
+            modelBuilder.Entity<ScheduledDownTime>().Property(s => s.Eind).IsRequired();
+            modelBuilder.Entity<ScheduledDownTime>().Property(s => s.Start).IsRequired();
+            modelBuilder.Entity<ScheduledDownTime>().Property(s => s.OvmId).IsRequired();
+
             //modelBuilder.Entity<KlantAccount>().Property(ka => ka.KlantId).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.Naam).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.KlantId).IsRequired();

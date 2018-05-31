@@ -37,5 +37,15 @@ namespace BL
         IEnumerable<LogLijst> GetLogLijstsKlant(int id);
         IEnumerable<LogLijst> GetLogLijstsOVM(string id);
         IEnumerable<LogLijst> GetLogLijsten();
+
+        //SCHEDULED DOWNTIME
+        //READ
+        List<ScheduledDownTime> GetScheduledDTByOvm(string OvmId);
+        List<ScheduledDownTime> GetScheduledDT();
+        ScheduledDownTime GetScheduledDTById(int SDTid);
+        //ADD
+        ScheduledDownTime AddScheduledDT(string ovmId, DateTime start, DateTime eind);
+        //REMOVE
+        void RemoveScheduledDT(ScheduledDownTime SDT);
     }
 }

@@ -845,6 +845,7 @@ namespace StageSSPortal.Controllers.api
         {
             DateTime start_time=makeDateTime(start);
             DateTime end_time = makeDateTime(end);
+            mgr.AddScheduledDT(id, start_time, end_time); 
             // DateTime start_time = Convert.ToDateTime(start);
             //DateTime end_time = Convert.ToDateTime(eind);
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
