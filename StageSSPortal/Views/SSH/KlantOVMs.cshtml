@@ -126,6 +126,7 @@
 
     function StopVM() {
         var t;
+        var duur;
         var naam;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
@@ -141,9 +142,10 @@
                 })
         });
         //document.location.reload();
+        duur = prompt("Hoelang wilt u de server offline halen? ( in minuten)");
         naam = "Stop";
         CreateLog(t, naam);
-        DownTime(t);
+        DownTime(t,duur);
         showVmNames();
 
     };
@@ -276,6 +278,51 @@
         //$("#KlantAccCheck").hide();
 
     }
+    function ScheduleDownTime() {
+       // alert("tzt");
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                id = $(this).attr('id');
+                alert(id);
+            }
+        })
+        var date1;
+        date1 = $("tr#sched").children("td").children("input#date").val();
+        //alert(date1);
+        var date2;
+        date2 = $("tr#sched2").children("td").children("input#date").val();
+       // alert(date2);
+        var time1;
+        time1 = $("tr#sched").children("td").children("input#time").val();
+        var time2 = $("tr#sched2").children("td").children("input#time").val();
+
+        var startdate;
+        startdate = (date1.replace("-", "", )).replace("-", "");
+        var starttime;
+        starttime = time1.replace(":", "");
+        //alert(startdate + starttime);
+        //var sec;
+        //sec= tijd + "00";
+        //alert(sec);
+        //alert(time1+time2);
+        //var begin = startdate + sec;
+        //var date2 = $("tr#sched2").children("td").children("input#date").val();
+        //var time2 = $("tr#sched2").children("td").children("input#time").val();
+        var einddate = (date2.replace("-", "", )).replace("-", "");
+        var eindtime = time2.replace(":", "");
+        var begin = startdate + starttime;
+        //alert(begin);
+        //var sec2 = tijd + "00";
+        var eind = einddate +eindtime;
+       $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/" + begin + "/" + eind + "/", {
+       //  $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/'" + tests + "'/'" + teste + "'/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done
+            (function (data) {
+            })
+    }
 </script>
 
 @*<div>
@@ -322,6 +369,12 @@
                         <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
                     </td>
                 </tr>
+               
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
+                    </td>
+                </tr>
             </table>
         </div>
         <div>
@@ -332,13 +385,23 @@
                         <button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
                     </td>
                 </tr>
+
+            </table>
+        </div>
+        <div >
+            <table>
+                <tr><th>Downtime</th></tr>
+                <tr><td>Geef hieronder start en einde van de geplande downtime in. (dd/mm/yyyy hh:mm::ss)</td></tr>
+                @*<tr id="sched"><td><input type="text" id="start" placeholder="start" /></td><td><input type="text" id="stop" placeholder="eind" /></td></tr>*@
+                <tr id="sched"><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+                <tr id="sched2"><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
                 <tr>
                     <td>
-                        <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
+                        <button class=" btn btn-default" id="btn" onclick="ScheduleDownTime()">Schedule Downtime</button>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
-</div>
+    </div>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@

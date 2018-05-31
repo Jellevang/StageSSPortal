@@ -167,6 +167,9 @@
     function StopVM() {
         var t;
         var naam;
+        var duur;
+      
+
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
@@ -180,9 +183,11 @@
                 (function (data) {
                 })
         });
+        duur = prompt("Hoelang wilt u de server offline halen? ( in minuten)");
+
         //document.location.reload();
         naam = "Stop";
-        DownTime(t);
+        DownTime(t,duur);
         CreateLog(t, naam);
         showVmNames();
 

@@ -1,5 +1,6 @@
-﻿function DownTime(id) {
-    $.ajax("/api/Klant/SSH/PushDowntime/" + id + "/", {
+﻿function DownTime(id, duur) {
+    alert(id +"  "+duur)
+    $.ajax("/api/Klant/SSH/PushDowntime/" + id + "/"+ duur + "/", {
         type: "GET",
         dataType: "json"
     })
@@ -8,3 +9,4 @@
         })
 
 };
+
