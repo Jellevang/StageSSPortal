@@ -32,7 +32,11 @@ namespace StageSSPortal.Controllers.api
         SSHManager sshmgr=new SSHManager();
         public SSHController()
         {
-            userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
+            var test = User.Identity.Name;
+            if (User.Identity.Name.Trim() != null && User.Identity.Name.Trim() !="")
+            {
+                userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
+            }
             Admin admin = admgr.GetAdmin();
             string passwd = admgr.GetPasswd(admin);
             string trimpasswd=passwd.Replace("'", "");
@@ -840,7 +844,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/Klant/SSH/ScheduleDowntime/{id}/{start}/{end}")]
-        [Authorize(Roles = "Admin , Klant")]
+        [Authorize(Roles = "Admin , Klant, KlantAccount")]
         public IHttpActionResult ScheduleDowntime(string id, string start, string end)
         {
             DateTime start_time=makeDateTime(start);
@@ -858,6 +862,16 @@ namespace StageSSPortal.Controllers.api
             IRestResponse response = client.Execute(request);
             return Ok();
         }
+        [HttpGet]
+        [Route("api/Klant/SSH/GetDowntime/{id}")]
+        [Authorize(Roles = "Admin , Klant, KlantAccount")]
+        public IHttpActionResult GetDowntime(string id)
+        {
+            List<ScheduledDownTime> LijstDT = mgr.GetScheduledDTByOvm(id);
+            List<ScheduledDownTime> Order = (LijstDT.OrderBy(x => x.Start)).OrderBy(x=>x.Eind).ToList();
+            return Ok(Order);
+        }
+        
         public DateTime makeDateTime(string ToFormat)
         {
             string date = ToFormat.Substring(0, 8);

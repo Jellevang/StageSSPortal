@@ -75,11 +75,8 @@ body {
     pointer-events: all;
 }
 
-input {
-    opacity: 0;
-    position: absolute;
-    left: -99999px;
-}
+
+
 
 input:checked + label {
     order: 1;

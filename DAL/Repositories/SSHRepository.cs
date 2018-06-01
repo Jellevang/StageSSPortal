@@ -230,6 +230,7 @@ namespace DAL.Repositories
         public void DeleteScheduledDT(ScheduledDownTime SDT)
         {
             ctx.ScheduleTDLijst.Remove(ReadScheduledDTById(SDT.id));
+            ctx.SaveChanges();
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using BL;
+using Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace StageSSPortal.Controllers.api
     public class KlantController : ApiController
     {
         KlantManager mgr = new KlantManager();
+        SSHManager sshMgr = new SSHManager();
 
         [HttpPost]
         [Route("api/klant/AddKlant/{naam}/{email}/{afk}")]
@@ -19,6 +21,23 @@ namespace StageSSPortal.Controllers.api
         {
             mgr.AddKlant(naam, email, afk);
             return Ok();
+
+        }
+        [HttpGet]
+        [Route("api/Klant/GetKlantOvms/{klantEmail}")]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult GetOvmsKlant(string klantEmail)
+        {
+            try
+            {
+                Klant k = mgr.GetKlant(klantEmail);
+                List<OracleVirtualMachine> ovms = sshMgr.GetKlantOVMs(k.KlantId).ToList() ;
+                return Ok(ovms);
+            }
+            catch
+            {
+                return Ok();
+            }
 
         }
     }

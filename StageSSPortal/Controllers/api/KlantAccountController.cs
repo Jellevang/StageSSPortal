@@ -26,7 +26,7 @@ namespace StageSSPortal.Controllers.api
         }
         [HttpGet]
         [Route("api/Klant/OvmLijst/{klantId}/{ovmId}")]
-        [Authorize(Roles = "Klant")]
+        [Authorize(Roles = "Admin, Klant")]
         public IHttpActionResult GetOvmLijst(int klantId, string ovmId)
         {
             try
@@ -43,7 +43,7 @@ namespace StageSSPortal.Controllers.api
 
         [HttpGet]
         [Route("api/Klant/OvmLijstKlant/{klantEmail}/{ovmId}")]
-        [Authorize(Roles = "Klant")]
+        [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult GetOvmLijstKlant(string klantEmail, string ovmId)
         {
             try
@@ -60,7 +60,7 @@ namespace StageSSPortal.Controllers.api
         }
         [HttpGet]
         [Route("api/Klant/OvmsKlant/{klantEmail}")]
-        [Authorize(Roles = "Klant")]
+        [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult GetOvmsKlant(string klantEmail)
         {
             try

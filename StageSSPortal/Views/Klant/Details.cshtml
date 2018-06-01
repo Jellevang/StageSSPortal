@@ -5,6 +5,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadVMs();
+    });
+    function loadVMs() {
+        if ($("#VmCheck").css("display") != "none") {
+            $("#VmCheck").find("tr:not(:first)").remove();
+            $("#VmCheck").hide();
+        }
+        var klantEmail = '@Model.Email';
+        //alert(klantEmail)
+        $.ajax("/api/Klant/GetKlantOvms/" + klantEmail + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                //alert(data)
+
+                if (data == "") {
+                    //alert('heuj');
+                
+                    $.ajax("/api/Klant/OvmsKlant/" + klantEmail + "/", {
+                        type: "GET",
+                        dataType: "json"
+                    })
+                        .done(function (data) {
+                            $("#VmCheck").show();
+                            $.each(data, function (index, value) {
+                                $("#VmCheck").append("<tr class=VmRow><td class=" + value.OvmId + " value=" + "'" + value.Naam + "'>" + value.Naam + "</tr></td>");//+"<br />");
+                            })
+
+                        });
+                } else {
+                    $("#VmCheck").show();
+                    $.each(data, function (index, value) {
+                        //   alert(value);
+                        $("#VmCheck").append("<tr class=VmRow><td class=" + value.OvmId + " value=" + "'" + value.Naam + "'>" + value.Naam + "</tr></td>");//+"<br />");
+                    })
+                }
+            });
+    }
+</script>
 <h2>Details</h2>
 @Scripts.Render("~/Scripts/changePass.js")
 
@@ -32,7 +74,11 @@
         </tr>
     </table>
 </div>
-
+<div id="KlantDiv">
+    <table id="VmCheck" style="display:none">
+        <tr><th>Virtuele machines</th></tr>
+    </table>
+</div>
 <p>
     @Html.ActionLink("Aanpassen", "Edit", new { id = Model.KlantId }) |
     @Html.ActionLink("Terug naar lijst", "Index")

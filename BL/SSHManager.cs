@@ -190,7 +190,8 @@ namespace BL
             {
                 OvmId = ovmId,
                 Eind = eind,
-                Start = start
+                Start = start,
+                Gebruikersnaam="test"
 
             };
             return repo.CreateScheduledDT(SDT);

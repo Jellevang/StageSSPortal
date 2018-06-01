@@ -9,13 +9,22 @@
         position: inherit;
         opacity: 100;
     }
+    input#time {
+        opacity: 100;
+        position: inherit;
+    }
+
+    input#date {
+        opacity: 100;
+        position: inherit;
+    }
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-
     $(document).ready(function () {
-        //alert("test");
-        $("select").hide();
+       // alert("test");
+        //$("select").hide();
         $("#btnSave").hide();
         $(".checkToeg").change(function () {
             if ($("input.checkToeg").prop('checked', true)) {
@@ -36,6 +45,7 @@
             $(this).css("color", "rgb(244, 78, 66)");
             showInfo();
         });
+        //alert("heheh");
         getServersDB();
     });
 
@@ -51,6 +61,7 @@
             })
     }
     function getServersDB() {
+        //alert("test");
         $.ajax("/api/ssh/getServersDB", {
             type: "GET",
             dataType: "json"
@@ -61,7 +72,18 @@
                 })
                 $("#servers").css("display", "block");
                 $("#servers").change(function () {
-                    showVmNames($("#servers").val());
+                    if ($("div#CheckBox").css("display", "block")) {
+                        if ($("input.checkNietToeg").prop('checked')== true) {
+                            showVmNames($("#servers").val(), false);
+                        } 
+                        if ($("input.checkToeg").prop('checked') == true) {
+                                showVmNames($("#servers").val(), true);
+                            }
+                                                
+                    } else {
+                        showVmNames($("#servers").val());
+                        $("div#CheckBox").css("display", "block");
+                    }                    
                 })
             })
     }
@@ -82,8 +104,8 @@
     }
     function showVmNames(id, bool) {
         //alert(id+bool);
-        $("div#btns").hide();
-        $("#btnSave").hide();
+        //$("div#btns").hide();
+        //$("#btnSave").hide();
         $(".VmRow").css("background-color", "inherit");
         // alert("vmnames");
         if ($("#ShowVms").css("display") != "none") {
@@ -162,8 +184,9 @@
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
+                checkDowntime(t, false)
             })
-    };
+    }
     function StopVM() {
         var t;
         var naam;
@@ -192,7 +215,7 @@
         showVmNames();
 
 
-    };
+    }
     function RestartVM() {
         alert("Dit kan 30 seconden duren");
         var t;
@@ -237,7 +260,7 @@
         CreateLog(t, naam);
         showVmNames();
 
-    };
+    }
     function CreateLog(id, naam) {
         $.ajax("/api/ssh/CreateNaam/" + id + "/" + naam, { //+ $(this).val(), {
             type: "GET",
@@ -253,7 +276,7 @@
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 t = $(this).attr('id');
-                alert(k);
+                //alert(k);
                 $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
                     type: "GET",
                     dataType: "json"
@@ -261,9 +284,11 @@
 
                     .done
                     (function (data) {
-                        $("div#btns").hide();
-                        $("#btnSave").hide();
+                        //$("div#btns").hide();
+                        //$("#btnSave").hide();
                         $("#" + data).css('background-color', 'inherit');
+                        $("#" + data).css('color', "rgb(244, 78, 66)");
+                        showInfo();
                     })
             }
         });
@@ -273,8 +298,8 @@
         }
         if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
             showVmNames($("#servers").val(), false);
-        }
 
+        }
     }
     $('#Dialog-Box').dialog({
         autoOpen: false,
@@ -286,7 +311,57 @@
         loadKlanten();
         $('#Dialog-Box').dialog('open');
     }
+    function checkDowntime(id, bool) {
+        if (bool == true) {
+            alert("Downtime succesvol toegevoegd!")
+        }
+        if ($("#DivDownTime").css("display") != "none") {
+            $("table#Downtime").find("tr:not(:first)").remove();
+        } $("#DivDownTime").css("display", "none");
 
+
+        $.ajax("/api/Klant/SSH/GetDowntime/" + id + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("table#Downtime").append("<tr><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
+                })
+            })
+        $("#DivDownTime").css("display", "block");
+    }
+    //////////=====================================================================
+
+    function ScheduleDownTime() {
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                id = $(this).attr('id');
+            }
+        })
+        var date1;
+        date1 = $("tr#sched").children("td").children("input#date").val();
+        var date2;
+        date2 = $("tr#sched2").children("td").children("input#date").val();
+        var time1;
+        time1 = $("tr#sched").children("td").children("input#time").val();
+        var time2 = $("tr#sched2").children("td").children("input#time").val();
+        var startdate;
+        startdate = (date1.replace("-", "", )).replace("-", "");
+        var starttime;
+        starttime = time1.replace(":", "");
+        var einddate = (date2.replace("-", "", )).replace("-", "");
+        var eindtime = time2.replace(":", "");
+        var begin = startdate + starttime;
+
+        var eind = einddate + eindtime;
+        $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/" + begin + "/" + eind + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done
+        checkDowntime(id, true);
+    }
 
 </script>
 
@@ -303,7 +378,7 @@
 
         </select>
     </div>
-    <div>
+    <div id="CheckBox" style="display:none">
         <input class="checkToeg" type="checkbox" id="CheckKlant" name="chk_Klant" value="Toegewezen">Toegewezen vms
         <input class="checkNietToeg" type="checkbox" id="CheckKlant" name="chk_Klant" value="Niet-Toegewezen">Niet-Toegewezen vms
 
@@ -319,7 +394,23 @@
     <div id="VmInfo" style="display:none">
         <table id="ListVmInfo" class="table"></table>
     </div>
+   
     <div id="btns" style="display:none">
+        <div id="Dialog-Box">
+            <table id="klantTable">
+                <tr><th>Klant</th></tr>
+                <tr>
+                    <td>
+                        <select class="form-control" id="klantenlijst"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <div>
             <table>
                 <tr><th>Virtuele Machine</th></tr>
@@ -340,22 +431,24 @@
                 </tr>
             </table>
         </div>
-
-        <div id="Dialog-Box">
-            <table id="klantTable">
-                <tr><th>Klant</th></tr>
+        <div>
+            <table>
+                <tr><th>Downtime</th></tr>
+                <tr><td>Geef hieronder start en einde van de geplande downtime in.</td></tr>
+                <tr id="sched"><td><label>Begintijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+                <tr id="sched2"><td><label>Eindtijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
                 <tr>
                     <td>
-                        <select class="form-control" id="klantenlijst"></select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+                        <button class=" btn btn-default" id="btn" onclick="ScheduleDownTime()">Schedule Downtime</button>
                     </td>
                 </tr>
             </table>
         </div>
-
+        <div id="DivDownTime" style="display:none">
+            <table id="Downtime">
+                <thead>Geplande Downtime</thead>
+                <tr><th>Begin</th><th>Eind</th></tr>
+            </table>
+        </div>
     </div>
 </div>

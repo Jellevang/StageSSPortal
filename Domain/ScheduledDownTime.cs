@@ -17,5 +17,7 @@ namespace Domain
         public DateTime Start { get; set; }
         [Required]
         public DateTime Eind { get; set; }
+        [Required]
+        public string Gebruikersnaam { get; set; }
     }
 }

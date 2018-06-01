@@ -35,7 +35,7 @@
     function SaveVms() {
         var t;
 
-       // var k = ('Model.Email');
+         var k = ('@Model.Email');
          //alert(k);
         $(".VmRow").each(function () {
             //alert($(this).children("td").find("#CheckVM").val());
@@ -43,7 +43,7 @@
                 t = $(this).children("td").find("#CheckVM").val();
                 //alert("woeho" + t)
                 //k = $(".klantEmail").val()
-                alert(t)
+               // alert(t)
                 $.ajax("/api/SSH/KlantOVM/" + t + "/" + k + "/", {
                     type: "GET",
                     dataType: "json"

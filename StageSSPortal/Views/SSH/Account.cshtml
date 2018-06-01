@@ -35,7 +35,7 @@
     });
 
     function showVmNames() {
-        $("#btns").hide();
+       // $("#btns").hide();
         if ($("#ShowVms").css("display") != "none") {
             $("table#LijstServerVMs").find("tr:not(:first)").remove();
             $("#VmInfo").css("display", "none");
@@ -93,6 +93,8 @@
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
                 $("#btns").show();
+                checkDowntime(t, false)
+
 
             })
     };
@@ -112,12 +114,13 @@
                 (function (data) {
                 })
         });
+        duur = prompt("Hoelang wilt u de server offline halen? ( in minuten)");
         //document.location.reload();
         naam = "Stop";
         CreateLog(t, naam);
-        DownTime(t);
+        DownTime(t, duur);
         showVmNames();
-
+        showInfo();
     };
     function RestartVM() {
         alert("Dit kan 30 seconden duren");
@@ -139,6 +142,7 @@
         naam = "Restart";
         CreateLog(t, naam);
         showVmNames($("#servers").val());
+        showInfo();
 
     }
     function StartVM() {
@@ -162,6 +166,7 @@
         naam = "Start"
         CreateLog(t, naam);
         showVmNames();
+        showInfo();
 
     };
     function CreateLog(id, naam) {
@@ -172,6 +177,57 @@
             .done
             (function (data) {
             })
+    }
+
+    function checkDowntime(id, bool) {
+        if (bool == true) {
+            alert("Downtime succesvol toegevoegd!")
+        }
+        if ($("#DivDownTime").css("display") != "none") {
+            $("table#Downtime").find("tr:not(:first)").remove();
+        } $("#DivDownTime").css("display", "none");
+
+
+        $.ajax("/api/Klant/SSH/GetDowntime/" + id + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("table#Downtime").append("<tr><td>"+value.Gebruikersnaam+"</td><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
+                })
+            })
+        $("#DivDownTime").css("display", "block");
+    }
+
+    function ScheduleDownTime() {
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                id = $(this).attr('id');
+            }
+        })
+        var date1;
+        date1 = $("tr#sched").children("td").children("input#date").val();
+        var date2;
+        date2 = $("tr#sched2").children("td").children("input#date").val();
+        var time1;
+        time1 = $("tr#sched").children("td").children("input#time").val();
+        var time2 = $("tr#sched2").children("td").children("input#time").val();
+        var startdate;
+        startdate = (date1.replace("-", "", )).replace("-", "");
+        var starttime;
+        starttime = time1.replace(":", "");
+        var einddate = (date2.replace("-", "", )).replace("-", "");
+        var eindtime = time2.replace(":", "");
+        var begin = startdate + starttime;
+
+        var eind = einddate + eindtime;
+        $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/" + begin + "/" + eind + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done
+        checkDowntime(id, true);
     }
 </script>
 
@@ -220,6 +276,25 @@
                     <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
                 </td>
             </tr>
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr><th>Downtime</th></tr>
+            <tr><td>Geef hieronder start en einde van de geplande downtime in.</td></tr>
+            <tr id="sched"><td><label>Begintijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+            <tr id="sched2"><td><label>Eindtijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+            <tr>
+                <td>
+                    <button class=" btn btn-default" id="btn" onclick="ScheduleDownTime()">Schedule Downtime</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="DivDownTime" style="display:none">
+        <table id="Downtime">
+            <thead>Geplande Downtime</thead>
+            <tr><th>Gebruiker</th><th>Begin</th><th>Eind</th></tr>
         </table>
     </div>
 </div>

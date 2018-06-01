@@ -120,7 +120,7 @@
 
                 $("#KlantAccCheck").show();
                 $("#btns").css("display", "block");
-
+                checkDowntime(t,false)
             })
     };
 
@@ -278,56 +278,62 @@
         //$("#KlantAccCheck").hide();
 
     }
+    function checkDowntime(id, bool) {
+        if (bool == true) {
+            alert("Downtime succesvol toegevoegd!")
+        }
+        if ($("#DivDownTime").css("display") != "none") {
+            $("table#Downtime").find("tr:not(:first)").remove();
+        } $("#DivDownTime").css("display", "none");
+
+
+        $.ajax("/api/Klant/SSH/GetDowntime/" + id + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("table#Downtime").append("<tr><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
+                })
+            })
+        $("#DivDownTime").css("display", "block");
+    }
+    //////////=====================================================================
+
     function ScheduleDownTime() {
-       // alert("tzt");
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
                 id = $(this).attr('id');
-                alert(id);
             }
         })
         var date1;
         date1 = $("tr#sched").children("td").children("input#date").val();
-        //alert(date1);
         var date2;
         date2 = $("tr#sched2").children("td").children("input#date").val();
-       // alert(date2);
         var time1;
         time1 = $("tr#sched").children("td").children("input#time").val();
         var time2 = $("tr#sched2").children("td").children("input#time").val();
-
         var startdate;
         startdate = (date1.replace("-", "", )).replace("-", "");
         var starttime;
         starttime = time1.replace(":", "");
-        //alert(startdate + starttime);
-        //var sec;
-        //sec= tijd + "00";
-        //alert(sec);
-        //alert(time1+time2);
-        //var begin = startdate + sec;
-        //var date2 = $("tr#sched2").children("td").children("input#date").val();
-        //var time2 = $("tr#sched2").children("td").children("input#time").val();
         var einddate = (date2.replace("-", "", )).replace("-", "");
         var eindtime = time2.replace(":", "");
         var begin = startdate + starttime;
-        //alert(begin);
-        //var sec2 = tijd + "00";
-        var eind = einddate +eindtime;
-       $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/" + begin + "/" + eind + "/", {
-       //  $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/'" + tests + "'/'" + teste + "'/", {
+
+        var eind = einddate + eindtime;
+        $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/" + begin + "/" + eind + "/", {
             type: "GET",
             dataType: "json"
         })
             .done
-            (function (data) {
-            })
+        checkDowntime(id, true);
     }
+
+    
+    
 </script>
 
-@*<div>
-        <h1>Beheer Virtuele Machines</h1>
-    </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
 @Scripts.Render("~/Scripts/SSHFunctions.js")
 <div id="scherm">
@@ -336,8 +342,6 @@
         <table id="LijstServerVMs" class="table">
             <tr>
                 <th>Name</th>
-                @*<th>Status</th>*@
-
             </tr>
         </table>
     </div>
@@ -369,7 +373,7 @@
                         <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
                     </td>
                 </tr>
-               
+
                 <tr>
                     <td>
                         <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
@@ -388,13 +392,12 @@
 
             </table>
         </div>
-        <div >
+        <div>
             <table>
                 <tr><th>Downtime</th></tr>
-                <tr><td>Geef hieronder start en einde van de geplande downtime in. (dd/mm/yyyy hh:mm::ss)</td></tr>
-                @*<tr id="sched"><td><input type="text" id="start" placeholder="start" /></td><td><input type="text" id="stop" placeholder="eind" /></td></tr>*@
-                <tr id="sched"><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
-                <tr id="sched2"><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+                <tr><td>Geef hieronder start en einde van de geplande downtime in.</td></tr>
+                <tr id="sched"><td><label>Begintijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+                <tr id="sched2"><td><label>Eindtijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
                 <tr>
                     <td>
                         <button class=" btn btn-default" id="btn" onclick="ScheduleDownTime()">Schedule Downtime</button>
@@ -402,6 +405,12 @@
                 </tr>
             </table>
         </div>
+        <div id="DivDownTime" style="display:none">
+            <table id="Downtime">
+                <thead>Geplande Downtime</thead>
+                <tr><th>Begin</th><th>Eind</th></tr>
+            </table>
+        </div>
     </div>
-    </div>
+</div>
 @*@Scripts.Render("~/Scripts/Ssh/sshScripts.js")*@
