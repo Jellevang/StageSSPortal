@@ -7,7 +7,7 @@ using System.Web.Http;
 using System.Web.Optimization;
 using System.Web.Routing;
 using StageSSPortal.App_Start;
-
+using StageSSPortal.Job;
 
 namespace StageSSPortal
 {
@@ -21,6 +21,7 @@ namespace StageSSPortal
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //JobScheduler.Start();
         }
     }
 }

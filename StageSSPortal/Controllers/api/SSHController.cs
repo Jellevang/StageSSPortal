@@ -32,7 +32,11 @@ namespace StageSSPortal.Controllers.api
         SSHManager sshmgr=new SSHManager();
         public SSHController()
         {
-            userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
+            var test = User.Identity.Name;
+            if (User.Identity.Name.Trim() != null && User.Identity.Name.Trim() !="")
+            {
+                userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
+            }
             Admin admin = admgr.GetAdmin();
             string passwd = admgr.GetPasswd(admin);
             string trimpasswd=passwd.Replace("'", "");
@@ -285,7 +289,8 @@ namespace StageSSPortal.Controllers.api
                 model.Add(vmModel);
             }
 
-            return Ok(model);
+            var orderModel = model.OrderBy(c => c.Name);
+            return Ok(orderModel);
         }
         [HttpGet]
         [Route("api/SSH/VmsDB/{id}")]
@@ -310,7 +315,8 @@ namespace StageSSPortal.Controllers.api
                 model.Add(vmModel);
             }
 
-            return Ok(model);
+            var orderModel = model.OrderBy(c => c.Name);
+            return Ok(orderModel);
         }
 
         public List<String> GetVmState(List<string> LijstServerVMs, SshClient ssh)
@@ -372,7 +378,6 @@ namespace StageSSPortal.Controllers.api
         [Route("api/SSH/KlantOVM/{id}/{k}")]
         [Authorize(Roles = "Admin")]
         public IHttpActionResult SetKlantOVM(string id,string k)
-
         {
             List<OVMLijst> lijsten = mgr.GetLijstOvm(id).ToList();
             if(lijsten != null)
@@ -381,6 +386,10 @@ namespace StageSSPortal.Controllers.api
             }
             OracleVirtualMachine ovm = mgr.GetOVMById(id);
             Klant klant = klantmgr.GetKlantByName(k);
+            if (klant == null)
+            {
+                klant = klantmgr.GetKlant(k);
+            }
             ovm.KlantId = klant.KlantId;
             mgr.ChangeOVM(ovm);
             return Ok(ovm.OvmId);
@@ -463,7 +472,8 @@ namespace StageSSPortal.Controllers.api
             }
             else
             {
-                return Ok(model);
+                var orderModel = model.OrderBy(c => c.Name);
+                return Ok(orderModel);
             } 
         }
         [HttpGet]
@@ -818,21 +828,65 @@ namespace StageSSPortal.Controllers.api
         }
 
         [HttpGet]
-        [Route("api/Klant/SSH/PushDowntime/{id}")]
+        [Route("api/Klant/SSH/PushDowntime/{id}/{duur}")]
         [Authorize(Roles = "Admin , Klant, KlantAccount")]
-        public IHttpActionResult PushDowntime(string id)
+        public IHttpActionResult PushDowntime(string id,int duur)
         {
             DateTime start_time = DateTime.Now;
-            DateTime end_time = DateTime.Now.AddMinutes(30);
+            DateTime end_time = DateTime.Now.AddMinutes(duur);
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
             OracleVirtualMachine ovm = mgr.GetOVM(id);
             var client = new RestClient("https://api.monitoring.be/command/prod/op5command");
             var request = new RestRequest(Method.POST);
             request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\": \""+ovm.Naam+"\",\n  \"start_time\":"+start_time+",\n  \"end_time\":"+end_time+",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for "+ovm.Naam+" by "+user.Naam+"\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
+            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\": \"TEST-"+ovm.Naam+"\",\n  \"start_time\":"+start_time+",\n  \"end_time\":"+end_time+",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for "+ovm.Naam+" by "+user.Naam+"\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/Klant/SSH/ScheduleDowntime/{id}/{start}/{end}")]
+        [Authorize(Roles = "Admin , Klant, KlantAccount")]
+        public IHttpActionResult ScheduleDowntime(string id, string start, string end)
+        {
+            DateTime start_time=makeDateTime(start);
+            DateTime end_time = makeDateTime(end);
+            mgr.AddScheduledDT(id, start_time, end_time,User.Identity.Name); 
+            // DateTime start_time = Convert.ToDateTime(start);
+            //DateTime end_time = Convert.ToDateTime(eind);
+            Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
+            OracleVirtualMachine ovm = mgr.GetOVM(id);
+            var client = new RestClient("https://api.monitoring.be/command/prod/op5command");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");
+            request.AddHeader("content-type", "application/json");
+            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\": \"TEST-" + ovm.Naam + "\",\n  \"start_time\":" + start_time + ",\n  \"end_time\":" + end_time + ",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for " + ovm.Naam + " by " + user.Naam + "\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return Ok();
+        }
+        [HttpGet]
+        [Route("api/Klant/SSH/GetDowntime/{id}")]
+        [Authorize(Roles = "Admin , Klant, KlantAccount")]
+        public IHttpActionResult GetDowntime(string id)
+        {
+            List<ScheduledDownTime> LijstDT = mgr.GetScheduledDTByOvm(id);
+            List<ScheduledDownTime> Order = (LijstDT.OrderBy(x => x.Start)).OrderBy(x=>x.Eind).ToList();
+            return Ok(Order);
+        }
+        
+        public DateTime makeDateTime(string ToFormat)
+        {
+            string date = ToFormat.Substring(0, 8);
+            string time = ToFormat.Substring(8, 4);
+            string year = date.Substring(0, 4);
+            string month= date.Substring(4, 2);
+            string day= date.Substring(6, 2);
+            string hour = time.Substring(0, 2);
+            string minutes = time.Substring(2, 2);
+            string datetime = day + "/" + month + "/" + year + " " + hour + ":" + minutes + ":00";
+            DateTime FullDate = Convert.ToDateTime(datetime);
+            return FullDate;
         }
     }
 }

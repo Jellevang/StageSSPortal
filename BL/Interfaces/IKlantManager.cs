@@ -5,7 +5,7 @@ namespace BL
 {
     public interface  IKlantManager
     {
-        Klant AddKlant(string naam, string email);
+        Klant AddKlant(string naam, string email, string afkorting);
         void ChangeKlantprofiel(Klant p);
         void ChangeKlant(Klant Klant);
         void BlockKlant(int id);

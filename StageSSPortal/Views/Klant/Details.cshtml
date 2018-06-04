@@ -5,61 +5,51 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<h2>Details</h2>
-@Scripts.Render("~/Scripts/changePass.js")
 <script>
     $(document).ready(function () {
         loadVMs();
-
     });
-
     function loadVMs() {
         if ($("#VmCheck").css("display") != "none") {
             $("#VmCheck").find("tr:not(:first)").remove();
             $("#VmCheck").hide();
-
         }
-        //var t;
-        //$("tr.VmRow").each(function () {
-        //    if ($(this).css('color') == "rgb(244, 78, 66)") {
-        //        t = $(this).attr('id');
-        $.ajax("/api/SSH/GetAllVmsDB", {
+        var klantEmail = '@Model.Email';
+        //alert(klantEmail)
+        $.ajax("/api/Klant/GetKlantOvms/" + klantEmail + "/", {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
-                $("#VmCheck").show();
-                $.each(data, function (index, value) {
-                    //searchOvmLijst(value,t)
-                    if (value.KlantId == 0) {
-                        $("#VmCheck").append("<tr class=VmRow><td><input type=checkbox id=CheckVM name=chk_VM  value=" + "'" + value.id + "'" + "/>" + value.Name + "</tr></td>");//+"<br />");
-                    }
-                })
+                //alert(data)
+
+                if (data == "") {
+                    //alert('heuj');
+                
+                    $.ajax("/api/Klant/OvmsKlant/" + klantEmail + "/", {
+                        type: "GET",
+                        dataType: "json"
+                    })
+                        .done(function (data) {
+                            $("#VmCheck").show();
+                            $.each(data, function (index, value) {
+                                $("#VmCheck").append("<tr class=VmRow><td class=" + value.OvmId + " value=" + "'" + value.Naam + "'>" + value.Naam + "</tr></td>");//+"<br />");
+                            })
+
+                        });
+                } else {
+                    $("#VmCheck").show();
+                    $.each(data, function (index, value) {
+                        //   alert(value);
+                        $("#VmCheck").append("<tr class=VmRow><td class=" + value.OvmId + " value=" + "'" + value.Naam + "'>" + value.Naam + "</tr></td>");//+"<br />");
+                    })
+                }
             });
     }
-    function SaveVms() {
-        var t;
-        var k = ($("td#naam").text()).trim();
-        // alert(k);
-        $(".VmRow").each(function () {
-            //alert($(this).children("td").find("#CheckVM").val());
-            if ($(this).children("td").find("#CheckVM").is(":checked")) {
-                t = $(this).children("td").find("#CheckVM").val();
-                //alert("woeho" + t)
-                //k = $(".klantEmail").val()
-                $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
-                    type: "GET",
-                    dataType: "json"
-                })
-                    .done(function (data) {
-                    window.location.href = "/Klant/Index";
-                    })
-            }
-
-        });
-        //loadVMs();
-    }
 </script>
+<h2>Details</h2>
+@Scripts.Render("~/Scripts/changePass.js")
+
 <div>
     <h4>Klant</h4>
     <hr />
@@ -88,9 +78,6 @@
     <table id="VmCheck" style="display:none">
         <tr><th>Virtuele machines</th></tr>
     </table>
-    <div>
-        <button class="btn btn-default" onclick="SaveVms()">Save</button>
-    </div>
 </div>
 <p>
     @Html.ActionLink("Aanpassen", "Edit", new { id = Model.KlantId }) |

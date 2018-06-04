@@ -164,7 +164,7 @@ namespace StageSSPortal.Controllers
                     }
                 }
                 ModelState.AddModelError("", "Ongeldige inlog gegevens");
-           TempData["Melding"] = "Passwoord vervalt binnen 7 dagen!";
+          // TempData["Melding"] = "Passwoord vervalt binnen 7 dagen!";
             return View(model);
             
             

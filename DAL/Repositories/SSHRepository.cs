@@ -207,5 +207,31 @@ namespace DAL.Repositories
         {
             return ctx.LogLijsten.AsEnumerable();
         }
+
+        public List<ScheduledDownTime> ReadScheduledDTByOvm(string OvmId)
+        {
+            return ctx.ScheduleTDLijst.Where(s => s.OvmId.Contains(OvmId)).ToList();
+        }
+        public ScheduledDownTime ReadScheduledDTById(int SDTid)
+        {
+            return ctx.ScheduleTDLijst.Where(s => s.id == SDTid).FirstOrDefault() ;
+        }
+
+        public List<ScheduledDownTime> ReadScheduledDT()
+        {
+            return ctx.ScheduleTDLijst.ToList();
+        }
+        public ScheduledDownTime CreateScheduledDT(ScheduledDownTime SDT)
+        {
+            ctx.ScheduleTDLijst.Add(SDT);
+            ctx.SaveChanges();
+            return SDT;
+        }
+        public void DeleteScheduledDT(ScheduledDownTime SDT)
+        {
+            ctx.ScheduleTDLijst.Remove(ReadScheduledDTById(SDT.id));
+            ctx.SaveChanges();
+        }
+
     }
 }

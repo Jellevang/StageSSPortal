@@ -14,6 +14,7 @@ namespace Domain
         public string Email { get; set; }
         public bool IsGeblokkeerd { get; set; }
         public bool IsKlantAccount { get; set; }
+        public string Afkorting { get; set; }
         public Klant HoofdKlant { get; set; }
     }
 }

@@ -168,5 +168,38 @@ namespace BL
         {
             return repo.ReadLogLijsten();
         }
+
+        public List<ScheduledDownTime> GetScheduledDTByOvm(string OvmId)
+        {
+            return repo.ReadScheduledDTByOvm(OvmId);
+        }
+
+        public List<ScheduledDownTime> GetScheduledDT()
+        {
+            return repo.ReadScheduledDT();
+        }
+
+        public ScheduledDownTime GetScheduledDTById(int SDTid)
+        {
+            return repo.ReadScheduledDTById(SDTid);
+        }
+
+        public ScheduledDownTime AddScheduledDT(string ovmId, DateTime start, DateTime eind,string email)
+        {
+            ScheduledDownTime SDT = new ScheduledDownTime()
+            {
+                OvmId = ovmId,
+                Eind = eind,
+                Start = start,
+                Gebruikersnaam=email
+
+            };
+            return repo.CreateScheduledDT(SDT);
+        }
+
+        public void RemoveScheduledDT(ScheduledDownTime SDT)
+        {
+            repo.DeleteScheduledDT(SDT);
+        }
     }
 }

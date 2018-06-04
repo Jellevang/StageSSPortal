@@ -16,17 +16,18 @@ namespace BL
             repo = new KlantRepository();
             repoUser = new GebruikerRepository();
         }
-        public Klant AddKlant(string naam, string email)
+        public Klant AddKlant(string naam, string email, string afkorting)
         {
-        Klant k = new Klant()
+            Klant k = new Klant()
             {
                 Naam = naam,
                 Email = email,
-                IsGeblokkeerd = false
-                
+                IsGeblokkeerd = false,
+                Afkorting=afkorting
             };
+           
             Klant created = repo.CreateKlant(k);
-            repo.UpdateKlant(created);
+           // repo.UpdateKlant(created);
             repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.Klant);
             return k;
         }
@@ -39,6 +40,7 @@ namespace BL
         public void ChangeKlant(Klant Klant)
         {
             Gebruiker user = repoUser.FindGebruiker(Klant.KlantId);
+            
             user.Email = Klant.Email;
             user.Naam = Klant.Naam;
             user.UserName = Klant.Email;
@@ -159,7 +161,7 @@ namespace BL
                 IsGeblokkeerd = false
             };
             Klant created = repo.CreateKlant(k);
-            repo.UpdateKlant(created);
+            //repo.UpdateKlant(created);
             repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.KlantAccount);
             return k;
         }

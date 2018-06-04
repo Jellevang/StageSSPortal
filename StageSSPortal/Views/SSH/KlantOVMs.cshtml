@@ -30,6 +30,9 @@
     hr {
         border-top: none;
     }
+    table#ListVmInfo {
+        margin-left: 2%;
+    }
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -78,7 +81,7 @@
     function addVM(vm) {
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
-    function showInfo() {
+    function showInfo(id) {
         $("#btns").css("display", "none");
         $("#KlantAccCheck").hide();
         $("#ListVmInfo").find("tr").remove();
@@ -91,25 +94,56 @@
                 $(this).prop("checked", false);
             }
         })
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //t = $(this).children("td:first").attr("id");
-                t = $(this).attr('id');
-                //t.replace(".", "-");
-                //alert(t);
-            }
-        })
+        if (id == null || id == "") {
+            $("tr.VmRow").each(function () {
+                if ($(this).css('color') == "rgb(244, 78, 66)") {
+                    //t = $(this).children("td:first").attr("id");
+                    t = $(this).attr('id');
+                    //t.replace(".", "-");
+                    //alert(t);
+                }
+            })
+        } else {
+            t = id;
+        }
         $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
                 var text = data;
-                //alert(text);
-                //alert("test");
                 $.each(data, function (index, value) {
-                    $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+                    //alert(value)
+                    if (index == 0) {
+                        $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> id: " + value + "</td> </tr>");
+
+                    } else {
+                        if (index == 7) {
+                            $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> Klant = " + value + "</td> </tr>");
+                            klant = value;
+                            // alert(klant)
+                        } else {
+                            $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+
+                        }
+
+                    }
                 })
+                $(".VmInfoRow").each(function () {
+                    if ($(this).is(':contains("Running")')) {
+                        $(this).css("color", "green");
+                    } else {
+                        if ($(this).is(':contains("Stopped")')) {
+                            $(this).css("color", "red");
+                        }
+                        else {
+                            if ($(this).is(':contains("Status")')) {
+                                $(this).css("color", "orange");
+                            }
+                        }
+                    }
+                })
+               
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
                 $("input#CheckKlant").each(function () {
@@ -120,12 +154,15 @@
 
                 $("#KlantAccCheck").show();
                 $("#btns").css("display", "block");
+                checkDowntime(t, false);
+                $("tr#" + t).css("color", "rgb(244, 78, 66)");
 
             })
     };
 
     function StopVM() {
         var t;
+        var duur;
         var naam;
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
@@ -141,11 +178,12 @@
                 })
         });
         //document.location.reload();
+        duur = prompt("Hoelang wilt u de server offline halen? ( in minuten)");
         naam = "Stop";
         CreateLog(t, naam);
-        DownTime(t);
+        DownTime(t,duur);
         showVmNames();
-
+        showInfo(t);
     };
     function RestartVM() {
         alert("Dit kan 30 seconden duren");
@@ -167,6 +205,11 @@
         naam = "Restart";
         CreateLog(t, naam);
         showVmNames($("#servers").val());
+        for (var i = 0; i < 100; i++) {
+            if (i == 50) {
+                showInfo(t);
+            }
+        }
 
     }
     function StartVM() {
@@ -190,6 +233,12 @@
         naam = "Start"
         CreateLog(t, naam);
         showVmNames();
+        for (var i = 0; i < 100; i++) {
+            if (i == 50) {
+//                alert(i)
+                showInfo(t);
+            }
+        }
 
     };
     function CreateLog(id, naam) {
@@ -276,11 +325,62 @@
         //$("#KlantAccCheck").hide();
 
     }
+    function checkDowntime(id, bool) {
+        if (bool == true) {
+            alert("Downtime succesvol toegevoegd!")
+        }
+        if ($("#DivDownTime").css("display") != "none") {
+            $("table#Downtime").find("tr:not(:first)").remove();
+        } $("#DivDownTime").css("display", "none");
+
+
+        $.ajax("/api/Klant/SSH/GetDowntime/" + id + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done(function (data) {
+                $.each(data, function (index, value) {
+                    $("table#Downtime").append("<tr><td>" + value.Gebruikersnaam +"</td><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
+                })
+            })
+        $("#DivDownTime").css("display", "block");
+    }
+    //////////=====================================================================
+
+    function ScheduleDownTime() {
+        $("tr.VmRow").each(function () {
+            if ($(this).css('color') == "rgb(244, 78, 66)") {
+                id = $(this).attr('id');
+            }
+        })
+        var date1;
+        date1 = $("tr#sched").children("td").children("input#date").val();
+        var date2;
+        date2 = $("tr#sched2").children("td").children("input#date").val();
+        var time1;
+        time1 = $("tr#sched").children("td").children("input#time").val();
+        var time2 = $("tr#sched2").children("td").children("input#time").val();
+        var startdate;
+        startdate = (date1.replace("-", "", )).replace("-", "");
+        var starttime;
+        starttime = time1.replace(":", "");
+        var einddate = (date2.replace("-", "", )).replace("-", "");
+        var eindtime = time2.replace(":", "");
+        var begin = startdate + starttime;
+
+        var eind = einddate + eindtime;
+        $.ajax("/api/Klant/SSH/ScheduleDowntime/" + id + "/" + begin + "/" + eind + "/", {
+            type: "GET",
+            dataType: "json"
+        })
+            .done
+        checkDowntime(id, true);
+    }
+
+    
+    
 </script>
 
-@*<div>
-        <h1>Beheer Virtuele Machines</h1>
-    </div>*@
 @Scripts.Render("~/Scripts/changePass.js")
 @Scripts.Render("~/Scripts/SSHFunctions.js")
 <div id="scherm">
@@ -289,8 +389,6 @@
         <table id="LijstServerVMs" class="table">
             <tr>
                 <th>Name</th>
-                @*<th>Status</th>*@
-
             </tr>
         </table>
     </div>
@@ -322,6 +420,12 @@
                         <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
                     </td>
                 </tr>
+
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
+                    </td>
+                </tr>
             </table>
         </div>
         <div>
@@ -332,11 +436,26 @@
                         <button class=" btn btn-default" id="btnSave" onclick="SaveKlantAccount()">Save KlantAccounts</button>
                     </td>
                 </tr>
+
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr><th>Downtime</th></tr>
+                <tr><td>Geef hieronder start en einde van de geplande downtime in.</td></tr>
+                <tr id="sched"><td><label>Begintijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
+                <tr id="sched2"><td><label>Eindtijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
                 <tr>
                     <td>
-                        <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
+                        <button class=" btn btn-default" id="btn" onclick="ScheduleDownTime()">Schedule Downtime</button>
                     </td>
                 </tr>
+            </table>
+        </div>
+        <div id="DivDownTime" style="display:none">
+            <table id="Downtime">
+                <thead>Geplande Downtime</thead>
+                <tr><th>Gebruiker</th><th>Begin</th><th>Eind</th></tr>
             </table>
         </div>
     </div>

@@ -109,10 +109,18 @@ namespace StageSSPortal.Controllers
             }
             if (Klant.Email == null || Klant.Email == "")
             {
-                //ModelState.AddModelError("", "Geef een Emailadres in");
                 return View("Create");
             }
+            //if (Klant.Afkorting == null || Klant.Afkorting == "")
+            //{
+            //    ViewBag.Message = "Bent u zeker dat u geen afkorting wilt meegeven?";
+            //    return View("Create");
+            //}
 
+           
+                
+            
+            
             Klant email = mgr.GetKlant(Klant.Email);
             if (email != null)
             {
@@ -134,7 +142,22 @@ namespace StageSSPortal.Controllers
             }
             else
             {
-                Klant = mgr.AddKlant(Klant.Naam, Klant.Email);
+                if (Klant.Afkorting == "" || Klant.Afkorting == null)
+                {
+                    Klant.Afkorting = Klant.Naam.ToUpper();
+                }
+                else {
+                    List<Klant> klanten = mgr.GetKlanten().ToList();
+                    foreach (var k in klanten)
+                    {
+                        if (k.Afkorting.Equals(Klant.Afkorting.ToUpper()))
+                        {
+                            ModelState.AddModelError("", "Afkorting moet uniek zijn");
+                            return View("Create");
+                        }
+                    }
+                }
+                Klant = mgr.AddKlant(Klant.Naam, Klant.Email,Klant.Afkorting.ToUpper());
                 return RedirectToAction("Details", new { id = Klant.KlantId });
             }
 
@@ -213,6 +236,35 @@ namespace StageSSPortal.Controllers
                 }
                 else
                 {
+                    Klant origineel = mgr.GetKlant(Klant.KlantId);
+                    List<Klant> klanten = mgr.GetKlanten().ToList();
+
+                    foreach (var k in mgr.GetKlanten().ToList())
+                    {
+                        if (k.KlantId == origineel.KlantId)
+                        {
+                            klanten.Remove(k);
+                        }
+                    }
+                    foreach (var k in klanten)
+                    {
+                        if (Klant.Naam == k.Naam)
+                        {
+                            ModelState.AddModelError("", "Geef een nieuwe naam op");
+                            return View("Edit");
+                        }
+                        if (Klant.Email == k.Email)
+                        {
+                            ModelState.AddModelError("", "Geef een nieuwe email op");
+                            return View("Edit");
+                        }
+                        if (Klant.Afkorting == k.Afkorting)
+                        {
+                            ModelState.AddModelError("", "Geef een nieuwe afkorting op");
+                            return View("Edit");
+                        }
+                    }
+                    //    mgr.RemoveKlant(origineel.KlantId);
                     mgr.ChangeKlant(Klant);
                 }                
                 return RedirectToAction("Index");
