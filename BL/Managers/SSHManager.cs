@@ -184,14 +184,14 @@ namespace BL
             return repo.ReadScheduledDTById(SDTid);
         }
 
-        public ScheduledDownTime AddScheduledDT(string ovmId, DateTime start, DateTime eind)
+        public ScheduledDownTime AddScheduledDT(string ovmId, DateTime start, DateTime eind,string email)
         {
             ScheduledDownTime SDT = new ScheduledDownTime()
             {
                 OvmId = ovmId,
                 Eind = eind,
                 Start = start,
-                Gebruikersnaam="test"
+                Gebruikersnaam=email
 
             };
             return repo.CreateScheduledDT(SDT);

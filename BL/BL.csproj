@@ -114,16 +114,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GebruikerManager.cs" />
-    <Compile Include="AdminManager.cs" />
-    <Compile Include="IAdminManager.cs" />
-    <Compile Include="IGebruikerManager.cs" />
-    <Compile Include="IKlantManager.cs" />
-    <Compile Include="ISSHManager.cs" />
-    <Compile Include="KlantManager.cs" />
+    <Compile Include="Managers\GebruikerManager.cs" />
+    <Compile Include="Managers\AdminManager.cs" />
+    <Compile Include="Interfaces\IAdminManager.cs" />
+    <Compile Include="Interfaces\IGebruikerManager.cs" />
+    <Compile Include="Interfaces\IKlantManager.cs" />
+    <Compile Include="Interfaces\ISSHManager.cs" />
+    <Compile Include="Managers\KlantManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="signInManager.cs" />
-    <Compile Include="SSHManager.cs" />
+    <Compile Include="Managers\SSHManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

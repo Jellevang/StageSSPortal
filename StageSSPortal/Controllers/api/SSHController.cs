@@ -289,7 +289,8 @@ namespace StageSSPortal.Controllers.api
                 model.Add(vmModel);
             }
 
-            return Ok(model);
+            var orderModel = model.OrderBy(c => c.Name);
+            return Ok(orderModel);
         }
         [HttpGet]
         [Route("api/SSH/VmsDB/{id}")]
@@ -314,7 +315,8 @@ namespace StageSSPortal.Controllers.api
                 model.Add(vmModel);
             }
 
-            return Ok(model);
+            var orderModel = model.OrderBy(c => c.Name);
+            return Ok(orderModel);
         }
 
         public List<String> GetVmState(List<string> LijstServerVMs, SshClient ssh)
@@ -470,7 +472,8 @@ namespace StageSSPortal.Controllers.api
             }
             else
             {
-                return Ok(model);
+                var orderModel = model.OrderBy(c => c.Name);
+                return Ok(orderModel);
             } 
         }
         [HttpGet]
@@ -849,7 +852,7 @@ namespace StageSSPortal.Controllers.api
         {
             DateTime start_time=makeDateTime(start);
             DateTime end_time = makeDateTime(end);
-            mgr.AddScheduledDT(id, start_time, end_time); 
+            mgr.AddScheduledDT(id, start_time, end_time,User.Identity.Name); 
             // DateTime start_time = Convert.ToDateTime(start);
             //DateTime end_time = Convert.ToDateTime(eind);
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());

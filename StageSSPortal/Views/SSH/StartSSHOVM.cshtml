@@ -18,6 +18,9 @@
         opacity: 100;
         position: inherit;
     }
+    table#ListVmInfo{
+        margin-left:2%;
+    }
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -87,7 +90,8 @@
                 })
             })
     }
-    function loadKlanten() {
+    function loadKlanten(klant) {
+        //alert(klant)
         $("select").show();
         $("#btnSave").show();
         $.ajax("/api/SSH/Klanten", {
@@ -97,9 +101,14 @@
             .done(function (data) {
                 $("#klantenlijst").find("option").remove();
                 $("#btns").css("display", "block");
-                $.each(data, function (index, value) {
+                $.each(data, function (index, value) {                    
                     $("#klantenlijst").append("<option class=klant> " + value.Naam + "</option>");
                 })
+                $("#klantenlijst").each(function () {
+                   // alert(klant);
+                    $('option:contains(' + klant + ')').prop('selected', true);
+                })
+                
             });
     }
     function showVmNames(id, bool) {
@@ -129,7 +138,7 @@
                 .done(function (data) {
                     ShowVms(data, bool);
                 })
-        };
+        };        
     }
     function ShowVms(LijstServerVMs, bool) {
         $.each(LijstServerVMs, function (index, value) {
@@ -159,32 +168,68 @@
             }
         }
     }
-    function showInfo() {
+    function showInfo(id) {
+        var klant;
         $('#Dialog-Box').hide();
         $("select#LijstServerVms").hide();
         $("#btns").css("display", "none");
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
         var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                t = $(this).attr('id');
-            }
-        })
+        if (id == null || id == "") {
+
+            $("tr.VmRow").each(function () {
+                if ($(this).css('color') == "rgb(244, 78, 66)") {
+                    t = $(this).attr('id');
+                }
+            })
+        } else {
+            t = id;
+        }
         $.ajax("/api/SSH/info/" + t, {
             type: "GET",
             dataType: "json"
         })
             .done(function (data) {
-                $('#Dialog-Box').show();
-                loadKlanten();
+                
                 var text = data;
                 $.each(data, function (index, value) {
-                    $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+                    //alert(value)
+                    if (index == 0) {
+                        $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> id: " + value + "</td> </tr>");
+
+                    } else {
+                        if (index == 7) {
+                            $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> Klant = " + value + "</td> </tr>");
+                            klant = value;
+                           // alert(klant)
+                        } else {
+                            $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+
+                        }
+
+                    }
                 })
+                $(".VmInfoRow").each(function () {
+                    if ($(this).is(':contains("Running")')) {
+                        $(this).css("color", "green");
+                    } else {
+                        if ($(this).is(':contains("Stopped")')) {
+                            $(this).css("color", "red");
+                        }
+                        else {
+                            if ($(this).is(':contains("Status")')) {
+                                $(this).css("color", "orange");
+                            }
+                        }
+                    }
+                })
+                $('#Dialog-Box').show();
+                loadKlanten(klant);
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
                 checkDowntime(t, false)
+                $("tr#" + t).css("color", "rgb(244, 78, 66)")
             })
     }
     function StopVM() {
@@ -206,13 +251,17 @@
                 (function (data) {
                 })
         });
-        duur = prompt("Hoelang wilt u de server offline halen? ( in minuten)");
-
-        //document.location.reload();
+        duur = prompt("Hoelang wilt u de server in downtime zetten? (in minuten)");
         naam = "Stop";
         DownTime(t,duur);
         CreateLog(t, naam);
-        showVmNames();
+        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }
+        showInfo(t);
 
 
     }
@@ -230,12 +279,20 @@
             })
                 .done
                 (function (data) {
-
                 })
         });
         naam = "Restart";
         CreateLog(t, naam);
-        showVmNames($("#servers").val());
+        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }        for (var i = 0; i < 100; i++) {
+            if (i == 50) {
+                showInfo(t);
+            }
+        }
 
     }
     function StartVM() {
@@ -248,17 +305,28 @@
                 //t.replace(".", "-");
                 // alert(t);
             }
-            $.ajax("/api/ssh/StartVM/" + t, { //+ $(this).val(), {
-                type: "GET",
-                dataType: "json"
-            })
-                .done
-                (function (data) {
+                $.ajax("/api/ssh/StartVM/" + t + "/", { //+ $(this).val(), {
+                    type: "GET",
+                    dataType: "json"
                 })
+                    .done
+                    (function (data) {
+
+                    })
+           
         });
         naam = "Start"
         CreateLog(t, naam);
-        showVmNames();
+        if ($(".checkToeg").is(":checked") && $(".checkNietToeg").is(":checked") == false) {
+            showVmNames($("#servers").val(), true);
+        }
+        if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
+            showVmNames($("#servers").val(), false);
+        }        for (var i = 0; i < 100; i++) {
+            if (i == 50) {
+                showInfo(t);
+            }
+        }
 
     }
     function CreateLog(id, naam) {
@@ -298,7 +366,6 @@
         }
         if ($(".checkToeg").is(":checked") == false && $(".checkNietToeg").is(":checked")) {
             showVmNames($("#servers").val(), false);
-
         }
     }
     $('#Dialog-Box').dialog({
@@ -326,7 +393,7 @@
         })
             .done(function (data) {
                 $.each(data, function (index, value) {
-                    $("table#Downtime").append("<tr><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
+                    $("table#Downtime").append("<tr><td>" + value.Gebruikersnaam +"</td><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
                 })
             })
         $("#DivDownTime").css("display", "block");
@@ -434,7 +501,7 @@
         <div>
             <table>
                 <tr><th>Downtime</th></tr>
-                <tr><td>Geef hieronder start en einde van de geplande downtime in.</td></tr>
+                <tr><td colspan="2">Geef hieronder start en einde van de geplande downtime in.</td></tr>
                 <tr id="sched"><td><label>Begintijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
                 <tr id="sched2"><td><label>Eindtijd</label></td><td><input type="date" id="date"></td><td><input type="time" id="time"></td></tr>
                 <tr>
@@ -447,7 +514,7 @@
         <div id="DivDownTime" style="display:none">
             <table id="Downtime">
                 <thead>Geplande Downtime</thead>
-                <tr><th>Begin</th><th>Eind</th></tr>
+                <tr><th>Gebruiker</th><th>Begin</th><th>Eind</th></tr>
             </table>
         </div>
     </div>

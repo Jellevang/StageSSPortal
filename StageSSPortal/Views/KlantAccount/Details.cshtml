@@ -10,11 +10,15 @@
         loadVMs();
     });
     function loadVMs() {
+       // alert("1")
         if ($("#VmCheck").css("display") != "none") {
             $("#VmCheck").find("tr:not(:first)").remove();
             $("#VmCheck").hide();
         }
-        var klantEmail = '@Model.Email';
+        var klantEmail = ($("td#email").text()).trim();
+        //alert("2")
+        //alert($("td#email").text())
+        alert(klantEmail)
         $.ajax("/api/Klant/OvmsKlant/" + klantEmail+"/", {
             type: "GET",
             dataType: "json"

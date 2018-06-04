@@ -20,6 +20,7 @@ div#VmInfo {
 
 div#btns {
     float: right;
+    margin-right:45% !important;
 }
 div#scherm {
     margin-top: 2%;

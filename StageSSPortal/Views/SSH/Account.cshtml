@@ -20,6 +20,9 @@
     div#btns {
         float: right;
     }
+    table#ListVmInfo {
+        margin-left: 2%;
+    }
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -66,19 +69,24 @@
     function addVM(vm) {
         $("table#LijstServerVMs").append("<tr  class=VmRow id=" + vm.id + ">" + "<td>" + vm.Name + "</td>" /*+ "<td>" + vm.Status + "</td>"*/ + "</tr>");
     }
-    function showInfo() {
+    function showInfo(id) {
         $("#btns").hide();
         $("#ListVmInfo").find("tr").remove();
         $("#VmInfo").css("display", "none");
-        var t;
-        $("tr.VmRow").each(function () {
-            if ($(this).css('color') == "rgb(244, 78, 66)") {
-                //t = $(this).children("td:first").attr("id");
-                t = $(this).attr('id');
-                //t.replace(".", "-");
-                //alert(t);
-            }
-        })
+        if (id == null || id == "") {
+            var t;
+            $("tr.VmRow").each(function () {
+                if ($(this).css('color') == "rgb(244, 78, 66)") {
+                    //t = $(this).children("td:first").attr("id");
+                    t = $(this).attr('id');
+                    //t.replace(".", "-");
+                    //alert(t);
+                }
+            })
+        } else {
+            t = id;
+        }
+        
         $.ajax("/api/SSH/info/" + t, { //+ $(this).val(), {
             type: "GET",
             dataType: "json"
@@ -87,15 +95,43 @@
                 var text = data;
                 //alert(text);
                 //alert("test");
+                var text = data;
                 $.each(data, function (index, value) {
-                    $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+                    //alert(value)
+                    if (index == 0) {
+                        $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> id: " + value + "</td> </tr>");
+
+                    } else {
+                        if (index == 7) {
+                            $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> Klant = " + value + "</td> </tr>");
+                            klant = value;
+                            // alert(klant)
+                        } else {
+                            $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+
+                        }
+
+                    }
+                })
+                $(".VmInfoRow").each(function () {
+                    if ($(this).is(':contains("Running")')) {
+                        $(this).css("color", "green");
+                    } else {
+                        if ($(this).is(':contains("Stopped")')) {
+                            $(this).css("color", "red");
+                        }
+                        else {
+                            if ($(this).is(':contains("Status")')) {
+                                $(this).css("color", "orange");
+                            }
+                        }
+                    }
                 })
                 $("#VmInfo").css("display", "block");
                 $("table#ListVmInfo").find("tr:first").css("font-weight", "bold");
                 $("#btns").show();
-                checkDowntime(t, false)
-
-
+                checkDowntime(t, false);
+                $("tr#" + t).css("color", "rgb(244, 78, 66)");
             })
     };
     function StopVM() {
@@ -120,7 +156,7 @@
         CreateLog(t, naam);
         DownTime(t, duur);
         showVmNames();
-        showInfo();
+        showInfo(t);
     };
     function RestartVM() {
         alert("Dit kan 30 seconden duren");
@@ -142,7 +178,11 @@
         naam = "Restart";
         CreateLog(t, naam);
         showVmNames($("#servers").val());
-        showInfo();
+        for (var i = 0; i < 100; i++) {
+            if (i == 50) {
+                showInfo(t);
+            }
+        }
 
     }
     function StartVM() {
@@ -166,7 +206,11 @@
         naam = "Start"
         CreateLog(t, naam);
         showVmNames();
-        showInfo();
+        for (var i = 0; i < 100; i++) {
+            if (i == 50) {
+                showInfo(t);
+            }
+        }
 
     };
     function CreateLog(id, naam) {

@@ -27,7 +27,7 @@ namespace BL
             };
            
             Klant created = repo.CreateKlant(k);
-            repo.UpdateKlant(created);
+           // repo.UpdateKlant(created);
             repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.Klant);
             return k;
         }
@@ -161,7 +161,7 @@ namespace BL
                 IsGeblokkeerd = false
             };
             Klant created = repo.CreateKlant(k);
-            repo.UpdateKlant(created);
+            //repo.UpdateKlant(created);
             repoUser.CreateGebruiker(email, naam, created.KlantId, RolType.KlantAccount);
             return k;
         }

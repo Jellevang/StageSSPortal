@@ -39,15 +39,10 @@ namespace DAL.Interfaces
         IEnumerable<LogLijst> ReadLogLijstKlant(int gebruikersid);
         IEnumerable<LogLijst> ReadLogLijstOVM(string id);
         IEnumerable<LogLijst> ReadLogLijsten();
-
-        //SCHEDULED DOWNTIME
-        //READ
         List<ScheduledDownTime> ReadScheduledDTByOvm(string OvmId);
         List<ScheduledDownTime> ReadScheduledDT();
         ScheduledDownTime ReadScheduledDTById(int SDTid);
-        //ADD
         ScheduledDownTime CreateScheduledDT(ScheduledDownTime SDT);
-        //REMOVE
         void DeleteScheduledDT(ScheduledDownTime SDT);
 
     }

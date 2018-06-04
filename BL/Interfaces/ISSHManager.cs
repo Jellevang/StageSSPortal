@@ -44,7 +44,7 @@ namespace BL
         List<ScheduledDownTime> GetScheduledDT();
         ScheduledDownTime GetScheduledDTById(int SDTid);
         //ADD
-        ScheduledDownTime AddScheduledDT(string ovmId, DateTime start, DateTime eind);
+        ScheduledDownTime AddScheduledDT(string ovmId, DateTime start, DateTime eind, string email);
         //REMOVE
         void RemoveScheduledDT(ScheduledDownTime SDT);
     }
