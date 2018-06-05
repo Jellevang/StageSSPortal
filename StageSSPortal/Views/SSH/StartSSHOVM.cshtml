@@ -1,5 +1,28 @@
 ﻿@Styles.Render("~/Content/ShowVm.css")
 @Scripts.Render("~/Script/Main/Ovm.js")
+<style>
+    hr {
+        border-top: none;
+    }
+
+    input#CheckKlant {
+        position: inherit;
+        opacity: 100;
+    }
+    input#time {
+        opacity: 100;
+        position: inherit;
+    }
+
+    input#date {
+        opacity: 100;
+        position: inherit;
+    }
+    table#ListVmInfo{
+        margin-left:2%;
+    }
+
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -440,45 +463,42 @@
     </div>
    
     <div id="btns" style="display:none">
-        <div id="options">
-            <div id="Dialog-Box">
-                <table id="klantTable">
-                    <tr><th>Klant</th></tr>
-                    <tr>
-                        <td>
-                            <select class="form-control" id="klantenlijst"></select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div>
-                <table>
-                    <tr><th>Virtuele Machine</th></tr>
-                    <tr>
-                        <td>
-                            <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+        <div id="Dialog-Box">
+            <table id="klantTable">
+                <tr><th>Klant</th></tr>
+                <tr>
+                    <td>
+                        <select class="form-control" id="klantenlijst"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
+                    </td>
+                </tr>
+            </table>
         </div>
-
-        <div id="Downtime">
+        <div>
+            <table>
+                <tr><th>Virtuele Machine</th></tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="StopVM()">Stop VM </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="StartVM()">Start VM </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class=" btn btn-default" id="btn" onclick="RestartVM()">Restart VM </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
             <table>
                 <tr><th>Downtime</th></tr>
                 <tr><td colspan="2">Geef hieronder start en einde van de geplande downtime in.</td></tr>
@@ -490,13 +510,12 @@
                     </td>
                 </tr>
             </table>
-
-            <div id="DivDownTime" style="display:none">
-                <table id="Downtime">
-                    <thead>Geplande Downtime</thead>
-                    <tr><th>Gebruiker</th><th>Begin</th><th>Eind</th></tr>
-                </table>
-            </div>
+        </div>
+        <div id="DivDownTime" style="display:none">
+            <table id="Downtime">
+                <thead>Geplande Downtime</thead>
+                <tr><th>Gebruiker</th><th>Begin</th><th>Eind</th></tr>
+            </table>
         </div>
     </div>
 </div>
