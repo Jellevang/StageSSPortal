@@ -367,7 +367,11 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Klant.js" />
+    <Content Include="Scripts\LogAdmin.js" />
+    <Content Include="Scripts\LogKlant.js" />
     <Content Include="Scripts\Main\Ovm.js" />
+    <Content Include="Scripts\Medewerker.js" />
     <Content Include="Scripts\SSHFunctions.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />

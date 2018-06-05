@@ -5,6 +5,8 @@ namespace DAL.Migrations
     
     public partial class createDatabase : DbMigration
     {
+        //we gebruiken migration om onze databank code first aan te maken dit wilt zeggen dat onze applicatie de databank aanmaakt.
+        //Creert de databank 
         public override void Up()
         {
             CreateTable(
@@ -154,7 +156,7 @@ namespace DAL.Migrations
                 .Index(t => t.Gebruiker_Id);
             
         }
-        
+        //dropt de databank indien gewenst
         public override void Down()
         {
             DropForeignKey("dbo.IdentityUserRole", "Gebruiker_Id", "dbo.Gebruiker");

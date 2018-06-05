@@ -10,6 +10,7 @@ namespace DAL.EF
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public partial class StageSSPortalDbContext : IdentityDbContext<Gebruiker>
     {
+        //DbSet's van ons domain model zodat we deze in onze databank kunnen steken
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Klant> Klanten { get; set; }
         public DbSet<Server> Servers { get; set; }
@@ -18,6 +19,7 @@ namespace DAL.EF
         public DbSet<LogLijst> LogLijsten { get; set; }
         public DbSet<ScheduledDownTime>  ScheduleTDLijst { get; set; }
          
+        //onze zelfgemaakte context met een verwijzing naar onze databank connectie string in web.config en app.config
         public StageSSPortalDbContext() : base("stage")
         {
            //Database.SetInitializer<StageSSPortalDbContext>(new StageSSPortalDbInitializer());
@@ -26,6 +28,7 @@ namespace DAL.EF
 
        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //onze regels voor de databank.
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
@@ -46,8 +49,6 @@ namespace DAL.EF
             modelBuilder.Entity<ScheduledDownTime>().Property(s => s.Eind).IsRequired();
             modelBuilder.Entity<ScheduledDownTime>().Property(s => s.Start).IsRequired();
             modelBuilder.Entity<ScheduledDownTime>().Property(s => s.OvmId).IsRequired();
-
-            //modelBuilder.Entity<KlantAccount>().Property(ka => ka.KlantId).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.Naam).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.KlantId).IsRequired();
             modelBuilder.Entity<OracleVirtualMachine>().Property(o => o.OvmId).IsRequired();
@@ -57,13 +58,9 @@ namespace DAL.EF
             modelBuilder.Entity<LogLijst>().Property(l => l.GebruikerId).IsRequired();
             modelBuilder.Entity<LogLijst>().Property(l => l.OvmId).IsRequired();
             modelBuilder.Entity<LogLijst>().Property(l => l.ActionDate).IsRequired();
-            //modelBuilder.Entity<Klant>().Property(k => k.Afkorting).IsRequired();
             // Identity
             modelBuilder.Entity<IdentityUserRole>().HasKey(i => i.UserId);
             modelBuilder.Entity<IdentityUserLogin>().HasKey(i => i.UserId);
-          //  modelBuilder.Entity<Klant>().HasIndex(k => k.Afkorting).IsUnique();
-
-
         }  
     }
 }

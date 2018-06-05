@@ -40,7 +40,7 @@ namespace DAL.Repositories
 
         public OracleVirtualMachine GetMachineByOvmId(string OvmId)
         {
-            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Equals(OvmId)).FirstOrDefault();
+            OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Contains(OvmId)).FirstOrDefault();
             return ovm;
 
         }
