@@ -4,6 +4,10 @@
     width: 15%;
     float: left;
 }
+div#Downtime{
+    float:right;
+    margin-right:5%;
+}
 hr {
     border-top:none;
 }
@@ -19,13 +23,38 @@ div#VmInfo {
 }
 
 div#btns {
-    float: right;
-    margin-right:45% !important;
+    float: left;
+    width:100%;
+}
+div#options{
+    float:left;
+    margin-left:2%;
 }
 div#scherm {
     margin-top: 2%;
 }
+hr {
+    border-top: none;
+}
 
+input#CheckKlant {
+    position: inherit;
+    opacity: 100;
+}
+
+input#time {
+    opacity: 100;
+    position: inherit;
+}
+
+input#date {
+    opacity: 100;
+    position: inherit;
+}
+
+table#ListVmInfo {
+    margin-left: 2%;
+}
 body {
     /*background: #2d2d2d;
     display: flex;
