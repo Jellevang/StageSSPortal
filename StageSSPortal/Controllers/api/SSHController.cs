@@ -32,10 +32,10 @@ namespace StageSSPortal.Controllers.api
         SSHManager sshmgr=new SSHManager();
         public SSHController()
         {
-            var test = User.Identity.Name;
             if (User.Identity.Name.Trim() != null && User.Identity.Name.Trim() !="")
             {
-                userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
+                userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext()
+                    .Get<AppBuilderProvider>().Get().GetDataProtectionProvider());                          // AppbuilderProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
             }
             Admin admin = admgr.GetAdmin();
             string passwd = admgr.GetPasswd(admin);
@@ -55,7 +55,9 @@ namespace StageSSPortal.Controllers.api
             vmInfo2[0] = vmId;
             for (int i = 0; i < vmLines.Length; i++)
             {
-                if (vmLines[i].Contains("Data:") || vmLines[i].Contains("Status =") || vmLines[i].Contains("Memory") || vmLines[i].Contains("Processors"))
+                if (vmLines[i].Contains("Data:") || 
+                    vmLines[i].Contains("Status =") || 
+                    vmLines[i].Contains("Memory") || vmLines[i].Contains("Processors"))
                 {
                     vmInfo2[j] = vmLines[i];
                     j++;
@@ -110,8 +112,10 @@ namespace StageSSPortal.Controllers.api
                     if (resId.Length != 0)
                     {
                         string[] serverAttributes=serverVMs[i].Split(' ');
-                        serverId = serverAttributes[2].Substring(serverAttributes[2].IndexOf(":") + 1, serverAttributes[2].Length - (serverAttributes[4].IndexOf(":") -1));
-                        serverName = serverAttributes[4].Substring(serverAttributes[4].IndexOf(":") + 1, serverAttributes[4].Length - serverAttributes[4].IndexOf(":") -1);
+                        serverId = serverAttributes[2].Substring(serverAttributes[2].IndexOf(":") + 1
+                            , serverAttributes[2].Length - (serverAttributes[4].IndexOf(":") -1));
+                        serverName = serverAttributes[4].Substring(serverAttributes[4].IndexOf(":") + 1
+                            , serverAttributes[4].Length - serverAttributes[4].IndexOf(":") -1);
                         Server s = new Server();
                         s.ServerNaam = serverName;
                         s.ServersId = serverId;
@@ -665,7 +669,7 @@ namespace StageSSPortal.Controllers.api
                 var orderLogs = logs.OrderByDescending(l => l.ActionDate);
                 if (logs.Count() != 0)
                 {
-                    if (logs.Count() >= 10)//
+                    if (logs.Count() >= 10)
                     {
                         for (int i = 0; i < 10; i++)
                         {
@@ -720,26 +724,50 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Admin , Klant")]
         public IHttpActionResult LogLijstUser(List<LogModel> model)
         {
+            List<LogModel> OrderModel = new List<LogModel>();
             model = new List<LogModel>();
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
             List<LogLijst> logs = mgr.GetLogLijstsKlant(user.GebruikerId).ToList();
-            for (int i = 0; i < logs.Count(); i++)
+            if (logs.Count() != 0)
             {
-                OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
-                LogModel logmodel = new LogModel();
-                logmodel.Gebruiker = user.Email;
-                logmodel.Naam = logs[i].Naam;
-                logmodel.ActionDate = logs[i].ActionDate;
-                logmodel.Ovm = ovm.Naam;
-                model.Add(logmodel);
+                if (logs.Count() >= 10)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Gebruiker = user.Email;
+                        logmodel.Naam = logs[i].Naam;
+                        logmodel.ActionDate = logs[i].ActionDate;
+                        logmodel.Ovm = ovm.Naam;
+                        model.Add(logmodel);
+                    }
+                }
             }
+            else
+            {
+                if (logs.Count() < 10)
+                {
+                    for (int i = 0; i < logs.Count(); i++)
+                    {
+                        OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Gebruiker = user.Email;
+                        logmodel.Naam = logs[i].Naam;
+                        logmodel.ActionDate = logs[i].ActionDate;
+                        logmodel.Ovm = ovm.Naam;
+                        model.Add(logmodel);
+                    }
+                }
+            }        
             if (!model.Any())
             {
                 return Ok(false);
             }
             else
             {
-                return Ok(model);
+                OrderModel = model.OrderByDescending(o => o.ActionDate).ToList(); ;
+                return Ok(OrderModel);
             }
         }
         [HttpGet]
@@ -747,17 +775,39 @@ namespace StageSSPortal.Controllers.api
         [Authorize(Roles = "Klant")]
         public IHttpActionResult LogLijstUser(int id, List<LogModel> model)
         {
+            List<LogModel> OrderModel = new List<LogModel>();
             model = new List<LogModel>();
             Gebruiker user = userManager.GetGebruiker(id);
             List<LogLijst> logs = mgr.GetLogLijstsKlant(user.GebruikerId).ToList();
-            for (int i = 0; i < logs.Count(); i++)
+            if (logs.Count() != 0)
             {
-                OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
-                LogModel logmodel = new LogModel();
-                logmodel.Naam = logs[i].Naam;
-                logmodel.ActionDate = logs[i].ActionDate;
-                logmodel.Ovm = ovm.Naam;
-                model.Add(logmodel);
+                if (logs.Count() >= 10)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Naam = logs[i].Naam;
+                        logmodel.ActionDate = logs[i].ActionDate;
+                        logmodel.Ovm = ovm.Naam;
+                        model.Add(logmodel);
+                    }
+                }
+            }
+            else
+            {
+                if (logs.Count() < 10)
+                {
+                    for (int i = 0; i < logs.Count(); i++)
+                    {
+                        OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
+                        LogModel logmodel = new LogModel();
+                        logmodel.Naam = logs[i].Naam;
+                        logmodel.ActionDate = logs[i].ActionDate;
+                        logmodel.Ovm = ovm.Naam;
+                        model.Add(logmodel);
+                    }
+                }
             }
             if (!model.Any())
             {
@@ -765,7 +815,8 @@ namespace StageSSPortal.Controllers.api
             }
             else
             {
-                return Ok(model);
+                OrderModel = model.OrderByDescending(o => o.ActionDate).ToList(); ;
+                return Ok(OrderModel);
             }
         }
         [HttpGet]
