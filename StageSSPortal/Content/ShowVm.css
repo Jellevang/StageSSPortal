@@ -1,15 +1,14 @@
 ﻿/*body {
 }*/
+/*Namen van Vms*/
 #LijstServerVMs {
     width: 15%;
     float: left;
 }
+/*DownTime*/
 div#Downtime{
     float:right;
     margin-right:5%;
-}
-hr {
-    border-top:none;
 }
 .VmRow td:hover {
     color: blue;
@@ -17,15 +16,13 @@ hr {
 .pointerCursor {
     cursor: pointer;
 }
-div#VmInfo {
-    float: left;
-    position: relative;
-}
 
+/*Klant/Vm knoppen + Downtime*/
 div#btns {
     float: left;
     width:100%;
 }
+/*Klant/VM knoppen*/
 div#options{
     float:left;
     margin-left:2%;
@@ -37,11 +34,13 @@ hr {
     border-top: none;
 }
 
+/*(NIET-)Toegewezen VMS*/
 input#CheckKlant {
     position: inherit;
     opacity: 100;
 }
 
+/*SCHEDULED DOWNTIME*/
 input#time {
     opacity: 100;
     position: inherit;
@@ -52,6 +51,11 @@ input#date {
     position: inherit;
 }
 
+/*VMInfo*/
+div#VmInfo {
+    float: left;
+    position: relative;
+}
 table#ListVmInfo {
     margin-left: 2%;
 }
@@ -68,7 +72,7 @@ body {
     font-family: sans-serif;
     color: #FFF;*/
 }
-
+/*KIES KLANT SELECTION*/
 .select {
     display: flex;
     flex-direction: column;
@@ -116,25 +120,25 @@ input:checked + label {
     position: relative;
 }
 
-    input:checked + label:after {
-        content: '';
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid white;
-        position: absolute;
-        right: 10px;
-        top: calc(50% - 2.5px);
-        pointer-events: none;
-        z-index: 3;
-    }
+input:checked + label:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    position: absolute;
+    right: 10px;
+    top: calc(50% - 2.5px);
+    pointer-events: none;
+    z-index: 3;
+}
 
-    input:checked + label:before {
-        position: absolute;
-        right: 0;
-        height: 40px;
-        width: 40px;
-        content: '';
-        background: #666;
-    }
+input:checked + label:before {
+    position: absolute;
+    right: 0;
+    height: 40px;
+    width: 40px;
+    content: '';
+    background: #666;
+}
