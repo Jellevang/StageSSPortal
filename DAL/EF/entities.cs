@@ -5,6 +5,7 @@ namespace DAL.EF
 {
     public partial class StageSSPortalDbContext
     {
+        //Een overide van de SaveChanges methode zodat deze exceptions kan opvangen indien er iets misloopt.
         public override int SaveChanges()
         {
             try

@@ -13,13 +13,15 @@ namespace DAL.Migrations
 
     internal sealed class Configuration : DbMigrationsConfiguration<DAL.EF.StageSSPortalDbContext>
     {
+        //Migrations configuratie
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
             ContextKey = "DAL.EF.StageSSPortalDbContext";
         }
-
+        //seed methode om testdata in de databank te steken 
+        //Let op niet Gebruiken om te deployen
         protected override void Seed(DAL.EF.StageSSPortalDbContext context)
         {
             List<String> emails = new List<string>();

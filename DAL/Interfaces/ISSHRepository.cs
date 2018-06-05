@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
+    //Deze methodes worden uitgewerkt in de SSHRepository. De interface dient ervoor om te verzekeren dat alle methodes hier gedeclareerd zeker worden uitgewerkt. 
     public interface ISSHRepository
     {
         OracleVirtualMachine AddMachine(OracleVirtualMachine ovm);
