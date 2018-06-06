@@ -48,21 +48,6 @@ namespace StageSSPortal.Controllers
 
             return View(klanten);
         }
-
-        // POST
-        [Route("Admin/Klant/Invite")]
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public ActionResult Invite(Klant Klant)
-        {
-            if (ModelState.IsValid)
-            {
-                //Klant = mgr.InviteKlant(Klant.Email);
-                return RedirectToAction("Details", new { id = Klant.KlantId });
-            }
-            return View();
-        }
-
         [Route("Admin/Klant/Create")]
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
@@ -70,33 +55,20 @@ namespace StageSSPortal.Controllers
 
             return View();
         }
-
         //// POST
         [Route("Admin/Klant/Create")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Create(Klant Klant, FormCollection collection)
-        {
-            
+        {            
             if (Klant.Naam == null || Klant.Naam == "")
             {
-               // ModelState.AddModelError("", "Geef een gebruikersnaam in");
                 return View("Create");
             }
             if (Klant.Email == null || Klant.Email == "")
             {
                 return View("Create");
             }
-            //if (Klant.Afkorting == null || Klant.Afkorting == "")
-            //{
-            //    ViewBag.Message = "Bent u zeker dat u geen afkorting wilt meegeven?";
-            //    return View("Create");
-            //}
-
-           
-                
-            
-            
             Klant email = mgr.GetKlant(Klant.Email);
             if (email != null)
             {
@@ -240,7 +212,6 @@ namespace StageSSPortal.Controllers
                             return View("Edit");
                         }
                     }
-                    //    mgr.RemoveKlant(origineel.KlantId);
                     mgr.ChangeKlant(Klant);
                 }                
                 return RedirectToAction("Index");

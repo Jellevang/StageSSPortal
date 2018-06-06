@@ -368,7 +368,6 @@
     <Content Include="Views\KlantAccount\Edit.cshtml" />
     <Content Include="Views\KlantAccount\Index.cshtml" />
     <Content Include="Views\KlantAccount\Klanten.cshtml" />
-    <Content Include="Views\KlantAccount\Profiel.cshtml" />
     <Content Include="Views\KlantAccount\Unblock.cshtml" />
     <Content Include="Views\Klant\Home.cshtml" />
     <Content Include="Views\SSH\Index.cshtml" />

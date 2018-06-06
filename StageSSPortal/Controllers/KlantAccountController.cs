@@ -34,45 +34,6 @@ namespace StageSSPortal.Controllers
             IEnumerable<Klant> Klanten = mgr.GetKlantenAccounts(k);
             return View(Klanten);
         }
-
-        // GET: Klant-informatie
-        [Route("KlantAccount/Profiel/")]
-        [Authorize(Roles = "KlantAccount")]
-        public ActionResult Profiel()
-        {
-            var user = userManager.FindById(User.Identity.GetUserId());
-            ViewBag.Id = user.GebruikerId;
-            return View();
-        }
-
-
-
-        [Route("Klant/Profiel/Create")]
-        [Authorize(Roles = "KlantAccount")]
-        [HttpPost]
-        public ActionResult CreateProfiel(Klant Klant, FormCollection collection)
-        {
-            WebImage image = WebImage.GetImageFromRequest();
-            byte[] toPutInDb = image.GetBytes();
-            //Klant.Logo = toPutInDb;
-            return RedirectToAction("Details", new { id = Klant.KlantId });
-        }
-
-
-        // POST
-        [Route("Admin/Klant/Invite")]
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public ActionResult Invite(Klant Klant)
-        {
-            if (ModelState.IsValid)
-            {
-                //Klant = mgr.InviteKlant(Klant.Email);
-                return RedirectToAction("Details", new { id = Klant.KlantId });
-            }
-            return View();
-        }
-
         [Route("Klant/KlantAccount/Create")]
         [Authorize(Roles = "Klant")]
         public ActionResult Create()
@@ -106,9 +67,7 @@ namespace StageSSPortal.Controllers
             {
                 Klant = mgr.AddKlantAccount(Klant.Naam, Klant.Email, k);
                 return RedirectToAction("Details", new { id = Klant.KlantId });
-            }
-
-            
+            }  
         }
 
         [Route("Klant/KlantAccount/Delete/{id}")]
