@@ -37,14 +37,15 @@ function checkForVms() {
         })
 }
 function getServersDB() {
-    //alert("test");
     $.ajax("/api/ssh/getServersDB", {
         type: "GET",
         dataType: "json"
     })
         .done(function (data) {
             $.each(data, function (index, value) {
-                $("#servers").append("<option class='" + value.ServersId + "'value='" + value.Id + "' > " + value.ServerNaam + "</option > ");
+                $("#servers").append("<option class='" + value.ServersId
+                    + "'value='" + value.Id + "' > "
+                    + value.ServerNaam + "</option > ");
             })
             $("#servers").css("display", "block");
             $("#servers").change(function () {
@@ -85,11 +86,7 @@ function loadKlanten(klant) {
         });
 }
 function showVmNames(id, bool) {
-    //alert(id+bool);
-    //$("div#btns").hide();
-    //$("#btnSave").hide();
     $(".VmRow").css("background-color", "inherit");
-    // alert("vmnames");
     if ($("#ShowVms").css("display") != "none") {
         $("table#LijstServerVMs").find("tr:not(:first)").remove();
         $("#VmInfo").css("display", "none");
@@ -101,7 +98,6 @@ function showVmNames(id, bool) {
         })
             .done(function (data) {
                 ShowVms(data, bool);
-                //alert(bool);
             })
     } else {
         $.ajax("/api/SSH/vmsDB/" + id + "/", {
@@ -405,7 +401,6 @@ function ScheduleDownTime() {
 
 ///////////DOWNTIME=============================================================
 function DownTime(id, duur) {
-    alert(id +"  "+duur)
     $.ajax("/api/Klant/SSH/PushDowntime/" + id + "/"+ duur + "/", {
         type: "GET",
         dataType: "json"

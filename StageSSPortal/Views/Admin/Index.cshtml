@@ -45,7 +45,7 @@
         var passwd;
         while (passwd == "" || passwd == null) {
             passwd = prompt("Geef het password");
-            alert(passwd);
+            //alert(passwd);
         }
         $.ajax("/api/SSH/InsertPasswd/" + "'" + passwd + "'" + "/", {
             type: "POST",
@@ -65,17 +65,11 @@
         }).done(function (data) {
             $.each(data, function (index, value) {
                 if (value.KlantId == 0) {
-                   // alert(value.id + " "+value.KlantId)
-                    redirect = true;
-                    //alert("Er zijn machines die nog moeten worden toegewezen!")
-
-                    //OpenDialog();
-                    //$("div#Dialog-box").append("<label>" + value.Naam + "</label>")
+                    redirect = true;               
                 }
             })
             if (redirect == true) {
                 alert("Er zijn machines die nog moeten worden toegewezen!")
-                //window.location.href = "/SSH/StartSSHOVM";
             }
         })
     }

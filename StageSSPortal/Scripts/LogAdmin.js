@@ -11,11 +11,11 @@
         $(this).css("color", "rgb(244, 78, 66)");
         ShowLogsKlant();
     });
-    //$(".AdminRow").delegate("tr", "click", function () {
-    //    $(".AdminRow").css("color", "rgb(0, 0, 0)");
-    //    $(this).css("color", "rgb(244, 78, 66)");
-    //    ShowLogsAdmin();
-    //});
+    $(".AdminRow").delegate("tr", "click", function () {
+        $(".AdminRow").css("color", "rgb(0, 0, 0)");
+        $(this).css("color", "rgb(244, 78, 66)");
+       ShowLogsAdmin();
+    });
     //$("select").hide();
     getServersDB();
     $("select").hide();
@@ -60,7 +60,7 @@ function getServersDB() {
 
 //=============KLANTEN===================
 function ShowLogsAdmin() {
-    //alert("heheh")
+    alert("heheh")
     $(".VmRow").css("color", "rgb(0, 0, 0)");
     $.ajax("/api/Klant/SSH/LogLijstUser", {
         type: "GET",
