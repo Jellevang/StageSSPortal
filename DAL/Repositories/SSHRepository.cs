@@ -18,39 +18,41 @@ namespace DAL.Repositories
         {
             ctx = new StageSSPortalDbContext();
         }
-
+        //Deze Methode voegt een Oracle Virtueel Machine toe aan de databank.
         public OracleVirtualMachine AddMachine(OracleVirtualMachine ovm)
         {
             ctx.OracleVirtualMachines.Add(ovm);
             ctx.SaveChanges();
             return ovm;
         }
-
+        //Deze Methode verwijdert een Oracle Virtueel Machine uit de databank.
         public void DeleteMachine(OracleVirtualMachine ovm)
         {
             ctx.OracleVirtualMachines.Remove(ovm);
             ctx.SaveChanges();
         }
-
+        //Deze Methode haalt een Oracle Virtueel Machine uit de databank op aan de hand van een id.
         public OracleVirtualMachine GetMachine(int id)
         {
             OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Find(id);
             return ovm;
         }
-
+        //Deze Methode haalt een Oracle Virtueel Machine uit de databank op aan de hand van de Oracle Virtueel Machine id.
         public OracleVirtualMachine GetMachineByOvmId(string OvmId)
         {
             OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Contains(OvmId)).FirstOrDefault();
             return ovm;
 
         }
+        //Deze Methode haalt alle Oracle Virtueel Machines uit de databank.
         public IEnumerable<OracleVirtualMachine> ReadMachines()
         {
             return ctx.OracleVirtualMachines.AsEnumerable();
         }
+        //Deze Methode haalt een Oracle Virtueel Machine uit de databank op aan de hand van de Oracle Virtueel Machine id.
+        //andere syntax mss verwijder
         public OracleVirtualMachine GetMachine(string id)
         {
-            //OracleVirtualMachine ovm = ctx.OracleVirtualMachines.Where(o => o.OvmId.Equals(id)).FirstOrDefault();
             List<OracleVirtualMachine> ovms = ReadMachines().ToList();
             OracleVirtualMachine ovm = new OracleVirtualMachine();
             for (int i = 0; i < ovms.Count(); i++)
@@ -64,6 +66,7 @@ namespace DAL.Repositories
             }
             return ovm;
         }
+        //mss verwijder
         public OracleVirtualMachine GetMachineById(string id)
         {
 
