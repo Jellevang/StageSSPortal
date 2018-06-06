@@ -22,19 +22,11 @@ namespace StageSSPortal.Controllers
         private SignInManager _signInManager;
         private GebruikerManager _userManager;
         private readonly IKlantManager mgr = new KlantManager();
-
         public AccountController()
         {
             _userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilerProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
             _signInManager = SignInManager.Create(_userManager, System.Web.HttpContext.Current.GetOwinContext());
         }
-
-        /*public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }*/
-
         public SignInManager SignInManager
         {
             get { return _signInManager; }
@@ -43,7 +35,6 @@ namespace StageSSPortal.Controllers
                 _signInManager = value;
             }
         }
-
         public GebruikerManager UserManager
         {
             get { return _userManager; }
@@ -52,8 +43,6 @@ namespace StageSSPortal.Controllers
                 _userManager = value;
             }
         }
-
-
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -70,7 +59,6 @@ namespace StageSSPortal.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
         //
         // POST: /Account/Login
         [HttpPost]
@@ -81,8 +69,7 @@ namespace StageSSPortal.Controllers
             if (!ModelState.IsValid)
             {
                 return View(model);
-            }
-            
+            }           
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user != null)
                 {
@@ -94,14 +81,12 @@ namespace StageSSPortal.Controllers
                         mgr.BlockKlant(user.GebruikerId);
                         ModelState.AddModelError("", "Uw passwoord is expired. Contacteer uw admin.");
                         return View("Login");
-
                     }
                 if (user.LastPasswordChangedDate.AddDays(7) < DateTime.Now && user.Rol != RolType.Admin)
                 {
                     //mgr.BlockKlant(user.GebruikerId);
                     ViewBag.Melding = "Passwoord vervalt binnen 7 dagen!";
                     return View(model);
-
                 }
                 if (user.Toegestaan == false)
                     {
@@ -125,7 +110,6 @@ namespace StageSSPortal.Controllers
                                     returnUrl = "~/Home/Index";
                                     return RedirectToLocal(returnUrl);
                                 }
-
                              }
                             if (user.Rol == RolType.Admin)
                             {
@@ -138,8 +122,7 @@ namespace StageSSPortal.Controllers
                                 {
                                     returnUrl = "~/Admin/Index";
                                     return RedirectToLocal(returnUrl);
-                                }
-                            
+                                }                           
                             }
                             if (user.MustChangePassword == true)
                             {
@@ -150,8 +133,7 @@ namespace StageSSPortal.Controllers
                             {
                                 returnUrl = "~/Klant/Home";
                                 return RedirectToLocal(returnUrl);
-                            }
-                        
+                            }                      
                         case SignInStatus.LockedOut:
                             return View("Lockout");
                         case SignInStatus.RequiresVerification:
@@ -165,11 +147,8 @@ namespace StageSSPortal.Controllers
                 }
                 ModelState.AddModelError("", "Ongeldige inlog gegevens");
           // TempData["Melding"] = "Passwoord vervalt binnen 7 dagen!";
-            return View(model);
-            
-            
+            return View(model); 
         }
-
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -199,7 +178,6 @@ namespace StageSSPortal.Controllers
 
             base.Dispose(disposing);
         }
-
         #region Helpers
         private const string XsrfKey = "XsrfId";
 
