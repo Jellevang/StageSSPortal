@@ -7,6 +7,7 @@ using Domain;
 
 namespace BL
 {
+    //Deze methodes worden uitgewerkt in de SSHManager. De interface dient ervoor om te verzekeren dat alle methodes hier gedeclareerd zeker worden uitgewerkt. 
     public interface ISSHManager
     {
         OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId, int serverId);

@@ -49,30 +49,6 @@ namespace StageSSPortal.Controllers
             return View(klanten);
         }
 
-        // GET: Klant-informatie
-        [Route("Klant/Profiel/")]
-        [Authorize(Roles = "Klant")]
-        public ActionResult Profiel()
-        {
-            var user = userManager.FindById(User.Identity.GetUserId());
-            ViewBag.Id = user.GebruikerId;
-            return View();
-        }
-       
-
-
-        [Route("Klant/Profiel/Create")]
-        [Authorize(Roles = "Klant")]
-        [HttpPost]
-        public ActionResult CreateProfiel(Klant Klant, FormCollection collection)
-        {
-            WebImage image = WebImage.GetImageFromRequest();
-            byte[] toPutInDb = image.GetBytes();
-            //Klant.Logo = toPutInDb;
-            return RedirectToAction("Details", new { id = Klant.KlantId });
-        }
-
-
         // POST
         [Route("Admin/Klant/Invite")]
         [Authorize(Roles = "Admin")]
