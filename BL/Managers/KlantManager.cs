@@ -44,7 +44,7 @@ namespace BL
             repoUser.UpdateGebruiker(user);
             repo.UpdateKlant(Klant);
         }
-        //Deze methode blokeert een klant en de aan hem gelinkte gebruiker zodat deze niet meer kan inloggen.
+        //Deze methode blokkeert een klant en de aan hem gelinkte gebruiker zodat deze niet meer kan inloggen.
         //Indien het een klant (Admin) is wordt de aan hem gelinkte KlantAccounts ook geblokeerd.
         //Indien het een KlantAccount is wordt enkel deze geblokkerd.
         public void BlockKlant(int id)
@@ -82,7 +82,7 @@ namespace BL
                 repo.BlockKlant(id);
             }
         }
-        //Deze methode deblokeert een klant en de aan hem gelinkte gebruiker zodat deze terug kan inloggen.
+        //Deze methode deblokkeert een klant en de aan hem gelinkte gebruiker zodat deze terug kan inloggen.
         //Indien het een klant (Admin) is wordt de aan hem gelinkte KlantAccounts ook geblokeerd.
         //Indien het een KlantAccount is wordt enkel deze gedeblokkerd.
         public void UnblockKlant(int id)
