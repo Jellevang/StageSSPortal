@@ -30,11 +30,6 @@ namespace BL
             OracleVirtualMachine created = repo.AddMachine(ovm);
             return created;
         }
-
-        public OracleVirtualMachine GetOVMByOvmId(string OvmId)
-        {
-            return repo.GetMachineByOvmId(OvmId);
-        }
         public IEnumerable<OracleVirtualMachine> GetOVMsByServer(int id)
         {
             return repo.ReadMachinesByServerId(id);
@@ -42,15 +37,11 @@ namespace BL
 
         public void RemoveOVM(string id)
         {
-            OracleVirtualMachine ovm = repo.GetMachineByOvmId(id);
+            OracleVirtualMachine ovm = repo.GetMachineById(id);
             repo.DeleteMachine(ovm);
         }
 
         public OracleVirtualMachine GetOVM(int id)
-        {
-            return repo.GetMachine(id);
-        }
-        public OracleVirtualMachine GetOVM(string id)
         {
             return repo.GetMachine(id);
         }

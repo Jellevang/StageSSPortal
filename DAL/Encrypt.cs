@@ -14,7 +14,7 @@ namespace DAL
         static readonly string PasswordHash = "P@@Sw0rd";
         static readonly string SaltKey = "S@LT&KEY";
         static readonly string VIKey = "@1B2c3D4e5F6g7H8";
-
+        //Deze methode gebruiken we om het OVM passwoord te encrypten.
         public static string EncryptString(string plainText)
         {
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
@@ -38,6 +38,7 @@ namespace DAL
             }
             return Convert.ToBase64String(cipherTextBytes);
         }
+        //Deze methode gebruiken we om het OVM passwoord te decrypten.
         public static string DecryptString(string encryptedText)
         {
             byte[] cipherTextBytes = Convert.FromBase64String(encryptedText);

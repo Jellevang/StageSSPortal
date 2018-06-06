@@ -886,7 +886,7 @@ namespace StageSSPortal.Controllers.api
             DateTime start_time = DateTime.Now;
             DateTime end_time = DateTime.Now.AddMinutes(duur);
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
-            OracleVirtualMachine ovm = mgr.GetOVM(id);
+            OracleVirtualMachine ovm = mgr.GetOVMById(id);
             var client = new RestClient("https://api.monitoring.be/command/prod/op5command");
             var request = new RestRequest(Method.POST);
             request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");
@@ -907,7 +907,7 @@ namespace StageSSPortal.Controllers.api
             // DateTime start_time = Convert.ToDateTime(start);
             //DateTime end_time = Convert.ToDateTime(eind);
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
-            OracleVirtualMachine ovm = mgr.GetOVM(id);
+            OracleVirtualMachine ovm = mgr.GetOVMById(id);
             var client = new RestClient("https://api.monitoring.be/command/prod/op5command");
             var request = new RestRequest(Method.POST);
             request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");

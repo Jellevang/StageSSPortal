@@ -12,12 +12,10 @@ namespace BL
         OracleVirtualMachine AddOVM(string naam, string ovmId, int klantId, int serverId);
         void RemoveOVM(string id);
         OracleVirtualMachine GetOVM(int id);
-        OracleVirtualMachine GetOVM(string naam);
         OracleVirtualMachine GetOVMById(string id);
         IEnumerable<OracleVirtualMachine> GetKlantOVMs(int klantid);
         IEnumerable<OracleVirtualMachine> GetOVMs();
         IEnumerable<OracleVirtualMachine> GetOVMsByServer(int id);
-
         void ChangeOVM(OracleVirtualMachine ovm);
         OVMLijst AddLijst(string ovmid, int klantid);
         OVMLijst GetLijst(int klantid, string ovmid);
@@ -37,7 +35,6 @@ namespace BL
         IEnumerable<LogLijst> GetLogLijstsKlant(int id);
         IEnumerable<LogLijst> GetLogLijstsOVM(string id);
         IEnumerable<LogLijst> GetLogLijsten();
-
         //SCHEDULED DOWNTIME
         //READ
         List<ScheduledDownTime> GetScheduledDTByOvm(string OvmId);
