@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
+    //Deze methodes worden uitgewerkt in de Adminmanager. De interface dient ervoor om te verzekeren dat alle methodes hier gedeclareerd zeker worden uitgewerkt. 
     public interface IAdminManager
     {
         Admin GetAdmin();

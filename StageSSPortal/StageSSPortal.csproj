@@ -358,7 +358,6 @@
     <Content Include="Views\Klant\Edit.cshtml" />
     <Content Include="Views\Klant\Index.cshtml" />
     <Content Include="Views\Klant\Klanten.cshtml" />
-    <Content Include="Views\Klant\Profiel.cshtml" />
     <Content Include="Views\Klant\Unblock.cshtml" />
     <Content Include="Views\Shared\_LayoutKlant.cshtml" />
     <Content Include="Views\Klant\Delete.cshtml" />

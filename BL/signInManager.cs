@@ -13,11 +13,12 @@ namespace BL
             : base(gebruikerManager, authenticationManager)
         {
         }
-
+        //Maakt Claimsidentity aan.
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(Gebruiker user)
         {
             return user.GenerateUserIdentityAsync((GebruikerManager)UserManager);
         }
+        //Maakt een signInManager aan.
         public static SignInManager Create(GebruikerManager manager, IOwinContext context)
         {
             return new SignInManager(manager, context.Authentication);
