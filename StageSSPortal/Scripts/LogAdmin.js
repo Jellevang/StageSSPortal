@@ -60,7 +60,7 @@ function getServersDB() {
 
 //=============KLANTEN===================
 function ShowLogsAdmin() {
-    alert("heheh")
+    //alert("heheh")
     $(".VmRow").css("color", "rgb(0, 0, 0)");
     $.ajax("/api/Klant/SSH/LogLijstUser", {
         type: "GET",
