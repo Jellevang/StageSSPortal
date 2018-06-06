@@ -110,7 +110,7 @@
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
         t = $(this).attr('id');
-    alert(t);
+    //alert(t);
             }
             $.ajax("/api/SSH/StopVM/" + t, {
         type: "GET",
@@ -155,7 +155,7 @@
         //t = $(this).children("td:first").attr("id");
         t = $(this).attr('id');
     //t.replace(".", "-");
-    alert(t);
+    //alert(t);
             }
             $.ajax("/api/SSH/StartVM/" + t, { //+ $(this).val(), {
         type: "GET",

@@ -18,7 +18,7 @@
         var klantEmail = ($("td#email").text()).trim();
         //alert("2")
         //alert($("td#email").text())
-        alert(klantEmail)
+        //alert(klantEmail)
         $.ajax("/api/Klant/OvmsKlant/" + klantEmail+"/", {
             type: "GET",
             dataType: "json"

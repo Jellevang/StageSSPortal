@@ -6,9 +6,12 @@
     });
     loadKlantenAccounts();
     showVmNames();
+    $("#btnSave").css("display", "none");
 });
 
 function showVmNames() {
+    //alert("test");
+    $("#btnSave").css("display", "none");
     $("#btns").hide();
     $("#KlantAccCheck").hide();
 
@@ -117,6 +120,7 @@ function showInfo(id) {
             $("#btns").css("display", "block");
             checkDowntime(t, false);
             $("tr#" + t).css("color", "rgb(244, 78, 66)");
+            $("#btnSave").css("display", "block");
 
         })
 };
@@ -246,6 +250,7 @@ function loadKlantenAccounts() {
         });
 }
 function SaveKlantAccount() {
+    //alert("save");
     var t;
     var k;
     $("input#CheckKlant").each(function () {
@@ -339,7 +344,7 @@ function ScheduleDownTime() {
 }
 ///////////DOWNTIME=============================================================
 function DownTime(id, duur) {
-    alert(id + "  " + duur)
+    //alert(id + "  " + duur)
     $.ajax("/api/Klant/SSH/PushDowntime/" + id + "/" + duur + "/", {
         type: "GET",
         dataType: "json"
