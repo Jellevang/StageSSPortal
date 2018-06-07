@@ -60,7 +60,6 @@ function getServersDB() {
 
 //=============KLANTEN===================
 function ShowLogsAdmin() {
-    //alert("heheh")
     $(".VmRow").css("color", "rgb(0, 0, 0)");
     $.ajax("/api/Klant/SSH/LogLijstUser", {
         type: "GET",
@@ -83,18 +82,23 @@ function ShowLogsKlant() {
             id = $(this).attr('id');
         }
     })
-    // alert(id);
     $.ajax("/api/Klant/SSH/LogLijstKlant/" + id, {
         type: "GET",
         dataType: "json"
     })
         .done(function (data) {
             if (data == false) {
-                $("table#LijstKlantLogs").append("<tr  class=LogRowEmpty><td colspan=4>" + "Nog geen Audits" + "</td></tr>");
+                $("table#LijstKlantLogs")
+                    .append("<tr  class=LogRowEmpty><td colspan=4>" + "Nog geen Audits" + "</td></tr>");
             }
             else {
                 $.each(data, function (index, value) {
-                    $("table#LijstKlantLogs").append("<tr  class=LogRow><td>" + value.Gebruiker + "</td><td>" + value.Ovm + "</td> <td> " + value.Naam + "</td><td>" + value.ActionDate + "</td>" + "</tr>");
+                    $("table#LijstKlantLogs")
+                        .append("<tr  class=LogRow><td>"
+                        + value.Gebruiker + "</td><td>"
+                        + value.Ovm + "</td> <td> "
+                        + value.Naam + "</td><td>"
+                        + value.ActionDate + "</td>" + "</tr>");
                 })
             }
             $("#ShowKlantLogs").show();
@@ -102,17 +106,16 @@ function ShowLogsKlant() {
 }
 function loadKlanten() {
     $("table#LijstKlanten").find("tr:not(:first)").remove();
-    //$("#VmInfo").css("display", "none");
-
     $("select").hide();
-    //alert('test')
     $("#ShowVms").hide();
     $.ajax("/api/SSH/getAdmin", {
         type: "GET",
         dataType: "json"
     })
         .done(function (data) {
-            $("table#LijstKlanten").append("<tr  class=AdminRow id=" + data.AdminId + " onClick=ShowLogsAdmin()>" + "<td>" + data.Email + "</td></tr>");
+            $("table#LijstKlanten").append("<tr  class=AdminRow id="
+                + data.AdminId + " onClick=ShowLogsAdmin()>" + "<td>"
+                + data.Email + "</td></tr>");
             $.ajax("/api/SSH/getKlanten", {
                 type: "GET",
                 dataType: "json"
@@ -121,10 +124,9 @@ function loadKlanten() {
                     ShowKlanten(data)
 
                 })
-            // alert(data);
         });
-
 }
+
 function ShowKlanten(LijstKlanten) {
     // $("table#LijstKlanten").append("<tr  class=VmRow id=" + klant.KlantId + ">" + "<td>" + klant.Email + "</td></tr>");
     $.each(LijstKlanten, function (index, value) {

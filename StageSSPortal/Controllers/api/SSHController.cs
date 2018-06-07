@@ -306,10 +306,6 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult GetVmsDB(List<VmModel> model, int id)
         {
             model = new List<VmModel>();
-            List<string> vmState = new List<string>();
-            string[] vmInfo = new string[8];
-            string[] getVmInfo = new string[8];
-            List<string> LijstServerVMs = new List<string>();
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             ovms = mgr.GetOVMsByServer(id).ToList();
 
@@ -327,26 +323,6 @@ namespace StageSSPortal.Controllers.api
             return Ok(orderModel);
         }
 
-        public List<String> GetVmState(List<string> LijstServerVMs, SshClient ssh)
-        {
-            List<string> vmState = new List<string>();
-                foreach (var vm in LijstServerVMs)
-                {
-                string[] tempState = new string[7];
-                    GetInfo(vm, ssh, tempState);
-                    var regex = @"Status = [A-Z]+";
-                    foreach (var line in tempState)
-                    {
-                        var match = Regex.Match(line, regex);
-                        if (match.Length != 0)
-                        {
-                            string cut = line.Substring(line.IndexOf("=") + 2, line.Length - line.IndexOf("=") - 2);
-                            vmState.Add(cut);
-                        }
-                    }
-                }
-            return vmState;
-        }
 
         [HttpGet]
         [Route("api/SSH/Info/{id}")]
@@ -462,8 +438,6 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult KlantOVMs(List<VmModel> model)
         {
             model = new List<VmModel>();
-            string[] vmInfo = new string[7];
-            string[] getVmInfo = new string[7];
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
             ovms = mgr.GetKlantOVMs(k.KlantId).ToList();
@@ -517,8 +491,6 @@ namespace StageSSPortal.Controllers.api
         public IHttpActionResult AccountOVMs(List<VmModel> model)
         {
             model = new List<VmModel>();
-            string[] vmInfo = new string[7];
-            string[] getVmInfo = new string[7];
             List<OracleVirtualMachine> ovms = new List<OracleVirtualMachine>();
             Klant k = klantmgr.GetKlant(User.Identity.GetUserName());
             List<OVMLijst> lijsten = mgr.GetLijstAccount(k.KlantId).ToList();
@@ -563,18 +535,15 @@ namespace StageSSPortal.Controllers.api
                         LogModel logmodel = new LogModel();
                         logmodel.Naam = orderLogs.ElementAt(i).Naam;
                         logmodel.ActionDate = orderLogs.ElementAt(i).ActionDate;
-                        logmodel.Gebruiker = user.Email;
-                       // if (admin.Email == User.Identity.Name)
-                       // {
-                       //     model.Add(logmodel);
-                       // }
-                       // else
-                       // {
-                            //if (!logmodel.Gebruiker.Equals(admin.Email))
-                            //{
-                                model.Add(logmodel);
-                            //}
-                       // }
+                        try
+                        {
+                            logmodel.Gebruiker = user.Email;                      
+                            model.Add(logmodel);
+                        }
+                        catch
+                        {
+
+                        }
                     }
                 }
                 if (logs.Count() < 10)
@@ -619,7 +588,6 @@ namespace StageSSPortal.Controllers.api
             Klant k = klantmgr.GetKlant(id);
             if(k.IsKlantAccount==false)
             {
-                // List<LogLijst> logs = new List<LogLijst>();
                 var logs = mgr.GetLogLijstsKlant(id).ToList(); ;
                 var orderLogs = logs.OrderByDescending(l => l.ActionDate);
                 List<Klant> medewerkers = klantmgr.GetKlantenAccounts(k).ToList();
@@ -703,7 +671,6 @@ namespace StageSSPortal.Controllers.api
                 }
             }
             OrderModel = model.OrderByDescending(m => m.ActionDate).ToList();
-            //return Ok(OrderModel);
             if (!OrderModel.Any())
             {
                 return Ok(false);
@@ -824,64 +791,7 @@ namespace StageSSPortal.Controllers.api
                 return Ok(OrderModel);
             }
         }
-        [HttpGet]
-        [Route("api/Klant/SSH/LogLijstAll")]
-        [Authorize(Roles = "Admin , Klant")]
-        public IHttpActionResult LogLijstAll(List<LogModel> model)
-        {
-            Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
-            if(user.Rol.Equals(RolType.Admin))
-            {
-                List<LogLijst> logs = mgr.GetLogLijsten().ToList();
-                for (int i = 0; i < logs.Count(); i++)
-                {
-                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
-                    Gebruiker userlog = userManager.GetGebruiker(logs[i].GebruikerId);
-                    LogModel logmodel = new LogModel();
-                    logmodel.Naam = logs[i].Naam;
-                    logmodel.ActionDate = logs[i].ActionDate;
-                    logmodel.Ovm = ovm.Naam;
-                    logmodel.Naam = userlog.Naam;
-                    model.Add(logmodel);
-                }
-            }
-            else
-            {
-                Klant k = klantmgr.GetKlant(user.GebruikerId);
-                List<LogLijst> logs = mgr.GetLogLijstsKlant(k.KlantId).ToList();
-                List<Klant> medewerkers = klantmgr.GetKlantenAccounts(k).ToList();
-                for (int i = 0; i < logs.Count(); i++)
-                {
-                    OracleVirtualMachine ovm = mgr.GetOVMById(logs[i].OvmId);
-                    LogModel logmodel = new LogModel();
-                    logmodel.Naam = logs[i].Naam;
-                    logmodel.ActionDate = logs[i].ActionDate;
-                    logmodel.Ovm = ovm.Naam;
-                    model.Add(logmodel);
-                }
-                for (int i = 0; i < medewerkers.Count(); i++)
-                {
-                    List<LogLijst> logsM = mgr.GetLogLijstsKlant(medewerkers[i].KlantId).ToList();
-                    for (int j = 0; j < logsM.Count(); j++)
-                    {
-                        OracleVirtualMachine ovm = mgr.GetOVMById(logsM[j].OvmId);
-                        LogModel logmodel = new LogModel();
-                        logmodel.Naam = logsM[j].Naam;
-                        logmodel.ActionDate = logsM[j].ActionDate;
-                        logmodel.Ovm = ovm.Naam;
-                        model.Add(logmodel);
-                    }
-                }
-            }
-            if (!model.Any())
-            {
-                return Ok(false);
-            }
-            else
-            {
-                return Ok(model);
-            }
-        }
+        
 
         [HttpGet]
         [Route("api/Klant/SSH/PushDowntime/{id}/{duur}")]
@@ -896,7 +806,12 @@ namespace StageSSPortal.Controllers.api
             var request = new RestRequest(Method.POST);
             request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\": \"TEST-"+ovm.Naam+"\",\n  \"start_time\":"+start_time+",\n  \"end_time\":"+end_time+",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for "+ovm.Naam+" by "+user.Naam+"\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
+            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\"" +
+                ",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\"" +
+                ": \"TEST-"+ovm.Naam+"\",\n  \"start_time\":"+start_time+",\n  \"end_time\":"+end_time+
+                ",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for "
+                +ovm.Naam+" by "+user.Naam+
+                "\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             return Ok();
         }
@@ -909,15 +824,19 @@ namespace StageSSPortal.Controllers.api
             DateTime start_time=makeDateTime(start);
             DateTime end_time = makeDateTime(end);
             mgr.AddScheduledDT(id, start_time, end_time,User.Identity.Name); 
-            // DateTime start_time = Convert.ToDateTime(start);
-            //DateTime end_time = Convert.ToDateTime(eind);
             Gebruiker user = userManager.GetGebruiker(User.Identity.GetUserName());
             OracleVirtualMachine ovm = mgr.GetOVMById(id);
             var client = new RestClient("https://api.monitoring.be/command/prod/op5command");
             var request = new RestRequest(Method.POST);
             request.AddHeader("x-api-key", "ZCeD4fSfqR8GeEJU4jGv43muowCGTybIabBVTpcK");
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": \"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\": {\n  \"host_name\": \"TEST-" + ovm.Naam + "\",\n  \"start_time\":" + start_time + ",\n  \"end_time\":" + end_time + ",\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for " + ovm.Naam + " by " + user.Naam + "\",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
+            request.AddParameter("application/json", "{\"$\":[{\n \"method\": \"POST\",\n \"endpoint\": " +
+                "\"command/SCHEDULE_HOST_DOWNTIME\",\n \"data\":" +
+                " {\n  \"host_name\": \"TEST-" + ovm.Naam + "\",\n  \"start_time\":" + start_time + "," +
+                "\n  \"end_time\":" + end_time + "," +
+                "\n\t\"fixed\": true,\n  \"comment\": \"MONIN-PORTAL: automatic downtime for " + ovm.Naam +
+                " by " + user.Naam + "\"" +
+                ",\n\t\"trigger_id\": 0,\n\t\"duration\": \"none\"\n\t}\n}]\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             return Ok();
         }

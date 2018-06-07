@@ -26,10 +26,8 @@
         
     })
     function HideKlanten() {
-        //alert("test");
         $(".klanten").each(function () {
             var id = $(this).attr("id");
-            //alert("eee");
             $.ajax("/api/SSH/getHoofdAcc/" + id+"", {
                 type: "GET",
                 dataType: "json"
@@ -37,7 +35,6 @@
                 .done(function (data) {
                     var bool = data.IsKlantAccount;
                     if (bool == true) {
-                        //      alert(data.KlantId)
                         $("#" + data.KlantId).hide();
                     }
                     else {
@@ -50,14 +47,11 @@
                         }, function () {
                             $(this).css("background-color", "white");
                         })
-
                     }
-                   // alert(data.IsKlantAccount);
                 })
         }) 
     }
     function ShowKlanten() {
-        // alert(ShowKlantId);
         HideKlanten();
         $.ajax("/api/SSH/getKlantAcc/" + ShowKlantId + "", {
             type: "GET",
@@ -65,7 +59,6 @@
         })
             .done(function (data) {
                 $.each(data, function (index,value) {
-                    //alert(value)
                     $("#" + value.KlantId).css("display","table-row");
 
                 })

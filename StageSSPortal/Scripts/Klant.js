@@ -250,19 +250,14 @@ function loadKlantenAccounts() {
         });
 }
 function SaveKlantAccount() {
-    //alert("save");
     var t;
     var k;
     $("input#CheckKlant").each(function () {
-        //  alert($(this));
         if ($(this).is(":checked")) {
-            //alert("if lus");
             k = $(this).val()
-            // alert(k)
             $("tr.VmRow").each(function () {
                 if ($(this).css('color') == "rgb(244, 78, 66)") {
                     t = $(this).attr('id');
-                    // alert(t+" "+ k)
                     $.ajax("/api/Klant/SSH/lijstcreate/" + t + "/" + k + "/", {
                         type: "GET",
                         dataType: "json"
@@ -287,8 +282,7 @@ function SaveKlantAccount() {
 
     })
     showVmNames();
-    //$("#btns").css("display", "none");
-    //$("#KlantAccCheck").hide();
+
 
 }
 function checkDowntime(id, bool) {

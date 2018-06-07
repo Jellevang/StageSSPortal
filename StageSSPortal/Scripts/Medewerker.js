@@ -9,7 +9,6 @@
 });
 
 function showVmNames() {
-    // $("#btns").hide();
     if ($("#ShowVms").css("display") != "none") {
         $("table#LijstServerVMs").find("tr:not(:first)").remove();
         $("#VmInfo").css("display", "none");
@@ -28,6 +27,7 @@ function showVmNames() {
             }
         })
 };
+
 function ShowVms(LijstServerVMs) {
     $.each(LijstServerVMs, function (index, value) {
         addVM(value);
@@ -209,7 +209,8 @@ function checkDowntime(id, bool) {
     })
         .done(function (data) {
             $.each(data, function (index, value) {
-                $("table#Downtime").append("<tr><td>" + value.Gebruikersnaam + "</td><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
+                $("table#Downtime").append("<tr><td>" + value.Gebruikersnaam
+                    + "</td><td>" + value.Start + "</td><td>" + value.Eind + "</td></tr>");
             })
         })
     $("#DivDownTime").css("display", "block");

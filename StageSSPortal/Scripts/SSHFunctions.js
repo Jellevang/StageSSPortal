@@ -165,15 +165,18 @@ function showInfo(id) {
             $.each(data, function (index, value) {
                 //alert(value)
                 if (index == 0) {
-                    $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> id: " + value + "</td> </tr>");
+                    $("table#ListVmInfo").append(
+                        "<tr class=VmInfoRow> <td> id: " + value + "</td> </tr>");
 
                 } else {
                     if (index == 7) {
-                        $("table#ListVmInfo").append("<tr class=VmInfoRow> <td> Klant = " + value + "</td> </tr>");
+                        $("table#ListVmInfo").append(
+                            "<tr class=VmInfoRow> <td> Klant = " + value + "</td> </tr>");
                         klant = value;
                         // alert(klant)
                     } else {
-                        $("table#ListVmInfo").append("<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
+                        $("table#ListVmInfo").append(
+                            "<tr class=VmInfoRow> <td>" + value + "</td> </tr>");
 
                     }
 
@@ -205,12 +208,9 @@ function StopVM() {
     var t;
     var naam;
     var duur;
-
-
     $("tr.VmRow").each(function () {
         if ($(this).css('color') == "rgb(244, 78, 66)") {
             t = $(this).attr('id');
-            //alert(t);
         }
         $.ajax("/api/SSH/StopVM/" + t, {
             type: "GET",
@@ -231,9 +231,8 @@ function StopVM() {
         showVmNames($("#servers").val(), false);
     }
     showInfo(t);
-
-
 }
+
 function RestartVM() {
     alert("Dit kan 30 seconden duren");
     var t;

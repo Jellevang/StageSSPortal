@@ -128,13 +128,10 @@
 
     function SaveKlantVM() {
         var t;
-        //alert("t=" + t);
-
         var k = $("#klantenlijst").val();
         $("tr.VmRow").each(function () {
             if ($(this).css('color') == "rgb(244, 78, 66)") {
         t = $(this).attr('id');
-    //alert("t=" + t);
     $.ajax("/api/SSH/KlantOVM/" + t + "/" + k, {
         type: "GET",
                     dataType: "json"
@@ -148,6 +145,7 @@
         });
         showVmNames();
     }
+
     function StartVM() {
         var t;
         $("tr.VmRow").each(function () {

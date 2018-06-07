@@ -265,7 +265,6 @@
     </Compile>
     <Compile Include="Helpers\AppBuilderProvider.cs" />
     <Compile Include="Helpers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Helpers\StreamProvider.cs" />
     <Compile Include="Job\DownTimeJob.cs" />
     <Compile Include="Job\JobScheduler.cs" />
     <Compile Include="Models\AccountViewModel.cs" />

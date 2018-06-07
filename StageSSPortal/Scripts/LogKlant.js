@@ -66,20 +66,16 @@ function ShowLogsKlant() {
 function loadKlanten() {
     $("table#LijstKlanten").find("tr:not(:first)").remove();
     $("table#LijstServerVms").find("tr:not(:first)").remove();
-
-    //$("#VmInfo").css("display", "none");
-
-    //alert('test')
     $("#ShowVms").hide();
     $.ajax("/api/SSH/GetKlantenUser", {
         type: "GET",
         dataType: "json"
     })
         .done(function (data) {
-            //alert(data)
             ShowKlanten(data);
         });
 }
+
 function ShowKlanten(LijstKlanten) {
     $.each(LijstKlanten, function (index, value) {
         //alert(value)
@@ -137,9 +133,6 @@ function ShowLogsVM() {
         })
 }
 function showVmNames() {
-    //alert(id+bool);
-    //$("table#LijstServerVms").find("tr:not(:first)").remove();
-
     $("#ShowKlanten").hide();
     $(".VmRow").css("background-color", "inherit");
     if ($("#ShowVms").css("display") != "none") {
@@ -151,10 +144,9 @@ function showVmNames() {
     })
         .done(function (data) {
             ShowVms(data);
-            //alert(bool);
         });
-
 }
+
 function ShowVms(LijstServerVMs) {
     $.each(LijstServerVMs, function (index, value) {
         addVM(value);
