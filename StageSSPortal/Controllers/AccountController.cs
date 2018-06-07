@@ -24,7 +24,8 @@ namespace StageSSPortal.Controllers
         private readonly IKlantManager mgr = new KlantManager();
         public AccountController()
         {
-            _userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilerProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
+            _userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); 
+            // AppbuilerProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
             _signInManager = SignInManager.Create(_userManager, System.Web.HttpContext.Current.GetOwinContext());
         }
         public SignInManager SignInManager
@@ -54,7 +55,6 @@ namespace StageSSPortal.Controllers
                 // LogOff();
                 AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 return RedirectToAction("Login", "Account");
-
             }
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -141,7 +141,7 @@ namespace StageSSPortal.Controllers
                         case SignInStatus.Failure:
 
                         default:
-                            ModelState.AddModelError("", "Invalid login attempt.");
+                            ModelState.AddModelError("", "Ongeldige Login Gegevens.");
                             return View(model);
                     }
                 }

@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNet.Identity
-
 @{
     ViewBag.Title = "Administratorportaal";
 }
@@ -11,8 +10,6 @@
         
        // checkForVms(); 
     });
-
-
     function LoadServers() {
         
         $.ajax("/api/ssh/getServers", {
@@ -104,34 +101,7 @@
     @Scripts.Render("~/Scripts/changePass.js")
     <div class="row">
         <img class="foto" src="~/Content/img/moninfiets.png" />
-        @*<div id="Dialog-Box">
-                <select id="klantenlijst"></select>
-                <button class=" btn btn-default" id="btnSave" onclick="SaveKlantVM()">Save Klant</button>
-            </div>*@
-        @*<div class="col-md-9">
-                <h2>Welkom</h2>
-            </div>*@
-        @*<div class="AdminLink">
-                        <table>
-                            <tr><td>
-                <a href="@Url.Action("Index", "Manage")">Account beheren</a>
-            </td></tr>
-                            <tr><td>
-                <a href="@Url.Action("Create", "Klant")">Klant aanmaken</a>
-            </td></tr>
-                            <tr><td>
-                <a href="@Url.Action("Index", "Klant")">Lijst van klanten</a>
-            </td></tr>
-                            <tr><td>
-                <a href="@Url.Action("StartSSHOVM", "SSH")">Lijst van machines</a>
-            </td></tr>
-                        </table>
-                    </div>*@
-    </div>
 
-    @*<div class="col-lg-12">
-            <p>U bent nu ingelogd als administrator op dit webplatform. </p>
-            <p>U kunt nu navigeren naar de beheerpagina.</p>
-        </div>*@
+    </div>
 
 </div>
