@@ -38,10 +38,8 @@ namespace StageSSPortal.Controllers
         [Authorize(Roles = "Klant")]
         public ActionResult Create()
         {
-
             return View();
         }
-
         // POST
         [Route("Klant/KlantAccount/Create")]
         [Authorize(Roles = "Klant")]
@@ -52,14 +50,12 @@ namespace StageSSPortal.Controllers
             Klant email = mgr.GetKlant(Klant.Email);
             if (email != null)
             {
-                //ViewBag.errorMessage = "email moet uniek zijn";
                 ModelState.AddModelError("", "Email moet uniek zijn");
                 return View("Create");
             }
             Klant naam = mgr.GetKlantByName(Klant.Naam);
             if (naam !=null && naam.IsKlantAccount == false)
             {
-                //ViewBag.errorMessage = "naam moet uniek zijn";
                 ModelState.AddModelError("", "Er is al reeds een klant met deze naam enkel accounts mogen dezelfde naam hebben");
                 return View("Create");
             }

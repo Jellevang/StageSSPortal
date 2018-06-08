@@ -68,14 +68,11 @@
 <div class="container">
     @Scripts.Render("~/Scripts/changePass.js")
     <h2>Lijst van Klanten</h2>
-    @*<button onclick="HideKlanten()">TEST</button>*@
     <p>
-        @Html.ActionLink("Nieuwe Klant", "Create") @*| @Html.ActionLink("Inviteer", "Invite")*@
+        @Html.ActionLink("Nieuwe Klant", "Create") 
     </p>
-    @*<button class="btn-success" onclick="VerzendMails()">Stuur uitnodigingsmail</button>*@
     <table class="table">
         <tr>
-
             <th>
                 @Html.DisplayNameFor(model => model.Naam)
             </th>
@@ -88,7 +85,6 @@
 
             <th></th>
         </tr>
-
         @foreach (var item in Model)
         {
             <tr class="klanten" id="@item.KlantId">
@@ -122,9 +118,7 @@
                     @Html.ActionLink("Verwijder", "Delete", new { id = item.KlantId }) |
                 </td>
             </tr>
-
         }
-
     </table>
 </div>
 

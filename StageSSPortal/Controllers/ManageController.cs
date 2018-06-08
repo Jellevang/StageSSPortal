@@ -26,13 +26,11 @@ namespace StageSSPortal.Controllers
             _userManager = GebruikerManager.Create(System.Web.HttpContext.Current.GetOwinContext().Get<AppBuilderProvider>().Get().GetDataProtectionProvider()); // AppbuilerProvider is een custom klasse die geregistreerd wordt in de startup.auth.cs
             _signInManager = SignInManager.Create(_userManager, System.Web.HttpContext.Current.GetOwinContext());
         }
-
         public ManageController(GebruikerManager userManager, SignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
-
         public SignInManager SignInManager
         {
             get { return _signInManager; }
@@ -41,7 +39,6 @@ namespace StageSSPortal.Controllers
                 _signInManager = value;
             }
         }
-
         public GebruikerManager UserManager
         {
             get { return _userManager; }
@@ -50,7 +47,6 @@ namespace StageSSPortal.Controllers
                 _userManager = value;
             }
         }
-
         //
         // GET: /Manage/Index
         public virtual async Task<ActionResult> Index(ManageMessageId? message)
@@ -96,7 +92,6 @@ namespace StageSSPortal.Controllers
             }
             return RedirectToAction("ManageLogins", new { Message = message });
         }
-
         //[HttpPost]
         //public ActionResult ChangeOvmPassword(ChangePasswordViewModel model)
         //{
@@ -251,17 +246,14 @@ namespace StageSSPortal.Controllers
             else
             {
                 return RedirectToAction("Index", "Manage");
-            }
-            
+            }            
         }
-
         //
         // GET: /Manage/SetPassword
         public virtual ActionResult SetPassword()
         {
             return View();
         }
-
         //
         // POST: /Manage/SetPassword
         [HttpPost]
@@ -284,7 +276,6 @@ namespace StageSSPortal.Controllers
             }
             return View(model);
         }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)
@@ -295,7 +286,6 @@ namespace StageSSPortal.Controllers
 
             base.Dispose(disposing);
         }
-
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -307,7 +297,6 @@ namespace StageSSPortal.Controllers
                 return HttpContext.GetOwinContext().Authentication;
             }
         }
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -315,7 +304,6 @@ namespace StageSSPortal.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-
         private bool HasPassword()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -325,7 +313,6 @@ namespace StageSSPortal.Controllers
             }
             return false;
         }
-
         private bool HasPhoneNumber()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -335,7 +322,6 @@ namespace StageSSPortal.Controllers
             }
             return false;
         }
-
         public enum ManageMessageId
         {
             AddPhoneSuccess,
@@ -346,7 +332,6 @@ namespace StageSSPortal.Controllers
             RemovePhoneSuccess,
             Error
         }
-
         #endregion
     }
 }

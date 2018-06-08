@@ -86,10 +86,6 @@
                 @Html.ValidationMessageFor(model => model.Afkorting, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @*<div>
-                <button class="btn btn-default" onclick="CreateKlant()">Save</button>
-            </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Maak" class="btn btn-default" onclick="SaveVms()" />
@@ -97,47 +93,6 @@
         </div>
     </div>
 }
-@*<div id="id01" class="modal">
-        <div class="modal-content">
-            <div class="container">
-                <span onclick="closeModal()" class="button display-topright">&times;</span>
-                <table>
-                    <tr>
-                        <td><button onclick="postAfkorting()">JA</button></td>
-                    </tr>
-                    <tr>
-                        <td><button onclick="postNieuweAfkorting()">NEE</button></td>
-                        <td><input id="afkorting" type="text" /></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>*@
 <div>
     @Html.ActionLink("Terug naar lijst", "Index")
 </div>
-
-@*@section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-        <script type="text/javascript">
-            $('#myFile').change(function () {
-                var file = this.files[0];
-
-                var formData = new FormData();
-                formData.append('MyFile', file);
-
-                $.ajax('/api/Klant/File/Create', {
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function () {
-                        alert('File uploaded successfully!');
-                    },
-                    error: function () {
-                        alert('OOOPS something went wrong!');
-                    }
-                });
-            });
-        </script>
-    }*@

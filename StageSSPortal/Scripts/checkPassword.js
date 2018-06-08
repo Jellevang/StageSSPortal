@@ -1,10 +1,4 @@
-﻿//$(document).ready(function () {
-//    checkPassWord();
-//});
-
-function checkPassword() {
-   
-        
+﻿function checkPassword() {    
         var ucase = new RegExp("[A-Z]+");
         var lcase = new RegExp("[a-z]+");
         var num = new RegExp("[0-9]+");
@@ -28,7 +22,6 @@ function checkPassword() {
             $("#sign").addClass("glyphicon-remove");
             $("#sign").css("color", "#FF0004");
         }
-
         if (ucase.test($("#NewPassword").val())) {
             $("#ucase").removeClass("glyphicon-remove");
             $("#ucase").addClass("glyphicon-ok");
@@ -48,7 +41,6 @@ function checkPassword() {
             $("#lcase").addClass("glyphicon-remove");
             $("#lcase").css("color", "#FF0004");
         }
-
         if (num.test($("#NewPassword").val())) {
             $("#num").removeClass("glyphicon-remove");
             $("#num").addClass("glyphicon-ok");
@@ -58,7 +50,6 @@ function checkPassword() {
             $("#num").addClass("glyphicon-remove");
             $("#num").css("color", "#FF0004");
         }
-
     if ($("#NewPassword").val() == $("#ConfirmPassword").val() && $("#NewPassword").val() != "") {
             $("#pwmatch").removeClass("glyphicon-remove");
             $("#pwmatch").addClass("glyphicon-ok");
@@ -67,6 +58,5 @@ function checkPassword() {
             $("#pwmatch").removeClass("glyphicon-ok");
             $("#pwmatch").addClass("glyphicon-remove");
             $("#pwmatch").css("color", "#FF0004");
-        }
-    
+        }   
 };

@@ -37,7 +37,6 @@ namespace StageSSPortal.Controllers
             return View();
         }
         [HttpGet]
-        //[Route("Admin/SSH/KlantOVMs")]
         [Route("Admin/SSH/KlantOVMs")]
         [Authorize(Roles = "Klant")]
         public ActionResult KlantOVMs()
@@ -68,7 +67,6 @@ namespace StageSSPortal.Controllers
             }
 
             return View(klanten);
-           // return View();
         }
 
         [HttpGet]
@@ -91,10 +89,6 @@ namespace StageSSPortal.Controllers
                 klanten.Add(k);
             }
             return View(klanten);
-            // return View();
         }
     }
 }
-
-
-

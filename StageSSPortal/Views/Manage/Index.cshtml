@@ -10,14 +10,8 @@
     <h4>Verander uw accountinstellingen</h4>
     <hr />
     <dl class="dl-horizontal">
-
-
         @if (Model.HasPassword && ViewContext.HttpContext.User.IsInRole("Admin"))
         {
-        @*<dt>Password:</dt>
-        <dd>
-            [@Html.ActionLink("Change your password", "ChangePassword")]
-        </dd>*@
         <dt>OVM Password:</dt>
         <dd>
             [@Html.ActionLink("Change OVM Password", "ChangeOvmPassword")]
@@ -29,17 +23,11 @@
         }
         @if (Model.HasPassword && ViewContext.HttpContext.User.IsInRole("Klant"))
         {
-        @*<dt>Password:</dt>
-        <dd>
-            [ @Html.ActionLink("Change your password", "ChangePassword")]
-        </dd>*@
         <dt>Medewerker Reset</dt>
         <dd>
             [@Html.ActionLink("Reset Medewerker Password", "ResetKlantAccount")]
         </dd>
-        }
-        
-        
+        }    
         @if (Model.HasPassword)
         {
         <dt>Password:</dt>
@@ -54,9 +42,6 @@
         [@Html.ActionLink("Create", "SetPassword")]
         </dd>
         }
-        
-
-
     </dl>
 </div>
 @section scripts{}

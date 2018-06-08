@@ -15,21 +15,16 @@
         <dt>
             @Html.DisplayNameFor(model => model.Naam)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Naam)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Email)
         </dd>
-
     </dl>
-
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
